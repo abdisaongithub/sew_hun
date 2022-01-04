@@ -1,47 +1,74 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Category(models.Model):
-    category = models.CharField(max_length=256)
+    """
+    Category to add posts to
+    """
+    category = models.CharField(max_length=256, verbose_name='categories')
     description = models.CharField(max_length=256)
 
     def __str__(self):
         return self.category
 
+    class Meta:
+        verbose_name_plural = 'categories'
+
+
+
 
 class Tag(models.Model):
+    """
+    Tags to filter out with their associations
+    """
     tag = models.CharField(max_length=256)
+    description = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):
         return self.tag
 
 
 class Post(models.Model):
-    author = models.ForeignKey(User, on_delete=models.PROTECT, related_name='posts')
+    """
+    Main information regarding individual posts
+    """
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='posts')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='posts')
     tags = models.ManyToManyField(Tag, related_name='posts')
     title = models.CharField(max_length=256, )
     text = models.TextField(null=False, blank=False, )
-    image = models.ImageField(upload_to='photos/', )
-    created_at = models.DateTimeField(auto_now=True, auto_now_add=True)
+    image = models.ImageField(upload_to='photos/posts/', )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    reads = models.BigIntegerField(default=0, blank=False,)
 
     def __str__(self):
         return self.title
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='comments')
+    """
+    Comments for posts
+    """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='comments')
     comment = models.TextField(null=False, blank=False)
-    created_at = models.DateTimeField(auto_now=True, auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.comment
 
 
 class Narration(models.Model):
-    narrator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='narrator')
+    """
+    Audio files for posts with the author's information
+    """
+    narrator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='narrator')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='narration')
     audio = models.FileField(upload_to='media/')
 
     def __str__(self):
-        return self.narrator
+        return self.post
