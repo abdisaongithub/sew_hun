@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 
@@ -21,11 +22,14 @@ class Settings(models.Model):
     is_active = models.BooleanField(default=True, )  # for payment purposes only
 
     def __str__(self):
-        return self.user
+        return self.user.username
 
 
 class Role(models.Model):
     role = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.role
 
 
 class Profile(models.Model):
@@ -41,3 +45,20 @@ class Profile(models.Model):
     photo = models.ImageField(upload_to='photos/profiles/')
 
     role = models.ManyToManyField(Role, related_name='profiles', )
+
+    def __str__(self):
+        if len(self.user.first_name + self.user.last_name) == 0:
+            return self.user.username
+        return self.user.first_name + self.user.last_name
+
+
+class Favorite(models.Model):
+    """
+    Favourite Posts for the current user
+    """
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='favorites')
+    post = models.ForeignKey('blog.Post', on_delete=models.CASCADE, related_name='favorites')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.email

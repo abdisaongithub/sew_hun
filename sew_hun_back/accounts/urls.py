@@ -1,7 +1,6 @@
 from django.urls import path
-from .views import UserRecordView
+from .views import CustomAuthToken
 
-app_name = 'api'
 urlpatterns = [
-    path('user/', UserRecordView.as_view(), name='users'),
+    path('get-token/', CustomAuthToken.as_view(), name='get-token'),
 ]
