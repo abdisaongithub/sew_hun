@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sew_hun/actions/get_categories.dart';
+import 'package:sew_hun/models/categories.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog_list_screen.dart';
 import 'package:sew_hun/static.dart';
@@ -13,14 +15,44 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
+  late Categories categories;
   final GlobalKey _globalKey = GlobalKey();
+
+  bool isLoading = true;
+  bool isLoaded = false;
+
+
+  getCategories() async {
+    categories = await GetCategories.get_categories() as Categories;
+    if(categories.category.contains('error')){
+      print(categories.category);
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+        isLoaded = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getCategories();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _globalKey,
       drawer: Drawer(
         elevation: 6.0,
-        child: Container(height: MediaQuery.of(context).size.height, width: 400, color: Colors.green,),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: 400,
+          color: Colors.green,
+        ),
       ),
       body: SafeArea(
         child: Container(
@@ -48,8 +80,7 @@ class _LandingScreenState extends State<LandingScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: (){
-                  },
+                  onTap: () {},
                   child: Text(
                     'Let\'s Explore Today',
                     style: TextStyle(
@@ -70,6 +101,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     fontSize: 18,
                   ),
                 ),
+                isLoaded == true && isLoading == false ? //TODO: show message for when there is no connection
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
@@ -100,7 +132,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       ),
                     ],
                   ),
-                ),
+                ) : CircularProgressIndicator(color: Colors.black, ),
                 SizedBox(
                   height: 20,
                 ),
@@ -236,7 +268,6 @@ class CategoryCard extends StatelessWidget {
               spreadRadius: 3,
             ),
           ],
-
           image: DecorationImage(
             image: AssetImage(
               'assets/img/$img',
@@ -271,7 +302,6 @@ class CategoryCard extends StatelessWidget {
       ),
     );
   }
-
 }
 
 class PopularCard extends StatelessWidget {

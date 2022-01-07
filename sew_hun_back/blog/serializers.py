@@ -49,7 +49,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class CommentsSerializer(serializers.ModelSerializer):
-    user = UserProfileSerializer()
+    user = UserProfileSerializer(read_only=True)
 
     class Meta:
         model = Comment

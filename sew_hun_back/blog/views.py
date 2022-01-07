@@ -73,13 +73,27 @@ class CommentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     # todo: start from here
 
     def put(self, request, *args, **kwargs):
-        return super().put(request, *args, **kwargs)
+        try:
+            comment = Comment.objects.get(pk=kwargs['pk'])
+
+            comment.comment = request.data['comment']
+            comment.save()
+            serialized = serializers.CommentDetailSerializer(data=comment)
+            serialized.is_valid()
+            return JsonResponse(data=serialized.data, status=status.HTTP_202_ACCEPTED)
+        except Comment.DoesNotExist:
+            return Response(data=None, status=status.HTTP_404_NOT_FOUND)
 
     def delete(self, request, *args, **kwargs):
-        return super().delete(request, *args, **kwargs)
+        try:
+            comment = Comment.objects.get(pk=kwargs['pk'])
+            comment.delete()
+            return Response(data=None, status=status.HTTP_204_NO_CONTENT)
+        except Comment.DoesNotExist:
+            return Response(data=None, status=status.HTTP_404_NOT_FOUND)
 
     def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+        return Response(data=None, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class FavoritesListCreateView(generics.ListCreateAPIView):
@@ -94,7 +108,6 @@ class FavoritesListCreateView(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         post = Post.objects.get(pk=request.data['post'])
         fav = Favorite.objects.create(user=request.user, post=post)
-        print(fav)
         serialized = serializers.FavoritesSerializer(data=fav)
         serialized.is_valid()
         return Response(serialized.data)

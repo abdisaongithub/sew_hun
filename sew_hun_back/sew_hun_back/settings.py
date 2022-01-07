@@ -24,7 +24,12 @@ SECRET_KEY = 'django-insecure-lrojy$c*7c(wsc@0estml4n$_u1q$#)z92b9!+-awmo-pl2!^j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '192.168.43.46',
+    '192.168.43.46:8000',
+    '127.0.0.1:8000',
+    '127.0.0.1',
+]
 
 # Application definition
 
@@ -36,11 +41,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django.contrib.sites',
+
     # 3rd party apps
     'rest_framework',
-    'rest_framework.authtoken', # TODO: checkout this shit
+    'rest_framework.authtoken',  # TODO: checkout this shit
     'drf_yasg',
+
     'dj_rest_auth',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
+
+    'django_extensions',
 
     # custom apps
     'accounts.apps.AccountsConfig',
@@ -150,3 +164,22 @@ REST_FRAMEWORK = {
     ],
 }
 
+SITE_ID = 1
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# ACCOUNT_EMAIL_REQUIRED = True
+# AUTHENTICATION_METHOD = 'EMAIL'
+# ACCOUNT_EMAIL_VERIFICATION = 'optional'
+
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+
+# Following is added to enable registration with email instead of username
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
+
+    # `allauth` specific authentication methods, such as login by e - mail
+    "allauth.account.auth_backends.AuthenticationBackend",
+)

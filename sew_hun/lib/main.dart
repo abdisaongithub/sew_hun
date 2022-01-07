@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog_list_screen.dart';
 import 'package:sew_hun/screens/landing_screen.dart';
+import 'package:sew_hun/screens/login_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,9 +17,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
+      initialRoute: LandingScreen.id,
       routes: {
-        '/': (context) => LandingScreen(),
+        '/': (context) => LoginScreen(),
+        LandingScreen.id: (context) => LandingScreen(),
         BlogListScreen.id: (context) => BlogListScreen(),
         BlogDetailScreen.id: (context) => BlogDetailScreen(),
       },
