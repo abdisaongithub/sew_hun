@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sew_hun/actions/get_categories.dart';
 import 'package:sew_hun/models/categories.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
@@ -15,22 +16,21 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  late Categories categories;
   final GlobalKey _globalKey = GlobalKey();
-
+  late Categories categories;
   bool isLoading = true;
   bool isLoaded = false;
 
-
   getCategories() async {
-    categories = await GetCategories.get_categories() as Categories;
-    if(categories.category.contains('error')){
-      print(categories.category);
+    categories = await GetCategories.get_categories();
+    if (categories.results[0].category.contains('error')) {
+      // print(categories.results[0].category);
       setState(() {
         isLoading = false;
       });
     } else {
       setState(() {
+        // print(categories.count);
         isLoading = false;
         isLoaded = true;
       });
@@ -42,6 +42,7 @@ class _LandingScreenState extends State<LandingScreen> {
     getCategories();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,129 +102,31 @@ class _LandingScreenState extends State<LandingScreen> {
                     fontSize: 18,
                   ),
                 ),
-                isLoaded == true && isLoading == false ? //TODO: show message for when there is no connection
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
                   padding: EdgeInsets.all(
                     smallPadding,
                   ),
-                  child: Row(
-                    children: [
-                      CategoryCard(
-                        category: 'Politics',
-                        img: 'baby.png',
-                      ),
-                      CategoryCard(
-                        category: 'News',
-                        img: 'merriage.png',
-                      ),
-                      CategoryCard(
-                        category: 'Sports',
-                        img: 'conflict.png',
-                      ),
-                      CategoryCard(
-                        category: 'News',
-                        img: 'postnatal.png',
-                      ),
-                      CategoryCard(
-                        category: 'Sports',
-                        img: 'tale.png',
-                      ),
-                    ],
-                  ),
-                ) : CircularProgressIndicator(color: Colors.black, ),
+                  child: isLoaded == true && isLoading == false
+                      ? //TODO: show message for when there is no connection
+                      Row(
+                          children: [
+                            for (var category in categories.results)
+                              CategoryCard(
+                                category: category.category,
+                                img: category.image,
+                                id: category.id,
+                              )
+                          ],
+                        )
+                      : CircularProgressIndicator(
+                          color: Colors.black,
+                        ),
+                ),
                 SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'Recommended',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                PopularCard(
-                  title: content[0]['title'].toString(),
-                  content: content[0]['content'].toString(),
-                  index: 0,
-                  img: 'tale.png',
-                ),
-                SizedBox(
-                  height: 10,
-                  child: Divider(
-                    thickness: 2,
-                    endIndent: 4,
-                    indent: 4,
-                  ),
-                ),
-                PopularCard(
-                  title: content[1]['title'].toString(),
-                  content: content[1]['content'].toString(),
-                  index: 1,
-                  img: 'merriage.png',
-                ),
-                SizedBox(
-                  height: 10,
-                  child: Divider(
-                    thickness: 2,
-                    endIndent: 4,
-                    indent: 4,
-                  ),
-                ),
-                PopularCard(
-                  title: content[2]['title'].toString(),
-                  content: content[2]['content'].toString(),
-                  index: 2,
-                  img: 'baby.png',
-                ),
-                SizedBox(
-                  height: 10,
-                  child: Divider(
-                    thickness: 2,
-                    endIndent: 4,
-                    indent: 4,
-                  ),
-                ),
-                PopularCard(
-                  title: content[3]['title'].toString(),
-                  content: content[3]['content'].toString(),
-                  index: 3,
-                  img: 'conflict.png',
-                ),
-                SizedBox(
-                  height: 10,
-                  child: Divider(
-                    thickness: 2,
-                    endIndent: 4,
-                    indent: 4,
-                  ),
-                ),
-                PopularCard(
-                  title: content[4]['title'].toString(),
-                  content: content[4]['content'].toString(),
-                  index: 4,
-                  img: 'postnatal.png',
-                ),
-                SizedBox(
-                  height: 10,
-                  child: Divider(
-                    thickness: 2,
-                    endIndent: 4,
-                    indent: 4,
-                  ),
-                ),
-                PopularCard(
-                  title: content[5]['title'].toString(),
-                  content: content[5]['content'].toString(),
-                  index: 5,
-                  img: 'inattentiveness.png',
-                ),
-                SizedBox(height: 10),
               ],
             ),
           ),
@@ -234,20 +137,31 @@ class _LandingScreenState extends State<LandingScreen> {
 }
 
 class CategoryCard extends StatelessWidget {
+  final storage = FlutterSecureStorage();
   final String category;
   final String img;
+  final int id;
 
-  const CategoryCard({
+  CategoryCard({
     Key? key,
     required this.category,
     required this.img,
+    required this.id,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, BlogListScreen.id);
+      onTap: () async {
+            await storage.write(key: 'current_category', value: id.toString());
+        Navigator.pushNamed(
+          context,
+          BlogListScreen.id,
+          arguments: BlogListArgument(
+            category: category,
+            id: id,
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -269,14 +183,10 @@ class CategoryCard extends StatelessWidget {
             ),
           ],
           image: DecorationImage(
-            image: AssetImage(
-              'assets/img/$img',
+            image: NetworkImage(
+              img,
             ),
             fit: BoxFit.cover,
-            // colorFilter: ColorFilter.mode(
-            //   Colors.black87,
-            //   BlendMode.dstATop,
-            // ),
           ),
         ),
         child: Padding(
@@ -288,12 +198,19 @@ class CategoryCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                category,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  category,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                  ),
                 ),
               ),
             ],
@@ -322,8 +239,14 @@ class PopularCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, BlogDetailScreen.id,
-            arguments: BlogArguments(index: index, img: img));
+        Navigator.pushNamed(
+          context,
+          BlogDetailScreen.id,
+          arguments: BlogArguments(
+            index: index,
+            img: img,
+          ),
+        );
       },
       child: Container(
         width: MediaQuery.of(context).size.width,

@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sew_hun/actions/get_post_detail.dart';
+import 'package:sew_hun/models/post_detail.dart';
 import 'package:sew_hun/static.dart';
 
 class BlogDetailScreen extends StatefulWidget {
@@ -13,7 +16,12 @@ class BlogDetailScreen extends StatefulWidget {
 
 class _BlogDetailScreenState extends State<BlogDetailScreen>
     with SingleTickerProviderStateMixin {
-  List abdi = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+
+  late PostDetail postDetail;
+  final storage = FlutterSecureStorage();
+  bool isLoading = true;
+  bool isLoaded = false;
+
 
   late ScrollController _scrollController;
   bool _showBackToTopButton = false;
@@ -21,6 +29,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
   @override
   void initState() {
     super.initState();
+    getCategoryPosts();
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -33,6 +42,26 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
       });
   }
 
+  getCategoryPosts() async {
+    String? stringKey = await storage.read(key: 'current_post');
+    int current_pk = int.parse(stringKey!);
+    postDetail = await GetPostDetail.get_post_detail(current_pk);
+    if (postDetail.title.contains('error')) {
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+        isLoaded = true;
+      });
+    }
+    return postDetail;
+  }
+
+
+
+
   void _scrollToTop() {
     _scrollController.animateTo(
       0,
@@ -43,6 +72,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
 
   @override
   Widget build(BuildContext context) {
+
     final args = ModalRoute.of(context)!.settings.arguments as BlogArguments;
 
     return SafeArea(
@@ -58,7 +88,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                 ),
               ),
         backgroundColor: Colors.white,
-        body: CustomScrollView(
+        body: isLoading == false && isLoaded == true ? CustomScrollView(
           controller: _scrollController,
           physics: BouncingScrollPhysics(),
           slivers: [
@@ -286,7 +316,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
               ),
             ),
           ],
-        ),
+        ) : Center(child: CircularProgressIndicator(),),
       ),
     );
   }

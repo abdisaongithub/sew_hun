@@ -31,6 +31,10 @@ dependencies:
 
   dio: ^4.0.4
   flutter_secure_storage: ^5.0.2
+  flutter_riverpod: ^1.0.3
+#  fluttertoast: ^8.0.8
+
+
 
 dev_dependencies:
   flutter_test:

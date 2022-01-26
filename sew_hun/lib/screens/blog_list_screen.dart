@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sew_hun/actions/get_category_post.dart';
+import 'package:sew_hun/dio_api.dart';
+import 'package:sew_hun/models/category_post.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/static.dart';
 
@@ -12,12 +16,48 @@ class BlogListScreen extends StatefulWidget {
 }
 
 class _BlogListScreenState extends State<BlogListScreen> {
+  late CategoryPost categoryPost;
+  final storage = FlutterSecureStorage();
+  bool isLoading = true;
+  bool isLoaded = false;
+
+  getCategoryPosts() async {
+    String? stringKey = await storage.read(key: 'current_category');
+    int current_pk = int.parse(stringKey!);
+    categoryPost = await GetCategoryPost.get_category_post(current_pk);
+    if (categoryPost.data[0].title.contains('error')) {
+      // print(categoryPost.data);
+      setState(() {
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        // print(categoryPost.data);
+        isLoading = false;
+        isLoaded = true;
+      });
+    }
+    // print(categoryPost);
+    return categoryPost;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCategoryPosts();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
+
+    final args = ModalRoute.of(context)!.settings.arguments as BlogListArgument;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Category',
+          args.category,
           style: TextStyle(color: Colors.black),
         ),
         leading: BackButton(
@@ -37,20 +77,22 @@ class _BlogListScreenState extends State<BlogListScreen> {
               left: smallPadding,
               right: smallPadding,
             ),
-            child: Column(
+            child: isLoading == false && isLoaded == true? Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BlogListContainer(
-                  img: 'et.jpg',
-                  title: 'Some title',
-                  content: 'Some kinda content',
-                  id: 1,
-                ),
+                for (var post in categoryPost.data)
+                  BlogListContainer(
+                    img: post.image,
+                    title: post.title,
+                    content: post.text,
+                    id: post.id,
+                  ),
+
                 Divider(),
                 // Divider(),
               ],
-            ),
+            ) : Center(child: CircularProgressIndicator()),
           ),
         ),
       ),
@@ -64,6 +106,7 @@ class BlogListContainer extends StatelessWidget {
   final String content;
   final int id;
 
+
   const BlogListContainer({
     Key? key,
     required this.img,
@@ -74,8 +117,11 @@ class BlogListContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final storage = FlutterSecureStorage();
+
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        await storage.write(key: 'current_post', value: id.toString());
         Navigator.pushNamed(
           context,
           BlogDetailScreen.id,
@@ -108,8 +154,8 @@ class BlogListContainer extends StatelessWidget {
                     Radius.circular(20),
                   ),
                   image: DecorationImage(
-                    image: AssetImage(
-                      'assets/img/$img',
+                    image: NetworkImage(
+                      '${baseUrl}${img.substring(1)}',
                     ),
                     fit: BoxFit.cover,
                   ),
@@ -164,4 +210,11 @@ class BlogListContainer extends StatelessWidget {
       ),
     );
   }
+}
+
+class BlogListArgument{
+  final int id;
+  final String category;
+
+  BlogListArgument({required this.category, required this.id});
 }

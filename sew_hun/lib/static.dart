@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+const kUsername = 'username';
+const kPassword = 'password';
+const kToken = 'token';
+
 Color textColor = new Color(0xFF775CB8);
 const double defaultPadding = 20.0;
 const double smallPadding = 10.0;
