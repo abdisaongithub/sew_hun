@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:sew_hun/models/post_detail.dart';
 import 'package:sew_hun/providers/blog/post_provider.dart';
 import 'package:sew_hun/static.dart';
 
@@ -17,10 +15,7 @@ class BlogDetailScreen extends StatefulWidget {
 
 class _BlogDetailScreenState extends State<BlogDetailScreen>
     with SingleTickerProviderStateMixin {
-  late PostDetail postDetail;
-  final storage = FlutterSecureStorage();
-  bool isLoading = true;
-  bool isLoaded = false;
+
 
   late ScrollController _scrollController;
   bool _showBackToTopButton = false;
