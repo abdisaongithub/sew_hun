@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sew_hun/models/auth/auth_token.dart';
 import 'package:sew_hun/providers/auth/credentials_provider.dart';
+import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/providers/auth/token_provider.dart';
 import 'package:sew_hun/screens/landing_screen.dart';
 import 'package:sew_hun/static.dart';
-
 
 class LoginScreen extends ConsumerStatefulWidget {
   static String id = 'LoginScreen';
@@ -21,7 +20,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final credsNotifier = ref.watch(credentialsProvider.notifier);
-    final auth = ref.watch(authTokenProvider);
+    final signedIn = ref.watch(isSignedInProvider.state);
+    final signInError = ref.watch(signInErrorProvider.state);
+
+    final auth = ref.listen(
+      newAuth,
+      (a, b) {
+        WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+
+          print('Inside Listen');
+          if(signedIn.state == true){
+            Navigator.popAndPushNamed(context, LandingScreen.id);
+            print('To LandingScreen...');
+          } else if (signInError.state == true){
+            print('Error Happened');
+          }
+        });
+      },
+    );
+
 
     return Scaffold(
       body: Stack(
@@ -52,12 +69,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Center(
-                    //   child: CircleAvatar(
-                    //     foregroundImage: AssetImage('assets/img/baby.png'),
-                    //     radius: 40,
-                    //   ),
-                    // ),
                     SizedBox(
                       height: 20,
                     ),
@@ -93,8 +104,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         onChanged: (value) {
                           // print(value);
                           // username = value;
-                          credsNotifier.setUsername(value);
-                          print(credsNotifier.state[kUsername]);
+                          credsNotifier.setEmail(value);
+                          print(credsNotifier.state[kEmail]);
                         },
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
@@ -123,7 +134,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                         obscureText: true,
                         onChanged: (value) {
-                          ref.read(credentialsProvider.notifier).setPassword(value);
+                          ref
+                              .read(credentialsProvider.notifier)
+                              .setPassword(value);
                           print(credsNotifier.state[kPassword]);
                         },
                         keyboardType: TextInputType.text,
@@ -137,32 +150,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        final token = ref.read(authTokenProvider);
-
-                        token.when(
-                          data: (AuthToken token) async {
-                            print('data returned');
-                            print(token.key);
-                            final storage = FlutterSecureStorage();
-                            await storage.write(key: kToken, value: token.key);
-                            Navigator.popAndPushNamed(context, LandingScreen.id);
-                          },
-
-                          loading: () => print('loading...'),
-
-                          error: (Object error, StackTrace? stackTrace) {
-                            print(error.toString() + 'error');
-                            // Fluttertoast.showToast(
-                            //     msg: "Invalid Credentials or Connection Error",
-                            //     toastLength: Toast.LENGTH_SHORT,
-                            //     gravity: ToastGravity.CENTER,
-                            //     timeInSecForIosWeb: 1,
-                            //     backgroundColor: Colors.red,
-                            //     textColor: Colors.white,
-                            //     fontSize: 16.0
-                            // );
-                          },
-                        );
+                        final a = ref.read(newAuth.notifier);
+                        a.login();
+                        print(a.toString());
+                        print('called login');
                       },
                       child: Center(
                         child: Text('Login'),

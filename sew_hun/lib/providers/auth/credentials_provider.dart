@@ -2,16 +2,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/static.dart';
 
 final credentialsProvider =
-StateNotifierProvider<CredentialsNotifier, Map<String, String>>((ref) {
+    StateNotifierProvider<CredentialsNotifier, Map<String, String>>((ref) {
   return CredentialsNotifier();
 });
 
 class CredentialsNotifier extends StateNotifier<Map<String, String>> {
-  CredentialsNotifier() : super({kUsername: '', kPassword: ''});
+  CredentialsNotifier() : super({kEmail: '', kPassword: ''});
 
-  void setUsername(String username) {
+  void setEmail(String username) {
     final newState = state;
-    newState.update(kUsername, (value) => username);
+    newState.update(kEmail, (value) => username);
     state = newState;
   }
 
@@ -20,5 +20,4 @@ class CredentialsNotifier extends StateNotifier<Map<String, String>> {
     newState.update(kPassword, (value) => password);
     state = newState;
   }
-
 }
