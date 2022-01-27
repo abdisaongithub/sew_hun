@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:sew_hun/actions/get_category_post.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/dio_api.dart';
-import 'package:sew_hun/models/category_post.dart';
+import 'package:sew_hun/providers/blog/blog_list_provider.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/static.dart';
 
-class BlogListScreen extends StatefulWidget {
+class BlogListScreen extends ConsumerStatefulWidget {
   static String id = 'BlogListScreen';
 
   const BlogListScreen({Key? key}) : super(key: key);
@@ -15,40 +14,7 @@ class BlogListScreen extends StatefulWidget {
   _BlogListScreenState createState() => _BlogListScreenState();
 }
 
-class _BlogListScreenState extends State<BlogListScreen> {
-  late CategoryPost categoryPost;
-  final storage = FlutterSecureStorage();
-  bool isLoading = true;
-  bool isLoaded = false;
-
-  getCategoryPosts() async {
-    String? stringKey = await storage.read(key: 'current_category');
-    int current_pk = int.parse(stringKey!);
-    categoryPost = await GetCategoryPost.get_category_post(current_pk);
-    if (categoryPost.data[0].title.contains('error')) {
-      // print(categoryPost.data);
-      setState(() {
-        isLoading = false;
-      });
-    } else {
-      setState(() {
-        // print(categoryPost.data);
-        isLoading = false;
-        isLoaded = true;
-      });
-    }
-    // print(categoryPost);
-    return categoryPost;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getCategoryPosts();
-  }
-
-
-
+class _BlogListScreenState extends ConsumerState<BlogListScreen> {
   @override
   Widget build(BuildContext context) {
 
@@ -69,31 +35,43 @@ class _BlogListScreenState extends State<BlogListScreen> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: smallPadding,
-              left: smallPadding,
-              right: smallPadding,
-            ),
-            child: isLoading == false && isLoaded == true? Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (var post in categoryPost.data)
-                  BlogListContainer(
-                    img: post.image,
-                    title: post.title,
-                    content: post.text,
-                    id: post.id,
-                  ),
+        child: Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            final blogList = ref.watch(categoryPostsProvider(args.id));
+            return blogList.when(
+              data: (data) {
+                return SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Padding(
+                      padding: EdgeInsets.only(
+                        top: smallPadding,
+                        left: smallPadding,
+                        right: smallPadding,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          for (var post in data.posts!)
+                            BlogListContainer(
+                              img: post.image!,
+                              title: post.title!,
+                              content: post.text!,
+                              id: post.id!,
+                            ),
 
-                Divider(),
-                // Divider(),
-              ],
-            ) : Center(child: CircularProgressIndicator()),
-          ),
+                          Divider(),
+                          // Divider(),
+                        ],
+                      )),
+                );
+              },
+              error: (error, stack) {
+                return Text(error.toString());
+              },
+              loading: () => Center(child: CircularProgressIndicator()),
+            );
+          },
         ),
       ),
     );
@@ -106,7 +84,6 @@ class BlogListContainer extends StatelessWidget {
   final String content;
   final int id;
 
-
   const BlogListContainer({
     Key? key,
     required this.img,
@@ -117,15 +94,15 @@ class BlogListContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final storage = FlutterSecureStorage();
-
     return GestureDetector(
       onTap: () async {
-        await storage.write(key: 'current_post', value: id.toString());
         Navigator.pushNamed(
           context,
           BlogDetailScreen.id,
-          arguments: BlogArguments(index: id, img: 'et.jpg')
+          arguments: BlogArguments(
+            id: id,
+            img: 'et.jpg',
+          ),
         );
       },
       child: Container(
@@ -212,7 +189,7 @@ class BlogListContainer extends StatelessWidget {
   }
 }
 
-class BlogListArgument{
+class BlogListArgument {
   final int id;
   final String category;
 

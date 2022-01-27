@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: LoginScreen.id,
+      initialRoute: LandingScreen.id,
       routes: {
         '/': (context) => LoginScreen(),
         LandingScreen.id: (context) => LandingScreen(),

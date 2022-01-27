@@ -24,7 +24,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final signInError = ref.watch(signInErrorProvider.state);
 
     final auth = ref.listen(
-      newAuth,
+      authTokenProvider,
       (a, b) {
         WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
 
@@ -150,7 +150,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        final a = ref.read(newAuth.notifier);
+                        final a = ref.read(authTokenProvider.notifier);
                         a.login();
                         print(a.toString());
                         print('called login');

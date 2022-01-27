@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:sew_hun/actions/get_categories.dart';
-import 'package:sew_hun/models/categories.dart';
+import 'package:sew_hun/providers/blog/categories_provider.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog_list_screen.dart';
 import 'package:sew_hun/static.dart';
 
-class LandingScreen extends StatefulWidget {
+class LandingScreen extends ConsumerStatefulWidget {
   static String id = 'LandingScreen';
 
   const LandingScreen({Key? key}) : super(key: key);
@@ -15,36 +15,12 @@ class LandingScreen extends StatefulWidget {
   _LandingScreenState createState() => _LandingScreenState();
 }
 
-class _LandingScreenState extends State<LandingScreen> {
+class _LandingScreenState extends ConsumerState<LandingScreen> {
   final GlobalKey _globalKey = GlobalKey();
-  late Categories categories;
-  bool isLoading = true;
-  bool isLoaded = false;
-
-  getCategories() async {
-    categories = await GetCategories.get_categories();
-    if (categories.results[0].category.contains('error')) {
-      // print(categories.results[0].category);
-      setState(() {
-        isLoading = false;
-      });
-    } else {
-      setState(() {
-        // print(categories.count);
-        isLoading = false;
-        isLoaded = true;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    getCategories();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       key: _globalKey,
       drawer: Drawer(
@@ -53,6 +29,13 @@ class _LandingScreenState extends State<LandingScreen> {
           height: MediaQuery.of(context).size.height,
           width: 400,
           color: Colors.green,
+          child: Column(
+            children: [
+              ListTile(
+                title: Text('Hello From Drawer'),
+              ),
+            ],
+          ),
         ),
       ),
       body: SafeArea(
@@ -102,27 +85,39 @@ class _LandingScreenState extends State<LandingScreen> {
                     fontSize: 18,
                   ),
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  physics: BouncingScrollPhysics(),
-                  padding: EdgeInsets.all(
-                    smallPadding,
-                  ),
-                  child: isLoaded == true && isLoading == false
-                      ? //TODO: show message for when there is no connection
-                      Row(
-                          children: [
-                            for (var category in categories.results)
-                              CategoryCard(
-                                category: category.category,
-                                img: category.image,
-                                id: category.id,
-                              )
-                          ],
-                        )
-                      : CircularProgressIndicator(
-                          color: Colors.black,
-                        ),
+                Consumer(
+                  builder:
+                      (BuildContext context, WidgetRef ref, Widget? child) {
+                    final category = ref.watch(categoryProvider);
+
+                    return category.when(
+                      data: (data) {
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          physics: BouncingScrollPhysics(),
+                          padding: EdgeInsets.all(
+                            smallPadding,
+                          ),
+                          child: Row(
+                            children: [
+                              for (var category in data.results!)
+                                CategoryCard(
+                                  category: category.category!,
+                                  img: category.image!,
+                                  id: category.id!,
+                                )
+                            ],
+                          ),
+                        );
+                      },
+                      error: (error, stack) {
+                        return Center(child: Text(error.toString()),);
+                      },
+                      loading: () {
+                        return Center(child: CircularProgressIndicator(),);
+                      },
+                    );
+                  },
                 ),
                 SizedBox(
                   height: 20,
@@ -153,7 +148,7 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-            await storage.write(key: 'current_category', value: id.toString());
+        await storage.write(key: 'current_category', value: id.toString());
         Navigator.pushNamed(
           context,
           BlogListScreen.id,
@@ -163,6 +158,7 @@ class CategoryCard extends StatelessWidget {
           ),
         );
       },
+
       child: Container(
         margin: EdgeInsets.only(
           right: defaultPadding,
@@ -226,7 +222,7 @@ class PopularCard extends StatelessWidget {
   final String content;
   final String img;
   final int index;
-
+  //TODO: Implement favorites ...
   const PopularCard({
     Key? key,
     required this.title,
@@ -243,7 +239,7 @@ class PopularCard extends StatelessWidget {
           context,
           BlogDetailScreen.id,
           arguments: BlogArguments(
-            index: index,
+            id: index,
             img: img,
           ),
         );

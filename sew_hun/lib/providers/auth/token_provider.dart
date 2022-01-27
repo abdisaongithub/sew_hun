@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sew_hun/dio_api.dart';
 import 'package:sew_hun/models/auth/auth_token.dart';
 import 'package:sew_hun/providers/auth/sign_in_provider.dart';
@@ -20,7 +21,7 @@ import 'credentials_provider.dart';
 //   },
 // );
 
-final newAuth = StateNotifierProvider<AuthNotifier, AuthToken>(
+final authTokenProvider = StateNotifierProvider<AuthNotifier, AuthToken>(
   (ref) => AuthNotifier(ref),
 );
 
@@ -33,6 +34,7 @@ class AuthNotifier extends StateNotifier<AuthToken> {
     final creds = _ref.watch(credentialsProvider);
     final isSignedIn = _ref.watch(isSignedInProvider.notifier);
     final signInError = _ref.watch(signInErrorProvider.notifier);
+    final storage = FlutterSecureStorage();
 
     try {
       Response _response = await dio_api.post(
@@ -47,13 +49,22 @@ class AuthNotifier extends StateNotifier<AuthToken> {
         isSignedIn.state = true;
       }
       state = AuthToken.fromJson(_response.data);
+      await storage.write(key: kToken, value: state.key);
       // print('Key: ' + state.key.toString());
-    } on DioError{
+    } on DioError catch(e){
       signInError.state = true;
       print('Network Error');
-    } catch (e) {
-      // print(e.toString());
-      print('Error Occurred');
     }
+    // catch (e) {
+    //   // print(e.toString());
+    //   print('Error Occurred');
+    // }
   }
 }
+
+final localTokenProvider = FutureProvider((ref) async {
+  final storage = FlutterSecureStorage();
+  final token = await storage.read(key: kToken);
+
+  return token;
+});

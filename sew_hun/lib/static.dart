@@ -4,6 +4,7 @@ const kUsername = 'username';
 const kEmail = 'email';
 const kPassword = 'password';
 const kToken = 'token';
+const kAuthorization = 'Authorization';
 
 Color textColor = new Color(0xFF775CB8);
 const double defaultPadding = 20.0;
