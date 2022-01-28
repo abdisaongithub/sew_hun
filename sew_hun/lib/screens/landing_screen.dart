@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sew_hun/providers/blog/categories_provider.dart';
+import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog_list_screen.dart';
 import 'package:sew_hun/static.dart';
@@ -16,27 +17,15 @@ class LandingScreen extends ConsumerStatefulWidget {
 }
 
 class _LandingScreenState extends ConsumerState<LandingScreen> {
-  final GlobalKey _globalKey = GlobalKey();
+  final GlobalKey<ScaffoldState> _globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: _globalKey,
       drawer: Drawer(
         elevation: 6.0,
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: 400,
-          color: Colors.green,
-          child: Column(
-            children: [
-              ListTile(
-                title: Text('Hello From Drawer'),
-              ),
-            ],
-          ),
-        ),
+        child: LandingScreenDrawer(),
       ),
       body: SafeArea(
         child: Container(
@@ -64,7 +53,10 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    print('Hello');
+                    _globalKey.currentState!.openDrawer();
+                  },
                   child: Text(
                     'Let\'s Explore Today',
                     style: TextStyle(
@@ -111,10 +103,14 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                         );
                       },
                       error: (error, stack) {
-                        return Center(child: Text(error.toString()),);
+                        return Center(
+                          child: Text(error.toString()),
+                        );
                       },
                       loading: () {
-                        return Center(child: CircularProgressIndicator(),);
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
                       },
                     );
                   },
@@ -126,6 +122,38 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class LandingScreenDrawer extends ConsumerWidget {
+  const LandingScreenDrawer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: 400,
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ListTile(
+            onTap: (){
+              final state = ref.read(themeModeProvider.state);
+
+              ref.read(themeModeProvider.state).state = state.state == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+              print(ref.read(themeModeProvider.state).state);
+            },
+            title: Text(
+              'Hello From Drawer',
+              style: TextStyle(fontSize: 30, color: Colors.green),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -158,7 +186,6 @@ class CategoryCard extends StatelessWidget {
           ),
         );
       },
-
       child: Container(
         margin: EdgeInsets.only(
           right: defaultPadding,
@@ -222,6 +249,7 @@ class PopularCard extends StatelessWidget {
   final String content;
   final String img;
   final int index;
+
   //TODO: Implement favorites ...
   const PopularCard({
     Key? key,
