@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/providers/blog/post_provider.dart';
+import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/static.dart';
 
 class BlogDetailScreen extends StatefulWidget {
@@ -15,8 +16,6 @@ class BlogDetailScreen extends StatefulWidget {
 
 class _BlogDetailScreenState extends State<BlogDetailScreen>
     with SingleTickerProviderStateMixin {
-
-
   late ScrollController _scrollController;
   bool _showBackToTopButton = false;
 
@@ -59,7 +58,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                   Icons.arrow_upward,
                 ),
               ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).custom.bgColor,
         body: Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final post = ref.watch(postProvider(args.id));
@@ -71,7 +70,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                   slivers: [
                     SliverAppBar(
                       expandedHeight: 350,
-                      backgroundColor: Colors.white,
+                      backgroundColor: Theme.of(context).custom.bgColor,
                       elevation: 0,
                       stretch: false,
                       floating: true,
@@ -116,7 +115,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         BackButton(
-                                          color: Colors.white,
+                                          color: Theme.of(context)
+                                              .custom
+                                              .textColor,
                                         ),
                                         Expanded(
                                           child: SizedBox(),
@@ -129,7 +130,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                           children: [
                                             Container(
                                               decoration: BoxDecoration(
-                                                color: Colors.black
+                                                color: Theme.of(context)
+                                                    .custom
+                                                    .bgColor
                                                     .withOpacity(0.3),
                                                 borderRadius:
                                                     BorderRadius.circular(10),
@@ -140,7 +143,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                                 data.author!.username!,
                                                 style: TextStyle(
                                                   fontSize: 14,
-                                                  color: Colors.white,
+                                                  color: Theme.of(context)
+                                                      .custom
+                                                      .textColor,
                                                 ),
                                               ),
                                             ),
@@ -149,19 +154,25 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                             ),
                                             Container(
                                               decoration: BoxDecoration(
-                                                color: Colors.black
+                                                color: Theme.of(context)
+                                                    .custom
+                                                    .bgColor
                                                     .withOpacity(0.3),
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                               ),
                                               padding: EdgeInsets.symmetric(
-                                                  horizontal: 4, vertical: 0),
+                                                horizontal: 4,
+                                                vertical: 0,
+                                              ),
                                               child: Text(
                                                 'Author',
                                                 style: TextStyle(
                                                   fontSize: 11,
                                                   fontWeight: FontWeight.w300,
-                                                  color: Colors.white,
+                                                  color: Theme.of(context)
+                                                      .custom
+                                                      .textColor,
                                                 ),
                                               ),
                                             ),
@@ -184,11 +195,13 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                     Text(
                                       data.title!,
                                       textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 28,
-                                      ),
+                                      style: Theme.of(context)
+                                          .custom
+                                          .textStyle
+                                          .copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 28,
+                                          ),
                                     ),
                                     SizedBox(
                                       height: smallPadding,
@@ -197,27 +210,33 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                       children: [
                                         Text(
                                           data.createdAt!,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12,
-                                          ),
+                                          style: Theme.of(context)
+                                              .custom
+                                              .textStyle
+                                              .copyWith(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12,
+                                              ),
                                         ),
                                         Text(
                                           ' - ',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12,
-                                          ),
+                                          style: Theme.of(context)
+                                              .custom
+                                              .textStyle
+                                              .copyWith(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12,
+                                              ),
                                         ),
                                         Text(
                                           data.category!.category!,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 12,
-                                          ),
+                                          style: Theme.of(context)
+                                              .custom
+                                              .textStyle
+                                              .copyWith(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12,
+                                              ),
                                         ),
                                       ],
                                     ),
@@ -229,21 +248,18 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                       children: [
                                         BlogDetailIconButton(
                                           iconData: Icons.fast_rewind,
-                                          iconColor: Colors.black,
                                         ),
                                         SizedBox(
                                           width: 8,
                                         ),
                                         BlogDetailIconButton(
                                           iconData: Icons.play_arrow,
-                                          iconColor: Colors.black,
                                         ),
                                         SizedBox(
                                           width: 8,
                                         ),
                                         BlogDetailIconButton(
                                           iconData: Icons.fast_forward,
-                                          iconColor: Colors.black,
                                         ),
                                         Expanded(
                                           child: SizedBox(
@@ -252,7 +268,29 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                         ),
                                         BlogDetailIconButton(
                                           iconData: Icons.share,
-                                          iconColor: Colors.black,
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        BlogDetailIconButton(
+                                          iconData: ref
+                                                      .watch(themeModeProvider
+                                                          .state)
+                                                      .state ==
+                                                  ThemeMode.light
+                                              ? Icons.wb_sunny_outlined
+                                              : CupertinoIcons.moon_stars,
+                                          onTap: () {
+                                            final state = ref
+                                                .read(themeModeProvider.state);
+
+                                            ref
+                                                .read(themeModeProvider.state)
+                                                .state = state.state ==
+                                                    ThemeMode.light
+                                                ? ThemeMode.dark
+                                                : ThemeMode.light;
+                                          },
                                         ),
                                         SizedBox(
                                           width: 8,
@@ -282,9 +320,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                             child: Text(
                               data.text!,
                               textAlign: TextAlign.justify,
-                              style: TextStyle(
-                                color: Colors.black,
-                              ),
+                              style:
+                                  Theme.of(context).custom.textStyle.copyWith(),
                             ),
                           );
                         },
@@ -310,30 +347,33 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
 
 class BlogDetailIconButton extends StatelessWidget {
   final IconData iconData;
-  final Color iconColor;
+  final Color? iconColor;
+  final VoidCallback? onTap;
 
   const BlogDetailIconButton({
     required this.iconData,
-    required this.iconColor,
+    this.iconColor,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: onTap,
       child: Container(
         height: 30,
         width: 30,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).custom.textColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Theme.of(context).custom.bgColor.withOpacity(0.3),
               blurRadius: 3,
               offset: Offset(1, 1),
             ),
           ],
           border: Border.all(
-            color: Colors.black.withOpacity(0.2),
+            color: Theme.of(context).custom.bgColor.withOpacity(0.2),
             style: BorderStyle.solid,
             width: 0.2,
           ),
@@ -343,11 +383,10 @@ class BlogDetailIconButton extends StatelessWidget {
         ),
         child: Icon(
           iconData,
-          color: iconColor,
+          color: iconColor ?? Theme.of(context).custom.bgThemeColor,
           size: 19,
         ),
       ),
-      onTap: () {},
     );
   }
 }

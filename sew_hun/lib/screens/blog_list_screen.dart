@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/dio_api.dart';
 import 'package:sew_hun/providers/blog/blog_list_provider.dart';
+import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/static.dart';
 
@@ -17,24 +18,25 @@ class BlogListScreen extends ConsumerStatefulWidget {
 class _BlogListScreenState extends ConsumerState<BlogListScreen> {
   @override
   Widget build(BuildContext context) {
-
     final args = ModalRoute.of(context)!.settings.arguments as BlogListArgument;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           args.category,
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Theme.of(context).custom.textColor),
         ),
         leading: BackButton(
-          color: Colors.black,
+          color: Theme.of(context).custom.textColor,
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).custom.bgColor,
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(),
+        decoration: BoxDecoration(
+          color: Theme.of(context).custom.bgColor,
+        ),
         child: Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final blogList = ref.watch(categoryPostsProvider(args.id));
@@ -44,9 +46,8 @@ class _BlogListScreenState extends ConsumerState<BlogListScreen> {
                   scrollDirection: Axis.vertical,
                   child: Padding(
                       padding: EdgeInsets.only(
-                        top: smallPadding,
-                        left: smallPadding,
-                        right: smallPadding,
+                        left: Theme.of(context).custom.smallPadding,
+                        right: Theme.of(context).custom.smallPadding,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -58,9 +59,8 @@ class _BlogListScreenState extends ConsumerState<BlogListScreen> {
                               title: post.title!,
                               content: post.text!,
                               id: post.id!,
-                            ),
+                            )
 
-                          Divider(),
                           // Divider(),
                         ],
                       )),
@@ -106,7 +106,8 @@ class BlogListContainer extends StatelessWidget {
         );
       },
       child: Container(
-        width: MediaQuery.of(context).size.width,
+        // width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.only(top: 8.0),
         height: 100,
         decoration: BoxDecoration(
           // color: Colors.blue,
@@ -147,8 +148,7 @@ class BlogListContainer extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
-                      color: Colors.black,
+                    style: Theme.of(context).custom.textStyle.copyWith(
                       fontWeight: FontWeight.w700,
                       fontSize: 18,
                     ),
@@ -156,8 +156,7 @@ class BlogListContainer extends StatelessWidget {
                   SizedBox(height: 10),
                   Text(
                     content,
-                    style: TextStyle(
-                      color: Colors.black,
+                    style: Theme.of(context).custom.textStyle.copyWith(
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                     ),
@@ -172,7 +171,7 @@ class BlogListContainer extends StatelessWidget {
                   Text(
                     'read more ...',
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: Theme.of(context).custom.linkColor,
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                     ),

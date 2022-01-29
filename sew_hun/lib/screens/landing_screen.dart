@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:sew_hun/providers/blog/categories_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog_list_screen.dart';
+import 'package:sew_hun/screens/profile_screen.dart';
 import 'package:sew_hun/static.dart';
 
 class LandingScreen extends ConsumerStatefulWidget {
@@ -23,6 +25,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _globalKey,
+      drawerEnableOpenDragGesture: true,
       drawer: Drawer(
         elevation: 6.0,
         child: LandingScreenDrawer(),
@@ -35,7 +38,9 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
           ),
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(),
+          decoration: BoxDecoration(
+            color: Theme.of(context).custom.bgColor,
+          ),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -44,13 +49,43 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                 SizedBox(
                   height: smallPadding,
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _globalKey.currentState!.openDrawer();
+                      },
+                      child: Icon(
+                        Ionicons.menu_sharp,
+                        size: 34,
+                      ),
+                    ),
+                    Expanded(child: SizedBox()),
+                    Icon(
+                      Icons.search,
+                      size: 34,
+                    ),
+                    SizedBox(width: smallPadding,),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.pushNamed(context, ProfileScreen.id);
+                      },
+                      child: CircleAvatar(
+                        foregroundImage: AssetImage('assets/img/baby.png'),
+                        backgroundImage: AssetImage('assets/img/et.jpg'),
+                        radius: 17,
+                      ),
+                    ),
+                  ],
+                ),
                 Text(
                   'Hello',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                  ),
+                  style: Theme.of(context).custom.textStyle.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
                 ),
                 GestureDetector(
                   onTap: () {
@@ -59,11 +94,10 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                   },
                   child: Text(
                     'Let\'s Explore Today',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 24,
-                    ),
+                    style: Theme.of(context).custom.textStyle.copyWith(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 24,
+                        ),
                   ),
                 ),
                 SizedBox(
@@ -71,11 +105,10 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                 ),
                 Text(
                   'Categories',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                  ),
+                  style: Theme.of(context).custom.textStyle.copyWith(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
                 ),
                 Consumer(
                   builder:
@@ -118,6 +151,67 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                 SizedBox(
                   height: 20,
                 ),
+                Text(
+                  'My Favorites',
+                  style: Theme.of(context).custom.textStyle.copyWith(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
+                ),
+                SizedBox(
+                  height: Theme.of(context).custom.smallPadding,
+                ),
+                PopularCard(
+                  title: 'title ghstytr',
+                  content: 'content sdvoidlkgnerp9fd p9aronfv',
+                  index: 1,
+                  img: 'baby.png',
+                ),
+                SizedBox(
+                  height: Theme.of(context).custom.smallPadding,
+                ),
+                PopularCard(
+                  title: 'title ghstytr',
+                  content: 'content sdvoidlkgnerp9fd p9aronfv',
+                  index: 1,
+                  img: 'baby.png',
+                ),
+                SizedBox(
+                  height: Theme.of(context).custom.smallPadding,
+                ),
+                PopularCard(
+                  title: 'title ghstytr',
+                  content: 'content sdvoidlkgnerp9fd p9aronfv',
+                  index: 1,
+                  img: 'baby.png',
+                ),
+                SizedBox(
+                  height: Theme.of(context).custom.smallPadding,
+                ),
+                PopularCard(
+                  title: 'title ghstytr',
+                  content: 'content sdvoidlkgnerp9fd p9aronfv',
+                  index: 1,
+                  img: 'baby.png',
+                ),
+                SizedBox(
+                  height: Theme.of(context).custom.smallPadding,
+                ),
+                PopularCard(
+                  title: 'title ghstytr',
+                  content: 'content sdvoidlkgnerp9fd p9aronfv',
+                  index: 1,
+                  img: 'baby.png',
+                ),
+                SizedBox(
+                  height: Theme.of(context).custom.smallPadding,
+                ),
+                PopularCard(
+                  title: 'title ghstytr',
+                  content: 'content sdvoidlkgnerp9fd p9aronfv',
+                  index: 1,
+                  img: 'baby.png',
+                ),
               ],
             ),
           ),
@@ -142,11 +236,13 @@ class LandingScreenDrawer extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ListTile(
-            onTap: (){
+            onTap: () {
               final state = ref.read(themeModeProvider.state);
 
-              ref.read(themeModeProvider.state).state = state.state == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-              print(ref.read(themeModeProvider.state).state);
+              ref.read(themeModeProvider.state).state =
+                  state.state == ThemeMode.light
+                      ? ThemeMode.dark
+                      : ThemeMode.light;
             },
             title: Text(
               'Hello From Drawer',
@@ -314,34 +410,29 @@ class PopularCard extends StatelessWidget {
               children: [
                 Text(
                   MediaQuery.of(context).orientation == Orientation.portrait
-                      ? (title.length > 10
-                          ? title.substring(0, 15) + '...'
-                          : title)
+                      ? (title.length > 10 ? title + '...' : title)
                       : title,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                  ),
+                  style: Theme.of(context).custom.textStyle.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                      ),
                 ),
                 Text(
                   content.substring(0, 20) + '...',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                  ),
+                  style: Theme.of(context).custom.textStyle.copyWith(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                      ),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 30),
                 Text(
                   'read more ...',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                  ),
+                  style: Theme.of(context).custom.textStyle.copyWith(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                      ),
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
