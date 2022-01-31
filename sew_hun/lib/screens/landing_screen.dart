@@ -1,11 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:sew_hun/providers/blog/categories_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog_list_screen.dart';
+import 'package:sew_hun/screens/messages_screen.dart';
 import 'package:sew_hun/screens/profile_screen.dart';
 import 'package:sew_hun/static.dart';
 
@@ -26,6 +27,52 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
     return Scaffold(
       key: _globalKey,
       drawerEnableOpenDragGesture: true,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).custom.bgThemeColor,
+        leading: GestureDetector(
+          onTap: () {
+            _globalKey.currentState!.openDrawer();
+          },
+          child: Icon(
+            Ionicons.menu_sharp,
+            size: 34,
+            color: Theme.of(context).custom.textColor,
+          ),
+        ),
+        title: Text(
+          'Sew Hun', // TODO: Make this text automatically scrolling
+          style: Theme.of(context).custom.textStyle.copyWith(),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              print('search');
+            },
+            child: Icon(
+              Icons.search,
+              size: 34,
+              color: Theme.of(context).custom.textColor,
+            ),
+          ),
+          SizedBox(
+            width: smallPadding,
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, ProfileScreen.id);
+            },
+            child: CircleAvatar(
+              foregroundImage: AssetImage('assets/img/baby.png'),
+              backgroundImage: AssetImage('assets/img/et.jpg'),
+              // TODO: change this to a default image
+              radius: 17,
+            ),
+          ),
+          SizedBox(
+            width: smallPadding,
+          ),
+        ],
+      ),
       drawer: Drawer(
         elevation: 6.0,
         child: LandingScreenDrawer(),
@@ -49,37 +96,6 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                 SizedBox(
                   height: smallPadding,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        _globalKey.currentState!.openDrawer();
-                      },
-                      child: Icon(
-                        Ionicons.menu_sharp,
-                        size: 34,
-                      ),
-                    ),
-                    Expanded(child: SizedBox()),
-                    Icon(
-                      Icons.search,
-                      size: 34,
-                    ),
-                    SizedBox(width: smallPadding,),
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.pushNamed(context, ProfileScreen.id);
-                      },
-                      child: CircleAvatar(
-                        foregroundImage: AssetImage('assets/img/baby.png'),
-                        backgroundImage: AssetImage('assets/img/et.jpg'),
-                        radius: 17,
-                      ),
-                    ),
-                  ],
-                ),
                 Text(
                   'Hello',
                   style: Theme.of(context).custom.textStyle.copyWith(
@@ -87,18 +103,12 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                         fontSize: 18,
                       ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    print('Hello');
-                    _globalKey.currentState!.openDrawer();
-                  },
-                  child: Text(
-                    'Let\'s Explore Today',
-                    style: Theme.of(context).custom.textStyle.copyWith(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 24,
-                        ),
-                  ),
+                Text(
+                  'Let\'s Explore Today',
+                  style: Theme.of(context).custom.textStyle.copyWith(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 24,
+                      ),
                 ),
                 SizedBox(
                   height: 20,
@@ -231,32 +241,175 @@ class LandingScreenDrawer extends ConsumerWidget {
     return Container(
       height: MediaQuery.of(context).size.height,
       width: 400,
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ListTile(
-            onTap: () {
-              final state = ref.read(themeModeProvider.state);
+      decoration: BoxDecoration(
+        color: Theme.of(context).custom.bgColor,
+      ),
+      padding: EdgeInsets.all(Theme.of(context).custom.smallPadding),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        Theme.of(context).custom.defaultPadding,
+                      ),
+                      image: DecorationImage(
+                        image: AssetImage('assets/img/baby.png'),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: Theme.of(context).custom.smallPadding,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Hello 👋',
+                        style: Theme.of(context).custom.textStyle.copyWith(
+                              color: Theme.of(context).custom.textColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                      SizedBox(
+                        height: Theme.of(context).custom.smallPadding,
+                      ),
+                      Text(
+                        'First name',
+                        style: Theme.of(context).custom.textStyle.copyWith(
+                              color: Theme.of(context).custom.textColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: SizedBox(),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      final state = ref.read(themeModeProvider.state);
 
-              ref.read(themeModeProvider.state).state =
-                  state.state == ThemeMode.light
-                      ? ThemeMode.dark
-                      : ThemeMode.light;
-            },
-            title: Text(
-              'Hello From Drawer',
-              style: TextStyle(fontSize: 30, color: Colors.green),
-            ),
+                      ref.read(themeModeProvider.state).state =
+                          state.state == ThemeMode.light
+                              ? ThemeMode.dark
+                              : ThemeMode.light;
+                    },
+                    child: Icon(
+                      ref.watch(themeModeProvider.state).state ==
+                              ThemeMode.light
+                          ? Icons.wb_sunny_outlined
+                          : CupertinoIcons.moon_stars,
+                    ),
+                  ),
+                ],
+              ),
+              Divider(
+                color: Theme.of(context).custom.textColor,
+                indent: Theme.of(context).custom.smallPadding,
+                endIndent: Theme.of(context).custom.smallPadding,
+                thickness: 0.5,
+              ),
+              DrawerItems(
+                iconData: Icons.message,
+                label: 'Messages',
+                number: 2,
+                onTap: (){
+                  Navigator.pushNamed(context, MessagesScreen.id);
+                },
+              ),
+              DrawerItems(
+                iconData: Icons.settings,
+                label: 'Settings',
+              ),
+              Divider(
+                color: Theme.of(context).custom.textColor,
+                indent: Theme.of(context).custom.smallPadding,
+                endIndent: Theme.of(context).custom.smallPadding,
+                thickness: 0.5,
+              ),
+              DrawerItems(
+                iconData: Icons.help,
+                label: 'About',
+              ),
+            ],
           ),
-        ],
+        ),
+      ),
+    );
+  }
+}
+
+class DrawerItems extends StatelessWidget {
+  final IconData iconData;
+  final String label;
+  final int? number;
+  final VoidCallback? onTap;
+
+  const DrawerItems({
+    Key? key,
+    required this.iconData,
+    required this.label,
+    this.number, this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 40.0,
+        child: Row(
+          children: [
+            Icon(
+              iconData,
+              color: Theme.of(context).custom.textColor,
+              size: 24,
+            ),
+            SizedBox(
+              width: Theme.of(context).custom.smallPadding,
+            ),
+            Text(
+              label,
+              style: Theme.of(context).custom.textStyle.copyWith(
+                    fontSize: 18,
+                  ),
+            ),
+            Expanded(
+              child: SizedBox(),
+            ),
+            CircleAvatar(
+              radius: 14,
+              backgroundColor: Colors.transparent,
+              child: Text(
+                number != null ? number.toString() : '',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class CategoryCard extends StatelessWidget {
-  final storage = FlutterSecureStorage();
+  // final storage = FlutterSecureStorage();
   final String category;
   final String img;
   final int id;
@@ -272,7 +425,7 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        await storage.write(key: 'current_category', value: id.toString());
+        // await storage.write(key: 'current_category', value: id.toString());
         Navigator.pushNamed(
           context,
           BlogListScreen.id,

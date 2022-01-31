@@ -13,12 +13,17 @@
 // TODO: recolor the whole app according to the theme
 
 
-/* NEXT TODOS */
+/* FUTURE TODOS */
 // TODO: add more languages to the app
+
+/* NEXT TODOS */
+
 
 
 /* ON-PROGRESS TODOS */
-
+// TODO: chat
+// TODO: Drawer
+// TODO: Profile
 
 /* COMPLETED TODOS */
 // TODO: disallow screenshot

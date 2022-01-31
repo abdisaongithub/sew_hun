@@ -2,6 +2,7 @@ class Post {
   int? id;
   Author? author;
   List<Comments>? comments;
+  List<Narration>? narration;
   String? title;
   String? text;
   String? image;
@@ -16,6 +17,7 @@ class Post {
       {this.id,
         this.author,
         this.comments,
+        this.narration,
         this.title,
         this.text,
         this.image,
@@ -34,6 +36,12 @@ class Post {
       comments = <Comments>[];
       json['comments'].forEach((v) {
         comments!.add(new Comments.fromJson(v));
+      });
+    }
+    if (json['narration'] != null) {
+      narration = <Narration>[];
+      json['narration'].forEach((v) {
+        narration!.add(new Narration.fromJson(v));
       });
     }
     title = json['title'];
@@ -62,6 +70,9 @@ class Post {
     }
     if (this.comments != null) {
       data['comments'] = this.comments!.map((v) => v.toJson()).toList();
+    }
+    if (this.narration != null) {
+      data['narration'] = this.narration!.map((v) => v.toJson()).toList();
     }
     data['title'] = this.title;
     data['text'] = this.text;
@@ -144,6 +155,31 @@ class Comments {
     if (this.user != null) {
       data['user'] = this.user!.toJson();
     }
+    return data;
+  }
+}
+
+class Narration {
+  int? id;
+  String? audio;
+  int? narrator;
+  int? post;
+
+  Narration({this.id, this.audio, this.narrator, this.post});
+
+  Narration.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    audio = json['audio'];
+    narrator = json['narrator'];
+    post = json['post'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['audio'] = this.audio;
+    data['narrator'] = this.narrator;
+    data['post'] = this.post;
     return data;
   }
 }

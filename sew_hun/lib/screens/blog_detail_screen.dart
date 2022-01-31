@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,10 +19,12 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
     with SingleTickerProviderStateMixin {
   late ScrollController _scrollController;
   bool _showBackToTopButton = false;
+  late AudioPlayer _player;
 
   @override
   void initState() {
     super.initState();
+    _player = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -34,6 +37,12 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
       });
   }
 
+  @override
+  void dispose() {
+    _player.dispose();
+    super.dispose();
+  }
+
   void _scrollToTop() {
     _scrollController.animateTo(
       0,
@@ -42,10 +51,28 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
     );
   }
 
+  void play({String url = 'https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3'}) async {
+    _player.play(url);
+    // _player.play(data.narration!.first.audio.toString());
+  }
+
+  void playPause() async {
+    // if (_player.isPlaying) {
+    //   await _player.pausePlayer();
+    // } else if (_player.isPaused) {
+    //   await _player.resumePlayer();
+    // } else if (_player.isStopped) {
+    //   await _player.startPlayer();
+    // }
+  }
+
+  Future<void> stopPlayer() async {
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as BlogArguments;
-
     return SafeArea(
       child: Scaffold(
         floatingActionButton: _showBackToTopButton == false
@@ -62,8 +89,12 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
         body: Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final post = ref.watch(postProvider(args.id));
+
             return post.when(
               data: (data) {
+                // TODO: check if narration exists before trying to play the sound
+                play();
+                print(data.narration!.first.audio.toString());
                 return CustomScrollView(
                   controller: _scrollController,
                   physics: BouncingScrollPhysics(),

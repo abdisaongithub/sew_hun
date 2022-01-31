@@ -5,6 +5,7 @@ import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog_list_screen.dart';
 import 'package:sew_hun/screens/landing_screen.dart';
 import 'package:sew_hun/screens/login_screen.dart';
+import 'package:sew_hun/screens/messages_screen.dart';
 import 'package:sew_hun/screens/profile_screen.dart';
 import 'package:sew_hun/screens/splash_screen.dart';
 
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
             BlogListScreen.id: (context) => BlogListScreen(),
             BlogDetailScreen.id: (context) => BlogDetailScreen(),
             ProfileScreen.id: (context) => ProfileScreen(),
+            MessagesScreen.id: (context) => MessagesScreen(),
           },
         );
       },

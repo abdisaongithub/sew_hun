@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-const baseUrl = 'http://192.168.42.243:8000/';
+const baseUrl = 'http://192.168.43.46:8000/';
 
 var options = BaseOptions(
   baseUrl: baseUrl,
