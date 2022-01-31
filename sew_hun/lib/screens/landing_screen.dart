@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:sew_hun/providers/blog/categories_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
+import 'package:sew_hun/screens/about_screen.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog_list_screen.dart';
 import 'package:sew_hun/screens/messages_screen.dart';
@@ -342,6 +343,9 @@ class LandingScreenDrawer extends ConsumerWidget {
               DrawerItems(
                 iconData: Icons.help,
                 label: 'About',
+                onTap: (){
+                  Navigator.pushNamed(context, AboutScreen.id);
+                },
               ),
             ],
           ),

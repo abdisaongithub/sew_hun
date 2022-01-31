@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
+import 'package:sew_hun/screens/about_screen.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog_list_screen.dart';
 import 'package:sew_hun/screens/landing_screen.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
             BlogDetailScreen.id: (context) => BlogDetailScreen(),
             ProfileScreen.id: (context) => ProfileScreen(),
             MessagesScreen.id: (context) => MessagesScreen(),
+            AboutScreen.id: (context) => AboutScreen(),
           },
         );
       },
