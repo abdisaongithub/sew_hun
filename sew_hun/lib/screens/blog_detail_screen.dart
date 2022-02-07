@@ -3,8 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/providers/blog/post_provider.dart';
+import 'package:sew_hun/providers/favorite/toggle_favorite_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
+import 'package:sew_hun/screens/comments_screen.dart';
 import 'package:sew_hun/static.dart';
+import 'package:share_plus/share_plus.dart';
 
 class BlogDetailScreen extends StatefulWidget {
   static String id = 'BlogDetailScreen';
@@ -19,6 +22,10 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
     with SingleTickerProviderStateMixin {
   late ScrollController _scrollController;
   bool _showBackToTopButton = false;
+  bool _isPlaying = false;
+  bool _isFavorite = false;
+
+  // bool _isSet = false;
   late AudioPlayer _player;
 
   @override
@@ -51,28 +58,30 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
     );
   }
 
-  void play({String url = 'https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3'}) async {
+  void play(
+      {String url =
+          'https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3'}) async {
     _player.play(url);
+    _isPlaying = true;
     // _player.play(data.narration!.first.audio.toString());
   }
 
-  void playPause() async {
-    // if (_player.isPlaying) {
-    //   await _player.pausePlayer();
-    // } else if (_player.isPaused) {
-    //   await _player.resumePlayer();
-    // } else if (_player.isStopped) {
-    //   await _player.startPlayer();
-    // }
-  }
+  // void playPause() async {
+  //   if (_isPlaying) {
+  //     await _player.pause();
+  //     _isPlaying = false;
+  //   } else if (!_isPlaying) {
+  //     await _player.resume();
+  //     _isPlaying = true;
+  //   }
+  // }
 
-  Future<void> stopPlayer() async {
-
-  }
+  Future<void> stopPlayer() async {}
 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as BlogArguments;
+
     return SafeArea(
       child: Scaffold(
         floatingActionButton: _showBackToTopButton == false
@@ -85,16 +94,26 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                   Icons.arrow_upward,
                 ),
               ),
-        backgroundColor: Theme.of(context).custom.bgColor,
+        backgroundColor: Theme.of(context).custom.appBarColor,
         body: Consumer(
           builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final post = ref.watch(postProvider(args.id));
 
             return post.when(
               data: (data) {
-                // TODO: check if narration exists before trying to play the sound
-                play();
-                print(data.narration!.first.audio.toString());
+                if (data.narration!.isEmpty) {
+                  // pass
+                  _player.setUrl(
+                    'https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3',
+                  );
+                } else {
+                  // _player.setUrl(
+                  //   data.narration!.first.audio.toString(),
+                  // );
+                  _player.setUrl(
+                    'https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3',
+                  );
+                }
                 return CustomScrollView(
                   controller: _scrollController,
                   physics: BouncingScrollPhysics(),
@@ -277,14 +296,29 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        BlogDetailIconButton(
-                                          iconData: Icons.fast_rewind,
-                                        ),
+                                        // BlogDetailIconButton(
+                                        //   iconData: Icons.fast_rewind,
+                                        // ),
                                         SizedBox(
                                           width: 8,
                                         ),
                                         BlogDetailIconButton(
-                                          iconData: Icons.play_arrow,
+                                          iconData: _isPlaying
+                                              ? Icons.pause
+                                              : Icons.play_arrow,
+                                          onTap: () {
+                                            if (!_isPlaying) {
+                                              _player.resume();
+                                              setState(() {
+                                                _isPlaying = true;
+                                              });
+                                            } else {
+                                              _player.pause();
+                                              setState(() {
+                                                _isPlaying = false;
+                                              });
+                                            }
+                                          },
                                         ),
                                         SizedBox(
                                           width: 8,
@@ -298,7 +332,22 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                           ),
                                         ),
                                         BlogDetailIconButton(
+                                          iconData: Icons.list_alt,
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                                context, CommentsScreen.id);
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        BlogDetailIconButton(
                                           iconData: Icons.share,
+                                          onTap: () {
+                                            Share.share(
+                                                data.text!.substring(5) +
+                                                    '\n https://t.me/abd_dba');
+                                          },
                                         ),
                                         SizedBox(
                                           width: 8,
@@ -328,8 +377,13 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                         ),
                                         BlogDetailIconButton(
                                           iconData: CupertinoIcons.heart_fill,
-                                          iconColor: Colors.red,
-                                        ),
+                                          iconColor: _isFavorite
+                                              ? Colors.red
+                                              : Theme.of(context)
+                                                  .custom
+                                                  .bgColor,
+                                          onTap: () {},
+                                        ), // TODO: implement this feature
                                         SizedBox(),
                                       ],
                                     ),

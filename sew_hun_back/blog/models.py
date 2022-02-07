@@ -9,7 +9,8 @@ class Category(models.Model):
     """
     category = models.CharField(max_length=256, verbose_name='categories')
     description = models.CharField(max_length=256)
-    image = models.ImageField(upload_to='photos/categories/',)
+    image = models.ImageField(upload_to='photos/categories/', )
+
     # created_at = models.DateTimeField(auto_now_add=True)
     # updated_at = models.DateTimeField(auto_now=True)
 
@@ -47,8 +48,11 @@ class Post(models.Model):
     reads = models.BigIntegerField(default=0, blank=False, )
     shares = models.BigIntegerField(default=0, blank=False, )
 
+    # TODO: not migrated, also update the pots provider after uncommenting this shit
+    # is_published = models.BooleanField(default=True)
+
     def __str__(self):
-        return self.title
+        return str(self.title)
 
     class Meta:
         ordering = ('-created_at',)
@@ -77,7 +81,14 @@ class Narration(models.Model):
     """
     narrator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='narrator')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='narration')
-    audio = models.FileField(upload_to='media/')
+    audio = models.FileField(upload_to='narrations/')
 
     def __str__(self):
-        return self.post
+        return str(self.post.id) + ': ' + self.post.title
+
+
+class YoutubePlaylist(models.Model):
+    playlist = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.playlist

@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Post, Category, Tag, Comment, Narration
+from .models import Post, Category, Tag, Comment, Narration, YoutubePlaylist
 from accounts.models import Profile, Favorite
 
 
@@ -14,6 +14,7 @@ class NarrationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Narration
         fields = '__all__'
+        depth = 0
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -57,7 +58,7 @@ class CommentsSerializer(serializers.ModelSerializer):
 
 
 class CommentDetailSerializer(serializers.ModelSerializer):
-    # todo: override create method to add additional data
+    # todo: override create method to add additional data for validation
 
     class Meta:
         model = Comment
@@ -81,6 +82,7 @@ class PostsCategorySerializer(serializers.ModelSerializer):
 class PostDetailSerializer(serializers.ModelSerializer):
     author = UserProfileSerializer()
     comments = CommentsSerializer(many=True)
+    narration = NarrationsSerializer(many=True)
 
     class Meta:
         model = Post
@@ -101,3 +103,10 @@ class FavoritesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorite
         fields = ['id', 'post', ]
+
+
+class YoutubePlaylistSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = YoutubePlaylist
+        fields = '__all__'

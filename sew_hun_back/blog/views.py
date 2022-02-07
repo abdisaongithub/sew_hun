@@ -1,9 +1,9 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Post, Comment, Category
+from .models import Post, Comment, Category, YoutubePlaylist
 from . import serializers
 from accounts.models import Favorite
 
@@ -19,10 +19,9 @@ class CategoryPostListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        posts = Post.objects.filter(category=request.data['category'])
-        serialized = serializers.PostsCategorySerializer(data=posts, many=True)
-        serialized.is_valid()
-        return Response(serialized.data)
+        posts = Post.objects.filter(category=kwargs['pk'])
+        serialized = serializers.PostsCategorySerializer(posts, many=True)
+        return Response({"posts": serialized.data}, status=status.HTTP_200_OK, )
 
 
 class PostListView(generics.ListAPIView):
@@ -64,9 +63,6 @@ class CommentCreateView(generics.CreateAPIView):
 
 
 class CommentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = serializers.CommentDetailSerializer
-    queryset = Comment
-
     permission_classes = [IsAuthenticated]
 
     # todo: check if the user owns the comment
@@ -101,15 +97,19 @@ class FavoritesListCreateView(generics.ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         fav = Favorite.objects.filter(user=request.user.id).order_by('-created_at')
-        serialized = serializers.FavoritesSerializer(data=fav, many=True)
-        serialized.is_valid()
-        return Response(serialized.data)
+        serialized = serializers.FavoritesSerializer(fav, many=True)
+        return Response(data={'favorites': serialized.data})
 
     def post(self, request, *args, **kwargs):
         post = Post.objects.get(pk=request.data['post'])
-        fav = Favorite.objects.create(user=request.user, post=post)
-        serialized = serializers.FavoritesSerializer(data=fav)
-        serialized.is_valid()
+        favorite = Favorite.objects.filter(user=request.user, post=post)
+        if len(favorite) > 0:
+            for fav in favorite:
+                fav.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            fav = Favorite.objects.create(user=request.user, post=post)
+        serialized = serializers.FavoritesSerializer(fav)
         return Response(serialized.data)
 
 
@@ -124,3 +124,27 @@ class FavoriteDestroyView(generics.DestroyAPIView):
                 return Response(data={"error": "Favorite doesn\'t belong to user"}, status=status.HTTP_403_FORBIDDEN, )
         except Favorite.DoesNotExist:
             return Response(data={}, status=status.HTTP_404_NOT_FOUND)
+
+
+class YoutubePlaylistListView(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        playlists = YoutubePlaylist.objects.all()
+        serialized = serializers.YoutubePlaylistSerializer(playlists, many=True)
+
+        return Response(data={'playlists': serialized.data}, status=status.HTTP_200_OK, )
+
+
+class LandingView(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        categories = Category.objects.all()
+        cat_ser = serializers.CategoriesSerializer(categories, many=True)
+
+        fav = Favorite.objects.filter(user=request.user.id).order_by('-created_at')
+        fav_ser = serializers.FavoritesSerializer(fav, many=True)
+
+        res = {
+            'categories': cat_ser.data,
+            'favorites': fav_ser.data
+        }
+
+        return Response(data=res, )

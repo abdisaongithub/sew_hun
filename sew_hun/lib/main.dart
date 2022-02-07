@@ -4,11 +4,17 @@ import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/about_screen.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog_list_screen.dart';
+import 'package:sew_hun/screens/chats_screen.dart';
+import 'package:sew_hun/screens/comments_screen.dart';
 import 'package:sew_hun/screens/landing_screen.dart';
 import 'package:sew_hun/screens/login_screen.dart';
+import 'package:sew_hun/screens/logo_screen.dart';
 import 'package:sew_hun/screens/messages_screen.dart';
 import 'package:sew_hun/screens/profile_screen.dart';
 import 'package:sew_hun/screens/splash_screen.dart';
+import 'package:sew_hun/screens/youtube_video_player_screen.dart';
+import 'package:sew_hun/screens/youtube_videos_screen.dart';
+
 
 void main() {
   runApp(
@@ -36,9 +42,14 @@ class MyApp extends StatelessWidget {
             LandingScreen.id: (context) => LandingScreen(),
             BlogListScreen.id: (context) => BlogListScreen(),
             BlogDetailScreen.id: (context) => BlogDetailScreen(),
+            CommentsScreen.id: (context) => CommentsScreen(),
             ProfileScreen.id: (context) => ProfileScreen(),
             MessagesScreen.id: (context) => MessagesScreen(),
+            ChatsScreen.id: (context) => ChatsScreen(),
             AboutScreen.id: (context) => AboutScreen(),
+            LogoScreen.id: (context) => LogoScreen(),
+            YoutubeVideosScreen.id: (context) => YoutubeVideosScreen(),
+            YoutubeVideoPlayerScreen.id: (context) => YoutubeVideoPlayerScreen(),
           },
         );
       },

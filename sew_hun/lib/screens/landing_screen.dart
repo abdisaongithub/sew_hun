@@ -2,14 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:sew_hun/dio_api.dart';
 import 'package:sew_hun/providers/blog/categories_provider.dart';
+import 'package:sew_hun/providers/favorite/favorites_provider.dart';
+import 'package:sew_hun/providers/landing/landingProvider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/about_screen.dart';
 import 'package:sew_hun/screens/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog_list_screen.dart';
+import 'package:sew_hun/screens/chats_screen.dart';
 import 'package:sew_hun/screens/messages_screen.dart';
 import 'package:sew_hun/screens/profile_screen.dart';
+import 'package:sew_hun/screens/youtube_videos_screen.dart';
 import 'package:sew_hun/static.dart';
+import 'dart:math';
 
 class LandingScreen extends ConsumerStatefulWidget {
   static String id = 'LandingScreen';
@@ -25,6 +31,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final landing = ref.watch(landingProvider);
     return Scaffold(
       key: _globalKey,
       drawerEnableOpenDragGesture: true,
@@ -79,153 +86,119 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
         child: LandingScreenDrawer(),
       ),
       body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.only(
-            left: 8,
-            right: 8,
-          ),
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            color: Theme.of(context).custom.bgColor,
-          ),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: smallPadding,
-                ),
-                Text(
-                  'Hello',
-                  style: Theme.of(context).custom.textStyle.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                      ),
-                ),
-                Text(
-                  'Let\'s Explore Today',
-                  style: Theme.of(context).custom.textStyle.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 24,
-                      ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'Categories',
-                  style: Theme.of(context).custom.textStyle.copyWith(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                      ),
-                ),
-                Consumer(
-                  builder:
-                      (BuildContext context, WidgetRef ref, Widget? child) {
-                    final category = ref.watch(categoryProvider);
-
-                    return category.when(
-                      data: (data) {
-                        return SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          physics: BouncingScrollPhysics(),
-                          padding: EdgeInsets.all(
-                            smallPadding,
+        child: landing.when(
+          data: (data) {
+            return Container(
+              padding: EdgeInsets.only(
+                left: 8,
+                right: 8,
+              ),
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: Theme.of(context).custom.bgColor,
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: defaultPadding,
+                    ),
+                    // Text(
+                    //   'Hello',
+                    //   style: Theme.of(context).custom.textStyle.copyWith(
+                    //         fontWeight: FontWeight.w700,
+                    //         fontSize: 18,
+                    //       ),
+                    // ),
+                    Text(
+                      'Let\'s Explore Today',
+                      style: Theme.of(context).custom.textStyle.copyWith(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 24,
                           ),
-                          child: Row(
-                            children: [
-                              for (var category in data.results!)
-                                CategoryCard(
-                                  category: category.category!,
-                                  img: category.image!,
-                                  id: category.id!,
-                                )
-                            ],
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'Categories',
+                      style: Theme.of(context).custom.textStyle.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
                           ),
-                        );
-                      },
-                      error: (error, stack) {
-                        return Center(
-                          child: Text(error.toString()),
-                        );
-                      },
-                      loading: () {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      },
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text(
-                  'My Favorites',
-                  style: Theme.of(context).custom.textStyle.copyWith(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: BouncingScrollPhysics(),
+                      padding: EdgeInsets.all(
+                        smallPadding,
                       ),
+                      child: Row(
+                        children: [
+                          for (var category in data.categories!)
+                            CategoryCard(
+                              category: category.category!,
+                              img: category.image!,
+                              id: category.id!,
+                            )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'My Favorites',
+                      style: Theme.of(context).custom.textStyle.copyWith(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                          ),
+                    ),
+                    SizedBox(
+                      height: Theme.of(context).custom.smallPadding,
+                    ),
+                    for (var fav in data.favorites!)
+                      FavoriteCard(
+                        title: fav.post!.title.toString(),
+                        content: fav.post!.text.toString(),
+                        index: fav.post!.id!.toInt(),
+                        img: fav.post!.image.toString(),
+                      ),
+                  ],
                 ),
-                SizedBox(
-                  height: Theme.of(context).custom.smallPadding,
-                ),
-                PopularCard(
-                  title: 'title ghstytr',
-                  content: 'content sdvoidlkgnerp9fd p9aronfv',
-                  index: 1,
-                  img: 'baby.png',
-                ),
-                SizedBox(
-                  height: Theme.of(context).custom.smallPadding,
-                ),
-                PopularCard(
-                  title: 'title ghstytr',
-                  content: 'content sdvoidlkgnerp9fd p9aronfv',
-                  index: 1,
-                  img: 'baby.png',
-                ),
-                SizedBox(
-                  height: Theme.of(context).custom.smallPadding,
-                ),
-                PopularCard(
-                  title: 'title ghstytr',
-                  content: 'content sdvoidlkgnerp9fd p9aronfv',
-                  index: 1,
-                  img: 'baby.png',
-                ),
-                SizedBox(
-                  height: Theme.of(context).custom.smallPadding,
-                ),
-                PopularCard(
-                  title: 'title ghstytr',
-                  content: 'content sdvoidlkgnerp9fd p9aronfv',
-                  index: 1,
-                  img: 'baby.png',
-                ),
-                SizedBox(
-                  height: Theme.of(context).custom.smallPadding,
-                ),
-                PopularCard(
-                  title: 'title ghstytr',
-                  content: 'content sdvoidlkgnerp9fd p9aronfv',
-                  index: 1,
-                  img: 'baby.png',
-                ),
-                SizedBox(
-                  height: Theme.of(context).custom.smallPadding,
-                ),
-                PopularCard(
-                  title: 'title ghstytr',
-                  content: 'content sdvoidlkgnerp9fd p9aronfv',
-                  index: 1,
-                  img: 'baby.png',
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
+          error: (error, st) {
+            return Center(
+              child: TextButton(
+                onPressed: () {
+                  ref.refresh(landingProvider);
+                },
+                child: Text('Reload'),
+              ),
+            );
+          },
+          loading: () {
+            return Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    height: defaultPadding,
+                  ),
+                  Text('Loading...'),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
@@ -324,15 +297,28 @@ class LandingScreenDrawer extends ConsumerWidget {
               ),
               DrawerItems(
                 iconData: Icons.message,
-                label: 'Messages',
+                label: 'Chat',
                 number: 2,
-                onTap: (){
-                  Navigator.pushNamed(context, MessagesScreen.id);
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, ChatsScreen.id);
+                },
+              ),
+              DrawerItems(
+                iconData: Icons.ondemand_video_sharp,
+                label: 'Latest Videos',
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, YoutubeVideosScreen.id);
                 },
               ),
               DrawerItems(
                 iconData: Icons.settings,
                 label: 'Settings',
+                onTap: () {
+                  Navigator.pop(context);
+                  // TODO: NNavigate to SettingsScreen
+                },
               ),
               Divider(
                 color: Theme.of(context).custom.textColor,
@@ -343,7 +329,8 @@ class LandingScreenDrawer extends ConsumerWidget {
               DrawerItems(
                 iconData: Icons.help,
                 label: 'About',
-                onTap: (){
+                onTap: () {
+                  Navigator.pop(context);
                   Navigator.pushNamed(context, AboutScreen.id);
                 },
               ),
@@ -365,7 +352,8 @@ class DrawerItems extends StatelessWidget {
     Key? key,
     required this.iconData,
     required this.label,
-    this.number, this.onTap,
+    this.number,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -429,7 +417,6 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        // await storage.write(key: 'current_category', value: id.toString());
         Navigator.pushNamed(
           context,
           BlogListScreen.id,
@@ -460,7 +447,7 @@ class CategoryCard extends StatelessWidget {
           ],
           image: DecorationImage(
             image: NetworkImage(
-              img,
+              baseUrl.substring(0, baseUrl.length - 1) + img,
             ),
             fit: BoxFit.cover,
           ),
@@ -497,14 +484,14 @@ class CategoryCard extends StatelessWidget {
   }
 }
 
-class PopularCard extends StatelessWidget {
+class FavoriteCard extends StatelessWidget {
   final String title;
   final String content;
   final String img;
   final int index;
 
   //TODO: Implement favorites ...
-  const PopularCard({
+  const FavoriteCard({
     Key? key,
     required this.title,
     required this.content,
@@ -527,6 +514,7 @@ class PopularCard extends StatelessWidget {
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.only(bottom: smallPadding),
         decoration: BoxDecoration(
           // color: Colors.blue,
           borderRadius: BorderRadius.all(
@@ -535,30 +523,27 @@ class PopularCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Hero(
-              tag: index.toString(),
-              child: Container(
-                margin: EdgeInsets.only(
-                  right: defaultPadding,
-                ),
-                width: 100,
-                height: 130,
-                decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
-                    ),
-                    image: DecorationImage(
-                      image: AssetImage(
-                        'assets/img/$img',
-                      ),
-                      fit: BoxFit.cover,
-                      // colorFilter: ColorFilter.mode(
-                      //   Colors.black87,
-                      //   BlendMode.dstATop,
-                      // ),
-                    )),
+            Container(
+              margin: EdgeInsets.only(
+                right: defaultPadding,
               ),
+              width: 100,
+              height: 130,
+              decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                  image: DecorationImage(
+                    image: NetworkImage(
+                        baseUrl.substring(0, baseUrl.length - 1) +img,
+                    ),
+                    fit: BoxFit.cover,
+                    // colorFilter: ColorFilter.mode(
+                    //   Colors.black87,
+                    //   BlendMode.dstATop,
+                    // ),
+                  )),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -575,7 +560,10 @@ class PopularCard extends StatelessWidget {
                       ),
                 ),
                 Text(
-                  content.substring(0, 20) + '...',
+                MediaQuery.of(context).orientation == Orientation.portrait
+                ? (content.length > 10 ? content + '...' : content)
+                    : content,
+                  // content.substring(0, 20) + '...',
                   style: Theme.of(context).custom.textStyle.copyWith(
                         fontWeight: FontWeight.w400,
                         fontSize: 14,

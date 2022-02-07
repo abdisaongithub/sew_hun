@@ -4,6 +4,8 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from django.contrib.auth import get_user_model
 
+from .models import MyUser, Profile, Role
+
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -25,3 +27,43 @@ class UserSerializer(serializers.ModelSerializer):
                 fields=['email']
             )
         ]
+
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Role
+        fields = '__all__'
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    role = RoleSerializer(many=True)
+
+    class Meta:
+        model = Profile
+        fields = '__all__'
+
+
+class ProfileMiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['id', 'photo']
+
+
+class MeSerializer(serializers.ModelSerializer):
+    profile = ProfileSerializer(many=False)
+
+    class Meta:
+        model = MyUser
+        # fields = '__all__'
+        exclude = ('password', 'groups', 'user_permissions', 'is_active',)
+        depth = 1
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    profile = ProfileMiniSerializer()
+
+    class Meta:
+        model = MyUser
+        exclude = ('password', 'groups', 'user_permissions', 'is_active', 'last_login', 'date_joined')
+        # fields = '__all__'
+        depth = 1

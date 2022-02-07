@@ -32,9 +32,15 @@ dependencies:
   dio: ^4.0.4
   flutter_secure_storage: ^5.0.2
   flutter_riverpod: ^1.0.3
-#  fluttertoast: ^8.0.8
-
-
+  fluttertoast: ^8.0.8
+#  animated_splash_screen: ^1.1.0
+  ionicons: ^0.1.2
+  audioplayers: ^0.20.1
+  url_launcher: ^6.0.18
+  share_plus: ^3.0.4
+  path_provider: ^2.0.8
+  youtube_explode_dart: ^1.10.9+1
+  youtube_player_flutter: ^8.0.0
 
 dev_dependencies:
   flutter_test:

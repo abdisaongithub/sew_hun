@@ -26,9 +26,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '192.168.43.46',
-    '192.168.43.46:8000',
-    '127.0.0.1:8000',
     '127.0.0.1',
+    'localhost',
+    '192.168.42.243',
+    '192.168.42.25',
 ]
 
 # Application definition
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
     # custom apps
     'accounts.apps.AccountsConfig',
     'blog.apps.BlogConfig',
+    'chat.apps.ChatConfig',
 ]
 
 MIDDLEWARE = [
@@ -160,8 +162,21 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ],
+
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.MultiPartParser',
+        # 'rest_framework.parsers.FileUploadParser',
+        'rest_framework.parsers.FormParser',
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
 }
 
 SITE_ID = 1

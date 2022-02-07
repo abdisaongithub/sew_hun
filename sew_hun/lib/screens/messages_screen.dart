@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sew_hun/providers/chat/messages_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
+import 'package:sew_hun/static.dart';
 
 class MessagesScreen extends ConsumerStatefulWidget {
   static String id = 'MessagesScreen';
@@ -12,9 +15,31 @@ class MessagesScreen extends ConsumerStatefulWidget {
 }
 
 class _MessagesScreenState extends ConsumerState<MessagesScreen> {
+  // bool adminChecker(int index){}
+
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(
+      Duration(seconds: 10),
+      (Timer t) {
+        ref.refresh(messagesProvider);
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final messages = ref.watch(messagesProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).custom.appBarColor,
@@ -29,27 +54,80 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       // backgroundColor: Theme.of(context).custom.bgColor,
       body: Stack(
         children: <Widget>[
-          ListView.builder(
-            padding: const EdgeInsets.only(bottom: 60.0),
-            itemExtent: 20,
-            scrollDirection: Axis.vertical,
-            reverse: true,
-            itemBuilder: (BuildContext context, int index) {
-              // return Container(
-              //   height: 100,
-              //   decoration: BoxDecoration(
-              //     color: Colors.teal,
-              //     border: Border.all(color: Colors.white, width: 2),
-              //   ),
-              //   child: Text('Hello'),
-              // );
-              return Container();
+          messages.when(
+            data: (data) {
+              return ListView.builder(
+                padding: const EdgeInsets.only(bottom: 60.0),
+                itemCount: data.data!.length,
+                scrollDirection: Axis.vertical,
+                reverse: true,
+                itemBuilder: (BuildContext context, int index) {
+                  return Row(
+                    mainAxisAlignment: data.data![index].isFromAdmin == true
+                        ? MainAxisAlignment.start
+                        : MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        width: size.width * 0.6,
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                          ),
+                          border: Border.all(
+                            color: Theme.of(context)
+                                .custom
+                                .textColor
+                                .withOpacity(0.2),
+                            width: 1.5,
+                          ),
+                        ),
+                        child: Text(data.data![index].text.toString()),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            error: (error, st) {
+              return Center(
+                child: TextButton(
+                  onPressed: () {
+                    ref.refresh(messagesProvider);
+                  },
+                  child: Text('Reload'),
+                ),
+              );
+            },
+            loading: () {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      height: defaultPadding,
+                    ),
+                    Text('Loading...'),
+                  ],
+                ),
+              );
             },
           ),
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
-              padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
+              padding: EdgeInsets.only(
+                left: 10,
+                bottom: 10,
+                top: 10,
+              ),
               height: 60,
               width: size.width,
               decoration: BoxDecoration(

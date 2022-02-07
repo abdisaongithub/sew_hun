@@ -7,12 +7,18 @@ from .views import (
     CategoriesView,
     CategoryPostListView,
     FavoritesListCreateView,
-    FavoriteDestroyView
+    FavoriteDestroyView,
+    YoutubePlaylistListView,
+    LandingView,
 )
 
 urlpatterns = [
     path('categories/', CategoriesView.as_view(), name='categories'),
-    path('categories/posts', CategoryPostListView.as_view(), name='categories.posts'),
+    path('categories/posts/<int:pk>/', CategoryPostListView.as_view(), name='categories.posts'),
+
+    # TODO: remove posts from the url
+
+    path('landing/', LandingView.as_view(), name='landing'),
 
     path('posts/', PostListView.as_view(), name='posts'),
     path('posts/<int:pk>/', PostDetailView.as_view(), name='post'),
@@ -23,4 +29,5 @@ urlpatterns = [
     path('favorites/', FavoritesListCreateView.as_view(), name='favorites'),
     path('favorites/<int:pk>/', FavoriteDestroyView.as_view(), name='favorites.detail'),
 
+    path('playlists/', YoutubePlaylistListView.as_view(), name='playlist'),
 ]
