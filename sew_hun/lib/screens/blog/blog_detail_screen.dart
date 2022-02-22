@@ -1,0 +1,486 @@
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sew_hun/models/blog/post.dart';
+import 'package:sew_hun/providers/blog/post_provider.dart';
+import 'package:sew_hun/providers/theme/theme_provider.dart';
+import 'package:sew_hun/screens/blog/comments_screen.dart';
+import 'package:sew_hun/static.dart';
+import 'package:share_plus/share_plus.dart';
+
+class BlogDetailScreen extends StatefulWidget {
+  static String id = 'BlogDetailScreen';
+
+  const BlogDetailScreen({Key? key}) : super(key: key);
+
+  @override
+  _BlogDetailScreenState createState() => _BlogDetailScreenState();
+}
+
+class _BlogDetailScreenState extends State<BlogDetailScreen>
+    with SingleTickerProviderStateMixin {
+  late ScrollController _scrollController;
+  bool _showBackToTopButton = false;
+  bool _isPlaying = false;
+  bool _isFavorite = false;
+
+  // bool _isSet = false;
+  late AudioPlayer _player;
+
+  @override
+  void initState() {
+    super.initState();
+    _player = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
+    _scrollController = ScrollController()
+      ..addListener(() {
+        setState(() {
+          if (_scrollController.offset >= 300) {
+            _showBackToTopButton = true; // show the back-to-top button
+          } else {
+            _showBackToTopButton = false; // hide the back-to-top button
+          }
+        });
+      });
+  }
+
+  @override
+  void dispose() {
+    _player.dispose();
+    super.dispose();
+  }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(
+      0,
+      duration: Duration(milliseconds: 800),
+      curve: Curves.decelerate,
+    );
+  }
+
+  void play(
+      {String url =
+          'https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Sevish_-__nbsp_.mp3'}) async {
+    _player.play(url);
+    _isPlaying = true;
+    // _player.play(data.narration!.first.audio.toString());
+  }
+
+  // void playPause() async {
+  //   if (_isPlaying) {
+  //     await _player.pause();
+  //     _isPlaying = false;
+  //   } else if (!_isPlaying) {
+  //     await _player.resume();
+  //     _isPlaying = true;
+  //   }
+  // }
+
+  Future<void> stopPlayer() async {}
+
+  @override
+  Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as BlogArguments;
+
+    return SafeArea(
+      child: Scaffold(
+        floatingActionButton: _showBackToTopButton == false
+            ? null
+            : FloatingActionButton(
+                onPressed: _scrollToTop,
+                mini: true,
+                backgroundColor: Colors.purple,
+                child: Icon(
+                  Icons.arrow_upward,
+                ),
+              ),
+        backgroundColor: Theme.of(context).custom.appBarColor,
+        body: Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
+            final post = ref.watch(postProvider(args.id));
+
+            return post.when(
+              data: (data) {
+                final narration = data.narration as List<Narration>;
+
+                if (narration.length == 0) {
+                  // pass
+                  _player.setUrl(
+                    'https://filesamples.com/samples/audio/mp3/sample1.mp3',
+                  );
+                } else {
+                  // _player.setUrl(
+                  //   data.narration!.first.audio.toString(),
+                  // );
+                  _player.setUrl(
+                    'https://filesamples.com/samples/audio/mp3/sample1.mp3',
+                  );
+                }
+                return CustomScrollView(
+                  controller: _scrollController,
+                  physics: BouncingScrollPhysics(),
+                  slivers: [
+                    SliverAppBar(
+                      expandedHeight: 350,
+                      backgroundColor: Theme.of(context).custom.bgColor,
+                      elevation: 0,
+                      stretch: false,
+                      floating: true,
+                      automaticallyImplyLeading: false,
+                      flexibleSpace: FlexibleSpaceBar(
+                        collapseMode: CollapseMode.parallax,
+                        background: Stack(
+                          children: [
+                            Positioned(
+                              child: Hero(
+                                tag: args.id.toString(),
+                                child: Container(
+                                  height: 325,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                        data.image!,
+                                      ),
+                                      fit: BoxFit.cover,
+                                      repeat: ImageRepeat.noRepeat,
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(30),
+                                      bottomRight: Radius.circular(30),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: smallPadding,
+                                  right: smallPadding,
+                                  bottom: smallPadding,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        BackButton(
+                                          color: Theme.of(context)
+                                              .custom
+                                              .textColor,
+                                        ),
+                                        Expanded(
+                                          child: SizedBox(),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .custom
+                                                    .bgColor
+                                                    .withOpacity(0.3),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 4, vertical: 0),
+                                              child: Text(
+                                                data.author!.username!,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Theme.of(context)
+                                                      .custom
+                                                      .textColor,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 2,
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                    .custom
+                                                    .bgColor
+                                                    .withOpacity(0.3),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 4,
+                                                vertical: 0,
+                                              ),
+                                              child: Text(
+                                                'Author',
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.w300,
+                                                  color: Theme.of(context)
+                                                      .custom
+                                                      .textColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        CircleAvatar(
+                                          radius: 15,
+                                          backgroundImage: NetworkImage(
+                                            data.author!.profile!.photo!,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Expanded(
+                                      child: SizedBox(),
+                                    ),
+                                    Text(
+                                      data.title!,
+                                      textAlign: TextAlign.left,
+                                      style: Theme.of(context)
+                                          .custom
+                                          .textStyle
+                                          .copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 28,
+                                          ),
+                                    ),
+                                    SizedBox(
+                                      height: smallPadding,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          data.createdAt!,
+                                          style: Theme.of(context)
+                                              .custom
+                                              .textStyle
+                                              .copyWith(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12,
+                                              ),
+                                        ),
+                                        Text(
+                                          ' - ',
+                                          style: Theme.of(context)
+                                              .custom
+                                              .textStyle
+                                              .copyWith(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12,
+                                              ),
+                                        ),
+                                        Text(
+                                          data.category!.category!,
+                                          style: Theme.of(context)
+                                              .custom
+                                              .textStyle
+                                              .copyWith(
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: smallPadding,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        // BlogDetailIconButton(
+                                        //   iconData: Icons.fast_rewind,
+                                        // ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        BlogDetailIconButton(
+                                          iconData: _isPlaying
+                                              ? Icons.pause
+                                              : Icons.play_arrow,
+                                          onTap: () {
+                                            if (!_isPlaying) {
+                                              _player.resume();
+                                              setState(() {
+                                                _isPlaying = true;
+                                              });
+                                            } else {
+                                              _player.pause();
+                                              setState(() {
+                                                _isPlaying = false;
+                                              });
+                                            }
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        BlogDetailIconButton(
+                                          iconData: Icons.fast_forward,
+                                        ),
+                                        Expanded(
+                                          child: SizedBox(
+                                            width: 8,
+                                          ),
+                                        ),
+                                        BlogDetailIconButton(
+                                          iconData: Icons.list_alt,
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                                context, CommentsScreen.id);
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        BlogDetailIconButton(
+                                          iconData: Icons.share,
+                                          onTap: () {
+                                            Share.share(
+                                                data.text!.substring(5) +
+                                                    '\n https://t.me/abd_dba');
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        BlogDetailIconButton(
+                                          iconData: ref
+                                                      .watch(themeModeProvider
+                                                          .state)
+                                                      .state ==
+                                                  ThemeMode.light
+                                              ? Icons.wb_sunny_outlined
+                                              : CupertinoIcons.moon_stars,
+                                          onTap: () {
+                                            final state = ref
+                                                .read(themeModeProvider.state);
+
+                                            ref
+                                                .read(themeModeProvider.state)
+                                                .state = state.state ==
+                                                    ThemeMode.light
+                                                ? ThemeMode.dark
+                                                : ThemeMode.light;
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        BlogDetailIconButton(
+                                          iconData: CupertinoIcons.heart_fill,
+                                          iconColor: _isFavorite
+                                              ? Colors.red
+                                              : Theme.of(context)
+                                                  .custom
+                                                  .bgColor,
+                                          onTap: () {},
+                                        ), // TODO: implement this feature
+                                        SizedBox(),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          return Padding(
+                            padding: EdgeInsets.all(
+                              smallPadding,
+                            ),
+                            child: Text(
+                              data.text!,
+                              textAlign: TextAlign.justify,
+                              style:
+                                  Theme.of(context).custom.textStyle.copyWith(),
+                            ),
+                          );
+                        },
+                        childCount: 1,
+                      ),
+                    ),
+                  ],
+                );
+              },
+              error: (error, stack) {
+                return Center(child: Text(error.toString()));
+              },
+              loading: () => Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class BlogDetailIconButton extends StatelessWidget {
+  final IconData iconData;
+  final Color? iconColor;
+  final VoidCallback? onTap;
+
+  const BlogDetailIconButton({
+    required this.iconData,
+    this.iconColor,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 30,
+        width: 30,
+        decoration: BoxDecoration(
+          color: Theme.of(context).custom.textColor,
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).custom.bgColor.withOpacity(0.3),
+              blurRadius: 3,
+              offset: Offset(1, 1),
+            ),
+          ],
+          border: Border.all(
+            color: Theme.of(context).custom.bgColor.withOpacity(0.2),
+            style: BorderStyle.solid,
+            width: 0.2,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(50),
+          ),
+        ),
+        child: Icon(
+          iconData,
+          color: iconColor ?? Theme.of(context).custom.bgThemeColor,
+          size: 19,
+        ),
+      ),
+    );
+  }
+}
+
+class BlogArguments {
+  final int id;
+  final String img;
+
+  BlogArguments({required this.id, required this.img});
+}
