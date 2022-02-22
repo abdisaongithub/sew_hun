@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 const kUsername = 'username';
 const kEmail = 'email';
 const kPassword = 'password';
+const kPassword1 = 'password1';
+const kPassword2 = 'password2';
 const kToken = 'token';
 const kAuthorization = 'Authorization';
 

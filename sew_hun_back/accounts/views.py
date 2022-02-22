@@ -28,7 +28,7 @@ class CustomAuthToken(ObtainAuthToken):
 
 class RegisterView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
-        serialized = serializers.UserSerializer(request.data)
+        serialized = serializers.UserSerializer(data=request.data)
         if serialized.is_valid():
             user = MyUser.objects.create(serialized.data)
 

@@ -41,6 +41,11 @@ dependencies:
   path_provider: ^2.0.8
   youtube_explode_dart: ^1.10.9+1
   youtube_player_flutter: ^8.0.0
+  either_dart: ^0.1.4
+  validators: ^3.0.0
+  record_mp3: ^3.0.0
+  permission_handler: ^9.1.0
+
 
 dev_dependencies:
   flutter_test:

@@ -8,6 +8,9 @@
 /* NEXT TODOS */
 // TODO: search->showSearch
 // TODO: CommentsScreen
+// TODO: register and reset password
+// TODO: use cached network images
+// TODO: replace all load errors with refresh button
 
 
 
@@ -16,6 +19,8 @@
 // TODO: chat
 // TODO: chat->change read according to the user type
 // TODO: Profile
+
+// TODO: Cast every shit from RIVERPOD to the model class
 
 
 /* COMPLETED TODOS */

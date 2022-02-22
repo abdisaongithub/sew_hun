@@ -5,7 +5,7 @@ import 'package:sew_hun/models/user/user_profile.dart';
 import 'package:sew_hun/providers/auth/token_provider.dart';
 import 'package:sew_hun/static.dart';
 
-final userProvider = FutureProvider<UserProfile>((ref) async {
+final userProvider = FutureProvider.autoDispose<UserProfile>((ref) async {
   final token = ref.watch(localTokenProvider);
   Response _response = await dio_api.get(
     'account/me/',

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 AuthToken authTokenFromJson(String str) => AuthToken.fromJson(json.decode(str));
 String authTokenToJson(AuthToken data) => json.encode(data.toJson());
+
 class AuthToken {
   AuthToken({
       String? key,}){

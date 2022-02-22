@@ -10,12 +10,12 @@ class Chat(models.Model):
 class Message(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='chats')
     text = models.CharField(max_length=256, default='')
-    audio = models.FileField(upload_to='messages/', null=True, blank=True)
+    audio = models.FileField(upload_to='messages/', null=False, blank=True)
 
     is_from_admin = models.BooleanField(default=False)
-    timestamp = models.DateTimeField(auto_now_add=True)
     admin_read = models.BooleanField(default=False)
     client_read = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         if len(self.text) == 0:
