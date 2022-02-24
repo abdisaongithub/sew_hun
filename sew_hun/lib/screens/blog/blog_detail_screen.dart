@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +9,7 @@ import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/blog/comments_screen.dart';
 import 'package:sew_hun/static.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:validators/validators.dart';
 
 class BlogDetailScreen extends StatefulWidget {
   static String id = 'BlogDetailScreen';
@@ -27,6 +29,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
 
   // bool _isSet = false;
   late AudioPlayer _player;
+
+  Duration currentPosition = Duration();
+  Duration totalLength = Duration();
 
   @override
   void initState() {
@@ -81,7 +86,21 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as BlogArguments;
-
+    _player.onDurationChanged.listen((event) {
+      setState(() {
+        totalLength = event;
+      });
+    });
+    _player.onAudioPositionChanged.listen((event) {
+      setState(() {
+        currentPosition = event;
+      });
+    });
+    _player.onPlayerCompletion.listen((event) {
+      setState(() {
+        _isPlaying = false;
+      });
+    });
     return SafeArea(
       child: Scaffold(
         floatingActionButton: _showBackToTopButton == false
@@ -261,7 +280,10 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                     Row(
                                       children: [
                                         Text(
-                                          data.createdAt!,
+                                          DateTimeFormat.format(
+                                            DateTime.parse(data.createdAt!),
+                                            format: DateTimeFormats.american,
+                                          ),
                                           style: Theme.of(context)
                                               .custom
                                               .textStyle
@@ -327,6 +349,34 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                         ),
                                         BlogDetailIconButton(
                                           iconData: Icons.fast_forward,
+                                          onTap: () async {
+                                            final val = await _player
+                                                .getCurrentPosition();
+                                            print(val);
+                                            _player.seek(Duration(
+                                                milliseconds: val + 10000));
+                                          },
+                                        ),
+                                        SizedBox(width: smallPadding),
+                                        Container(
+                                          height: 30,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 4),
+                                          decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .custom
+                                                  .textColor
+                                                  .withOpacity(0.8),
+                                              borderRadius:
+                                                  BorderRadius.circular(12)),
+                                          child: Text(
+                                            '${currentPosition.toString().split('.')[0]} - ${totalLength.toString().split('.')[0]}',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .custom
+                                                  .bgColor,
+                                            ),
+                                          ),
                                         ),
                                         Expanded(
                                           child: SizedBox(
@@ -337,7 +387,10 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                           iconData: Icons.list_alt,
                                           onTap: () {
                                             Navigator.pushNamed(
-                                                context, CommentsScreen.id);
+                                              context,
+                                              CommentsScreen.id,
+                                              arguments: CommentArgument(comments: data.comments!),
+                                            );
                                           },
                                         ),
                                         SizedBox(
@@ -377,15 +430,15 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                         SizedBox(
                                           width: 8,
                                         ),
-                                        BlogDetailIconButton(
-                                          iconData: CupertinoIcons.heart_fill,
-                                          iconColor: _isFavorite
-                                              ? Colors.red
-                                              : Theme.of(context)
-                                                  .custom
-                                                  .bgColor,
-                                          onTap: () {},
-                                        ), // TODO: implement this feature
+                                        // BlogDetailIconButton(
+                                        //   iconData: CupertinoIcons.heart_fill,
+                                        //   iconColor: _isFavorite
+                                        //       ? Colors.red
+                                        //       : Theme.of(context)
+                                        //           .custom
+                                        //           .bgColor,
+                                        //   onTap: () {},
+                                        // ), // TODO: implement this feature
                                         SizedBox(),
                                       ],
                                     ),

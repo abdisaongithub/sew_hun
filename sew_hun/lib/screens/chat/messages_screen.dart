@@ -7,6 +7,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record_mp3/record_mp3.dart';
 import 'package:sew_hun/dio_api.dart';
+import 'package:sew_hun/models/chat/text_message_to_send.dart';
+import 'package:sew_hun/models/chat/voice_message_to_send.dart';
+import 'package:sew_hun/providers/chat/chat_id_provider.dart';
 import 'package:sew_hun/providers/chat/messages_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/chat/record_screen.dart';
@@ -25,6 +28,7 @@ class MessagesScreen extends ConsumerStatefulWidget {
 class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   late Timer _timer;
   late AudioPlayer _player;
+  late TextEditingController _textEditingController;
   bool _isPlaying = false;
   String _currentlyPlaying = '';
 
@@ -37,6 +41,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
   void initState() {
     super.initState();
     _player = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
+    _textEditingController = TextEditingController();
     _timer = Timer.periodic(
       Duration(seconds: 10),
       (Timer t) {
@@ -61,10 +66,49 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     super.dispose();
   }
 
+  // bool isAdmin(){
+  //   bool result = false;
+  //
+  //   final user = ref.read(userProvider);
+  //
+  //   user.when(
+  //     data: (data) {
+  //       result = data.user!.isStaff as bool;
+  //       return result;
+  //     },
+  //     error: (error, st) {
+  //       result = false;
+  //       return result;
+  //     },
+  //     loading: () {
+  //       result = false;
+  //       return result;
+  //     },
+  //   );
+  //   return result;
+  // }
+
+  alignMessage({required bool isAdmin, required bool fromAdmin}) {
+    if (isAdmin == true && fromAdmin == true) {
+      return MainAxisAlignment.end;
+    } else if (isAdmin == true && fromAdmin == false) {
+      return MainAxisAlignment.start;
+    } else if (isAdmin == false && fromAdmin == false) {
+      return MainAxisAlignment.end;
+    } else if (isAdmin == false && fromAdmin == true) {
+      return MainAxisAlignment.start;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final chatId = ref.watch(chatIdProvider.notifier);
     final messages = ref.watch(messagesProvider);
+
+    final message = TextMessageToSend(chatId: chatId.state);
+    final voice = VoiceMessageToSend(chatId: chatId.state);
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).custom.appBarColor,
@@ -91,17 +135,22 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                   reverse: true,
                   itemBuilder: (BuildContext context, int index) {
                     return Row(
-                      mainAxisAlignment:
-                          messages.data![index].isFromAdmin == true
-                              ? MainAxisAlignment.start
-                              : MainAxisAlignment.end,
+                      mainAxisAlignment: alignMessage(
+                        isAdmin: messages.isAdmin!,
+                        fromAdmin: messages.data![index].isFromAdmin!,
+                      ),
+                      // messages.data![index].isFromAdmin == true && messages.isAdmin == true
+                      //     ? MainAxisAlignment.end
+                      //     : MainAxisAlignment.start,
                       children: [
                         Container(
                           width: size.width * 0.6,
                           margin: EdgeInsets.symmetric(
                               vertical: 10, horizontal: 10),
                           padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
+                            vertical: 10,
+                            horizontal: 10,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),
@@ -123,17 +172,28 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                                     ? CrossAxisAlignment.start
                                     : CrossAxisAlignment.end,
                             children: [
-                              Text(messages.data![index].text.toString(), textAlign: TextAlign.left,),
+                              Text(
+                                messages.data![index].text.toString(),
+                                textAlign: TextAlign.left,
+                              ),
                               isNull(messages.data![index].audio) == true
                                   ? SizedBox()
                                   : GestureDetector(
                                       onTap: () {
-                                        print(baseUrl + messages.data![index].audio!.substring(1));
-                                        if (_isPlaying){
+                                        print(baseUrl +
+                                            messages.data![index].audio!
+                                                .substring(1));
+                                        if (_isPlaying) {
                                           _player.pause();
-                                          _isPlaying = false;
+                                          setState(() {
+                                            _isPlaying = false;
+                                          });
                                         } else {
-                                          play();
+                                          setState(() {
+                                            _isPlaying = true;
+                                          });
+                                          _player.play(
+                                              'https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3');
                                         }
                                         print('play-pause');
                                         // _player.play(baseUrl + messages.data![index].audio!.substring(1));
@@ -149,7 +209,9 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                                           shape: BoxShape.circle,
                                         ),
                                         child: Icon(
-                                          Icons.play_arrow,
+                                          _isPlaying
+                                              ? Icons.pause
+                                              : Icons.play_arrow,
                                           color: Theme.of(context)
                                               .custom
                                               .bgThemeColor,
@@ -242,29 +304,30 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               ),
               child: Row(
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      print('record sound');
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.lightBlue,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Icon(
-                        Icons.mic,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     print('record sound');
+                  //   },
+                  //   child: Container(
+                  //     height: 30,
+                  //     width: 30,
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.lightBlue,
+                  //       borderRadius: BorderRadius.circular(30),
+                  //     ),
+                  //     child: Icon(
+                  //       Icons.mic,
+                  //       color: Colors.white,
+                  //       size: 20,
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(
                     width: 15,
                   ),
                   Expanded(
                     child: TextField(
+                      controller: _textEditingController,
                       decoration: InputDecoration(
                         hintText: "Write message...",
                         hintStyle: Theme.of(context).custom.textStyle,
@@ -272,6 +335,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                       ),
                       onChanged: (value) {
                         print(value);
+                        message.text = value.toString();
                       },
                     ),
                   ),
@@ -280,7 +344,15 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                   ),
                   FloatingActionButton(
                     onPressed: () {
-                      print('send stuff over');
+                      // if no audio
+                      ref.read(messageProvider.notifier).sendText(message);
+                      setState(() {
+                        message.text = '';
+                        _textEditingController.text = '';
+                      });
+                      ref.refresh(messagesProvider);
+                      // if audio
+                      // ref.read(messageProvider.notifier).sendVoice(voice);
                     },
                     child: Icon(
                       Icons.send,
@@ -349,6 +421,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       setState(() {});
     }
   }
+
   void resumeRecord() {
     bool s = RecordMp3.instance.resume();
     if (s) {
@@ -356,7 +429,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       setState(() {});
     }
   }
-
 
   void playRecorder() {
     if (recordFilePath != null && File(recordFilePath).existsSync()) {
@@ -376,4 +448,10 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     }
     return sdPath + "/test_${i++}.mp3";
   }
+}
+
+class MessageArgument {
+  final isAdmin;
+
+  MessageArgument({this.isAdmin});
 }

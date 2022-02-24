@@ -45,6 +45,8 @@ dependencies:
   validators: ^3.0.0
   record_mp3: ^3.0.0
   permission_handler: ^9.1.0
+#  restart_app: ^1.1.0
+  date_time_format: ^2.0.1
 
 
 dev_dependencies:

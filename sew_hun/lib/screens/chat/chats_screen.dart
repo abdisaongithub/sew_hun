@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/providers/chat/admin_chooser_screen.dart';
-import 'package:sew_hun/providers/chat/admins_provider.dart';
 import 'package:sew_hun/providers/chat/chat_id_provider.dart';
 import 'package:sew_hun/providers/chat/chats_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
@@ -47,27 +46,43 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
                       width: 65,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Image(
-                        image: NetworkImage(
-                          data.chats![index].admin!.profile!.photo.toString(),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            data.isAdmin!
+                                ? data.chats![index].client!.profile!.photo
+                                    .toString()
+                                : data.chats![index].admin!.profile!.photo
+                                    .toString(),
+                          ),
+                          fit: BoxFit.cover,
                         ),
-                        fit: BoxFit.cover,
-                        errorBuilder: (c, o, s) {
-                          return Image(
-                            image: AssetImage('assets/img/et.jpg'),
-                          );
-                        },
                       ),
+                      // child: Image(
+                      //   image: NetworkImage(
+                      //     data.isAdmin!
+                      //         ? data.chats![index].admin!.profile!.photo
+                      //             .toString()
+                      //         : data.chats![index].client!.profile!.photo
+                      //             .toString(),
+                      //   ),
+                      //   fit: BoxFit.cover,
+                      //   errorBuilder: (c, o, s) {
+                      //     return Image(
+                      //       image: AssetImage('assets/img/et.jpg'),
+                      //     );
+                      //   },
+                      // ),
                     ),
                     title: Text(
-                      data.chats![index].admin!.username.toString(),
+                      data.isAdmin!
+                          ? data.chats![index].client!.username.toString()
+                          : data.chats![index].admin!.username.toString(),
                       style: Theme.of(context).custom.textStyle.copyWith(
                             fontSize: 22,
                           ),
                     ),
                     subtitle: Text(
-                      'Admin',
+                      data.isAdmin! ? 'Admin' : 'Client',
                     ),
                     onTap: () {
                       ref.read(chatIdProvider.state).state =

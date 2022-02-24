@@ -6,20 +6,27 @@ import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/providers/user/user_provider.dart';
 import 'package:sew_hun/screens/auth/login_screen.dart';
-import 'package:sew_hun/screens/profile/edit_profile_screen.dart';
 import 'package:sew_hun/static.dart';
 
-class ProfileScreen extends ConsumerStatefulWidget {
-  static String id = 'ProfileScreen';
+class EditProfileScreen extends ConsumerStatefulWidget {
+  static String id = 'EditProfileScreen';
 
-  const ProfileScreen({Key? key}) : super(key: key);
+  const EditProfileScreen({Key? key}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-
+class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController roleController = TextEditingController(); // TODO: Include names too
+  TextEditingController paymentController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  TextEditingController subCityController = TextEditingController();
+  TextEditingController specialNameController = TextEditingController();
+  TextEditingController bioController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,34 +44,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             leading: BackButton(
               color: Theme.of(context).custom.textColor,
             ),
-            actions: [
-              Tooltip(
-                message: 'Logout',
-                child: GestureDetector(
-                  onTap: () async {
-                    // final storage = FlutterSecureStorage();
-                    // await storage.delete(key: kToken);
-                    // ref.read(isSignedInProvider.notifier).state = false;
-                    // ref.read(signInErrorProvider.notifier).state = false;
-                    // ref.read(networkErrorProvider.notifier).state = null;
-                    //
-                    Navigator.pushNamed(
-                      context,
-                      EditProfileScreen.id,
-                    );
-
-                    // Restart.restartApp();
-                  },
-                  child: Icon(
-                    Icons.edit,
-                    color: Theme.of(context).custom.textColor,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: smallPadding,
-              ),
-            ],
           ),
           body: Container(
             height: MediaQuery.of(context).size.height,
@@ -126,98 +105,69 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   ],
                 ),
                 Divider(),
-                ProfileTile(
+                EditProfileTile(
                   icon: Icons.chair_alt,
-                  label: data.user!.profile!.role!.first.role!,
+                  initialValue: data.user!.profile!.role!.first.role!,
                   onTap: () {
                     print('Role');
                   },
                 ),
                 Divider(),
-                ProfileTile(
-                  icon: Icons.chair_alt,
-                  label: 'First Name',
-                  onTap: () {
-                    print('Role');
-                  },
-                ),
-                Divider(),
-                ProfileTile(
-                  icon: Icons.chair_alt,
-                  label: 'Last Name',
-                  onTap: () {
-                    print('Role');
-                  },
-                ),
-                Divider(),
-                ProfileTile(
-                  icon: Icons.phone_android,
-                  label: data.user!.profile!.phone!,
-                  onTap: () {
-                    print('Phone');
-                  },
-                ),
-                Divider(),
-                ProfileTile(
-                  icon: Icons.location_on_outlined,
-                  label: data.user!.profile!.city!,
-                  onTap: () {
-                    print('City');
-                  },
-                ),
-                Divider(),
-                ProfileTile(
-                  icon: Icons.location_city_outlined,
-                  label: data.user!.profile!.subCity!,
-                  onTap: () {
-                    print('Sub City');
-                  },
-                ),
-                Divider(),
-                ProfileTile(
-                  icon: Icons.location_city_outlined,
-                  label: data.user!.profile!.specialName!,
-                  onTap: () {
-                    print('Special Name');
-                  },
-                ),
-                Divider(),
-                ProfileTile(
-                  icon: Icons.print,
-                  label: data.user!.profile!.bio!,
-                  onTap: () {
-                    print('Bio');
-                  },
-                ),
-                Divider(),
-                ProfileTile(
+                EditProfileTile(
                   icon: Icons.attach_money,
-                  label: 'Payment: Unimplemented',
-
+                  initialValue: 'Payment: Unimplemented',
                   onTap: () {
                     print('Payments');
                   },
+                  // controller: paymentController,
+                ),
+                Divider(),
+                EditProfileTile(
+                  icon: Icons.phone_android,
+                  initialValue: data.user!.profile!.phone!,
+                  onTap: () {
+                    print('Phone');
+                  },
+                  // controller: phoneController,
+                ),
+                Divider(),
+                EditProfileTile(
+                  icon: Icons.location_on_outlined,
+                  initialValue: data.user!.profile!.city!,
+                  onTap: () {
+                    print('City');
+                  },
+                  // controller: cityController,
+                ),
+                Divider(),
+                EditProfileTile(
+                  icon: Icons.location_city_outlined,
+                  initialValue: data.user!.profile!.subCity!,
+                  onTap: () {
+                    print('Sub City');
+                  },
+                  // controller: subCityController,
+                ),
+                Divider(),
+                EditProfileTile(
+                  icon: Icons.location_city_outlined,
+                  initialValue: data.user!.profile!.specialName!,
+                  onTap: () {
+                    print('Special Name');
+                  },
+                  // controller: specialNameController,
+                ),
+                Divider(),
+                EditProfileTile(
+                  icon: Icons.print,
+                  initialValue: data.user!.profile!.bio!,
+                  onTap: () {
+                    print('Bio');
+                  },
+                  // controller: bioController,
                 ),
                 Divider(),
                 Expanded(child: SizedBox()),
-                Divider(),
-                ProfileTile(
-                    icon: Icons.logout_rounded,
-                    label: 'Logout',
-                    onTap: () async {
-                      final storage = FlutterSecureStorage();
-                      await storage.delete(key: kToken);
-                      ref.read(isSignedInProvider.notifier).state = false;
-                      ref.read(signInErrorProvider.notifier).state = false;
-                      ref.read(networkErrorProvider.notifier).state = null;
-
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        LoginScreen.id,
-                        (route) => route.currentResult == LoginScreen.id,
-                      );
-                    },
-                    textColor: Colors.red),
                 Divider(),
               ],
             ),
@@ -304,48 +254,56 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 }
 
-class ProfileTile extends StatelessWidget {
+class EditProfileTile extends StatelessWidget {
   final IconData icon;
-  final String label;
+  final String initialValue;
   final VoidCallback onTap;
   final Color? textColor;
+  final TextEditingController? controller;
 
-  const ProfileTile({
+  const EditProfileTile({
     Key? key,
     required this.icon,
-    required this.label,
+    required this.initialValue,
     required this.onTap,
     this.textColor,
+    this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 35,
-        child: Row(
-          children: [
-            SizedBox(
-              width: defaultPadding,
-            ),
-            Icon(
-              icon,
-              size: 28,
-              color: textColor ?? Theme.of(context).custom.textColor,
-            ),
-            SizedBox(
-              width: defaultPadding,
-            ),
-            Text(
-              label,
+    return Container(
+      height: 35,
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: defaultPadding,
+          ),
+          Icon(
+            icon,
+            size: 28,
+          ),
+          SizedBox(
+            width: defaultPadding,
+          ),
+          Expanded(
+            child: TextFormField(
+              controller: controller,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+              ),
               style: Theme.of(context).custom.textStyle.copyWith(
                     fontSize: 22,
-                    color: textColor ?? Theme.of(context).custom.textColor,
                   ),
+              cursorColor: Theme.of(context).custom.textColor,
+              focusNode: FocusNode(),
+              initialValue: initialValue,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

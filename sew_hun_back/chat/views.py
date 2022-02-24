@@ -6,43 +6,26 @@ from .serializers import MessagesSerializer, ChatSerializer, UserProfileSerializ
 from accounts.models import MyUser
 
 
-class MessagesListCreateView(generics.ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticated, ]
-
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        if user.is_staff:
-            messages = Message.objects.filter(chat__admin=user.id, )
-        else:
-            messages = Message.objects.filter(chat__client=user.id, )
-        # messages = Message.objects.filter(chat=chat_id, )
-        # messages = Message.objects.all()
-        print(messages)
-
-        if messages is None:
-            return Response(data={'error': 'None'}, status=status.HTTP_204_NO_CONTENT)
-        else:
-            serializer = MessagesSerializer(messages, many=True)
-
-            return Response(data={'data': serializer.data})
+class MessageCreateView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         chat_id = request.POST['chat_id']
         text = request.POST['text']  # TODO: create with empty text if not provided
+
         sender = request.user
         try:
             if request.data['audio'] is not None:
                 print(request.data['audio'])
         except:
-            print('safe')
+            print('Not: Safe')
         # if request.data['audio']:
         #     print('request.data')
         #     print(request.data)
         if sender.is_staff:
             message = Message.objects.create(chat_id=chat_id, text=text, is_from_admin=True, )
         else:
-            message = Message.objects.create(chat_id=chat_id, text=text, is_from_admin=False,
-                                             audio=request.data['audio'])
+            message = Message.objects.create(chat_id=chat_id, text=text, is_from_admin=False, )
 
         # messages = Message.objects.filter(chat=chat_id, )
         # for message in messages:
@@ -51,6 +34,32 @@ class MessagesListCreateView(generics.ListCreateAPIView):
         serialized = MessagesSerializer(message)
         return Response(data={'data': serialized.data}, status=status.HTTP_200_OK)
     # TODO: Check ownership before answering
+
+
+class MessagesListView(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def get(self, request, *args, **kwargs, ):
+        user = request.user
+
+        chat_id = kwargs.get('chat_id')
+        chat = Chat.objects.get(id=chat_id)
+        if user.is_staff:
+            messages = Message.objects.filter(chat__admin=user.id, chat_id=chat_id)
+        else:
+            messages = Message.objects.filter(chat__client=user.id, chat_id=chat_id)
+        # messages = Message.objects.filter(chat=chat_id, )
+        # messages = Message.objects.all()
+        # print(messages)
+
+        if messages is None:
+            return Response(data={'error': 'None'}, status=status.HTTP_204_NO_CONTENT)
+        else:
+            serializer_messages = MessagesSerializer(messages, many=True)
+            serializer_chat = ChatSerializer(chat, many=False)
+
+            return Response(
+                data={'data': serializer_messages.data, 'isAdmin': user.is_staff, 'chat': serializer_chat.data, })
 
 
 class ChatsListCreateView(generics.ListCreateAPIView):
@@ -66,7 +75,7 @@ class ChatsListCreateView(generics.ListCreateAPIView):
 
         serializer = ChatSerializer(chats, many=True, context={'request': request})
 
-        return Response(data={'chats': serializer.data})
+        return Response(data={'chats': serializer.data, 'isAdmin': user.is_staff})
 
     def post(self, request, *args, **kwargs):
         user = request.user

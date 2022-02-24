@@ -10,6 +10,7 @@ from .views import (
     FavoriteDestroyView,
     YoutubePlaylistListView,
     LandingView,
+    SettingsListView,
 )
 
 urlpatterns = [
@@ -30,4 +31,6 @@ urlpatterns = [
     path('favorites/<int:pk>/', FavoriteDestroyView.as_view(), name='favorites.detail'),
 
     path('playlists/', YoutubePlaylistListView.as_view(), name='playlist'),
+
+    path('settings/', SettingsListView.as_view(), name='settings'),
 ]

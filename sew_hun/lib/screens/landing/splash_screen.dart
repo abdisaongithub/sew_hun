@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/screens/landing/landing_screen.dart';
 import 'package:sew_hun/screens/auth/login_screen.dart';
 import 'package:sew_hun/static.dart';

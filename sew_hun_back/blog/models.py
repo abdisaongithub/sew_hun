@@ -42,8 +42,8 @@ class Post(models.Model):
     title = models.CharField(max_length=256, )
     text = models.TextField(null=False, blank=False, )
     image = models.ImageField(upload_to='photos/posts/', )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
 
     reads = models.BigIntegerField(default=0, blank=False, )
     shares = models.BigIntegerField(default=0, blank=False, )

@@ -1,11 +1,11 @@
 from django.http import JsonResponse
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Post, Comment, Category, YoutubePlaylist
 from . import serializers
-from accounts.models import Favorite
+from accounts.models import Favorite, Settings
 
 
 class CategoriesView(generics.ListAPIView):
@@ -148,3 +148,15 @@ class LandingView(generics.ListAPIView):
         }
 
         return Response(data=res, )
+
+
+class SettingsListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        setting = Settings.objects.get(user_id=request.user.id)
+
+        serialized = serializers.SettingsSerializer(setting)
+        print(serialized.data)
+
+        return Response(data={'data': serialized.data}, status=status.HTTP_200_OK)

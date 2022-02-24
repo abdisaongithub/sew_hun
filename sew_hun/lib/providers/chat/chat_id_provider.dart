@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final chatIdProvider = StateProvider<int>((ref) {
-  return 1;
+final chatIdProvider = StateProvider<int?>((ref) {
+  return null;
 });

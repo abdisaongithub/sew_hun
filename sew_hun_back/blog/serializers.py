@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import Post, Category, Tag, Comment, Narration, YoutubePlaylist
-from accounts.models import Profile, Favorite
+from accounts.models import Profile, Favorite, Settings
 
 
 class CategoriesSerializer(serializers.ModelSerializer):
@@ -106,7 +106,15 @@ class FavoritesSerializer(serializers.ModelSerializer):
 
 
 class YoutubePlaylistSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = YoutubePlaylist
         fields = '__all__'
+
+
+class SettingsSerializer(serializers.ModelSerializer):
+    user = UserMiniSerializer
+
+    class Meta:
+        model = Settings
+        fields = ('id', 'is_subscribed', 'dark_mode', 'is_active', 'user')
+        depth = 0

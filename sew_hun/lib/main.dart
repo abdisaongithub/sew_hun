@@ -12,9 +12,11 @@ import 'package:sew_hun/screens/landing/landing_screen.dart';
 import 'package:sew_hun/screens/auth/login_screen.dart';
 import 'package:sew_hun/screens/about/logo_screen.dart';
 import 'package:sew_hun/screens/chat/messages_screen.dart';
+import 'package:sew_hun/screens/profile/edit_profile_screen.dart';
 import 'package:sew_hun/screens/profile/profile_screen.dart';
 import 'package:sew_hun/screens/auth/register_screen.dart';
 import 'package:sew_hun/screens/landing/splash_screen.dart';
+import 'package:sew_hun/screens/settings/settings_screen.dart';
 import 'package:sew_hun/screens/youtube/youtube_video_player_screen.dart';
 import 'package:sew_hun/screens/youtube/youtube_videos_screen.dart';
 
@@ -48,6 +50,8 @@ class MyApp extends StatelessWidget {
             BlogDetailScreen.id: (context) => BlogDetailScreen(),
             CommentsScreen.id: (context) => CommentsScreen(),
             ProfileScreen.id: (context) => ProfileScreen(),
+            EditProfileScreen.id: (context) => EditProfileScreen(),
+            SettingsScreen.id: (context) => SettingsScreen(),
             MessagesScreen.id: (context) => MessagesScreen(),
             ChatsScreen.id: (context) => ChatsScreen(),
             RecordScreen.id: (context) => RecordScreen(),

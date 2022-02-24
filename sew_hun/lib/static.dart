@@ -7,6 +7,9 @@ const kPassword1 = 'password1';
 const kPassword2 = 'password2';
 const kToken = 'token';
 const kAuthorization = 'Authorization';
+const kChatId = 'chat_id';
+const kText = 'text';
+const kVoice = 'voice';
 
 Color textColor = new Color(0xFF775CB8);
 const double defaultPadding = 20.0;

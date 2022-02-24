@@ -1,21 +1,18 @@
-import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:sew_hun/dio_api.dart';
-import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/providers/landing/landingProvider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/about/about_screen.dart';
-import 'package:sew_hun/screens/auth/login_screen.dart';
 import 'package:sew_hun/screens/blog/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog/blog_list_screen.dart';
 import 'package:sew_hun/screens/chat/chats_screen.dart';
 import 'package:sew_hun/screens/profile/profile_screen.dart';
+import 'package:sew_hun/screens/settings/settings_screen.dart';
 import 'package:sew_hun/screens/youtube/youtube_videos_screen.dart';
 import 'package:sew_hun/static.dart';
 
@@ -44,7 +41,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
         key: _globalKey,
         drawerEnableOpenDragGesture: true,
         appBar: AppBar(
-          backgroundColor: Theme.of(context).custom.bgThemeColor,
+          backgroundColor: Theme.of(context).custom.bgColor,
           leading: GestureDetector(
             onTap: () {
               _globalKey.currentState!.openDrawer();
@@ -288,7 +285,7 @@ class LandingScreenDrawer extends ConsumerWidget {
                         height: Theme.of(context).custom.smallPadding,
                       ),
                       Text(
-                        'First name',
+                        '',
                         style: Theme.of(context).custom.textStyle.copyWith(
                               color: Theme.of(context).custom.textColor,
                               fontSize: 18,
@@ -326,8 +323,8 @@ class LandingScreenDrawer extends ConsumerWidget {
               ),
               DrawerItems(
                 iconData: Icons.message,
-                label: 'Chat',
-                number: 2,
+                label: 'Chats',
+                // number: 2,
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, ChatsScreen.id);
@@ -338,7 +335,7 @@ class LandingScreenDrawer extends ConsumerWidget {
                 label: 'Latest Videos',
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, YoutubeVideosScreen.id);
+                  Navigator.pushNamed(context, YoutubeVideosScreen.id,);
                 },
               ),
               DrawerItems(
@@ -346,6 +343,7 @@ class LandingScreenDrawer extends ConsumerWidget {
                 label: 'Settings',
                 onTap: () {
                   Navigator.pop(context);
+                  Navigator.pushNamed(context, SettingsScreen.id);
                   // TODO: NNavigate to SettingsScreen
                 },
               ),

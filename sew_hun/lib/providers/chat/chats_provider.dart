@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/dio_api.dart';
-import 'package:sew_hun/models/chat/chat.dart';
 import 'package:sew_hun/models/chat/new_chat.dart';
 import 'package:sew_hun/models/user/chat_user_profile.dart';
 import 'package:sew_hun/providers/auth/token_provider.dart';

@@ -1,10 +1,10 @@
-class MessageToSend {
+class TextMessageToSend {
   int? chatId;
   String? text;
 
-  MessageToSend({this.chatId, this.text});
+  TextMessageToSend({this.chatId, this.text});
 
-  MessageToSend.fromJson(Map<String, dynamic> json) {
+  TextMessageToSend.fromJson(Map<String, dynamic> json) {
     chatId = json['chat_id'];
     text = json['text'];
   }
