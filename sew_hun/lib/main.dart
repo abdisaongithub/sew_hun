@@ -12,6 +12,7 @@ import 'package:sew_hun/screens/landing/landing_screen.dart';
 import 'package:sew_hun/screens/auth/login_screen.dart';
 import 'package:sew_hun/screens/about/logo_screen.dart';
 import 'package:sew_hun/screens/chat/messages_screen.dart';
+import 'package:sew_hun/screens/payment/payment_screen.dart';
 import 'package:sew_hun/screens/profile/edit_profile_screen.dart';
 import 'package:sew_hun/screens/profile/profile_screen.dart';
 import 'package:sew_hun/screens/auth/register_screen.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
             LogoScreen.id: (context) => LogoScreen(),
             YoutubeVideosScreen.id: (context) => YoutubeVideosScreen(),
             YoutubeVideoPlayerScreen.id: (context) => YoutubeVideoPlayerScreen(),
+            PaymentsScreen.id: (context) => PaymentsScreen(),
           },
         );
       },

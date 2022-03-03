@@ -11,6 +11,7 @@ import 'package:sew_hun/screens/about/about_screen.dart';
 import 'package:sew_hun/screens/blog/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog/blog_list_screen.dart';
 import 'package:sew_hun/screens/chat/chats_screen.dart';
+import 'package:sew_hun/screens/payment/payment_screen.dart';
 import 'package:sew_hun/screens/profile/profile_screen.dart';
 import 'package:sew_hun/screens/settings/settings_screen.dart';
 import 'package:sew_hun/screens/youtube/youtube_videos_screen.dart';
@@ -347,6 +348,15 @@ class LandingScreenDrawer extends ConsumerWidget {
                   // TODO: NNavigate to SettingsScreen
                 },
               ),
+              DrawerItems(
+                iconData: Icons.attach_money,
+                label: 'Payments',
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, PaymentsScreen.id);
+                  // TODO: NNavigate to SettingsScreen
+                },
+              ),
               Divider(
                 color: Theme.of(context).custom.textColor,
                 indent: Theme.of(context).custom.smallPadding,
@@ -579,7 +589,7 @@ class FavoriteCard extends StatelessWidget {
               children: [
                 Text(
                   MediaQuery.of(context).orientation == Orientation.portrait
-                      ? (title.length > 10 ? title + '...' : title)
+                      ? (title.length > 29 ? title.substring(0, 30) + '...' : title)
                       : title,
                   style: Theme.of(context).custom.textStyle.copyWith(
                         fontWeight: FontWeight.w700,
@@ -588,9 +598,8 @@ class FavoriteCard extends StatelessWidget {
                 ),
                 Text(
                   MediaQuery.of(context).orientation == Orientation.portrait
-                      ? (content.length > 10 ? content + '...' : content)
-                      : content,
-                  // content.substring(0, 20) + '...',
+                      ? (content.length > 29 ? content.substring(0, 30) + '...' : content)
+                      : content.substring(0, 50),
                   style: Theme.of(context).custom.textStyle.copyWith(
                         fontWeight: FontWeight.w400,
                         fontSize: 14,

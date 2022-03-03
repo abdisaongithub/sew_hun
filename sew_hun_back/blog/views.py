@@ -32,10 +32,17 @@ class PostListView(generics.ListAPIView):
 
 
 class PostDetailView(generics.RetrieveAPIView):
-    serializer_class = serializers.PostDetailSerializer
-    queryset = Post.objects.all()
+    # serializer_class = serializers.PostDetailSerializer
+    # queryset = Post.objects.all()
 
     permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        post = Post.objects.get(pk=kwargs['pk'])
+        post.reads += 1
+        post.save()
+        serialized = serializers.PostDetailSerializer(post)
+        return Response(data=serialized.data, status=status.HTTP_200_OK)
 
 
 class CommentCreateView(generics.CreateAPIView):
@@ -74,8 +81,7 @@ class CommentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 
             comment.comment = request.data['comment']
             comment.save()
-            serialized = serializers.CommentDetailSerializer(data=comment)
-            serialized.is_valid()
+            serialized = serializers.CommentDetailSerializer(comment)
             return JsonResponse(data=serialized.data, status=status.HTTP_202_ACCEPTED)
         except Comment.DoesNotExist:
             return Response(data=None, status=status.HTTP_404_NOT_FOUND)
@@ -109,8 +115,8 @@ class FavoritesListCreateView(generics.ListCreateAPIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             fav = Favorite.objects.create(user=request.user, post=post)
-        serialized = serializers.FavoritesSerializer(fav)
-        return Response(serialized.data)
+            serialized = serializers.FavoritesSerializer(fav)
+            return Response(serialized.data, status=status.HTTP_200_OK)
 
 
 class FavoriteDestroyView(generics.DestroyAPIView):
@@ -157,6 +163,6 @@ class SettingsListView(generics.ListAPIView):
         setting = Settings.objects.get(user_id=request.user.id)
 
         serialized = serializers.SettingsSerializer(setting)
-        print(serialized.data)
+        # print(serialized.data)
 
         return Response(data={'data': serialized.data}, status=status.HTTP_200_OK)

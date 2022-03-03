@@ -49,7 +49,7 @@ class Post(models.Model):
     shares = models.BigIntegerField(default=0, blank=False, )
 
     # TODO: not migrated, also update the pots provider after uncommenting this shit
-    # is_published = models.BooleanField(default=True)
+    is_published = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.title)
@@ -92,3 +92,8 @@ class YoutubePlaylist(models.Model):
 
     def __str__(self):
         return self.playlist
+
+
+# class Read(models.Model):
+#     user = models.ManyToManyField()
+#     post = models.ManyToManyField()

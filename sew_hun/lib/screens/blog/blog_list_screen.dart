@@ -147,7 +147,7 @@ class BlogListContainer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    title.length < 15 ? title : title.substring(0,14),
                     style: Theme.of(context).custom.textStyle.copyWith(
                       fontWeight: FontWeight.w700,
                       fontSize: 18,
@@ -155,7 +155,7 @@ class BlogListContainer extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    content,
+                    content.length < 36 ? content : content.substring(0,35) + ' ...',
                     style: Theme.of(context).custom.textStyle.copyWith(
                       fontWeight: FontWeight.w400,
                       fontSize: 14,

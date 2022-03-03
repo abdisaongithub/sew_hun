@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/providers/settings/settings_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
+import 'package:sew_hun/static.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   static String id = 'SettingsScreen';
@@ -32,19 +33,62 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(color: Theme.of(context).custom.bgColor),
         child: settings.when(
-            data: (data) {
-              ListView.builder(
-                  itemExtent: 10,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                        data.data!.darkMode.toString(),
+          data: (data) {
+            return ListView.builder(
+                itemExtent: 10,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          data.data!.darkMode.toString(),
+                        ),
                       ),
-                    );
-                  });
-            },
-            error: (error, st) {},
-            loading: () {}),
+                    ],
+                  );
+                });
+          },
+          error: (error, st) {
+            return Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Are you connected to the Internet?',
+                      style: Theme.of(context).custom.textStyle,
+                    ),
+                    SizedBox(
+                      height: smallPadding,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ref.refresh(settingsProvider);
+                      },
+                      child: Text('Reload'),
+                    ),
+                  ],
+                ),
+              );
+          },
+          loading: () {
+            return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      height: defaultPadding,
+                    ),
+                    Text('Loading...'),
+                  ],
+                ),
+            );
+          },
+        ),
       ),
     );
   }

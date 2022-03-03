@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/dio_api.dart';
 import 'package:sew_hun/models/landing/landing.dart';
 import 'package:sew_hun/providers/auth/token_provider.dart';
+import 'package:sew_hun/providers/favorite/toggle_favorite_provider.dart';
 import 'package:sew_hun/static.dart';
 
 final landingProvider = FutureProvider<Landing>((ref) async {
@@ -16,7 +17,7 @@ final landingProvider = FutureProvider<Landing>((ref) async {
         }
     ),
   );
-
-
-  return Landing.fromJson(_response.data);
+  final landing = Landing.fromJson(_response.data);
+  ref.read(favListProvider.notifier).add(favs: landing.favorites!);
+  return landing;
 });

@@ -54,7 +54,7 @@ class Me(generics.RetrieveAPIView):
             )
 
 
-class Profile(generics.RetrieveAPIView):
+class Profile(generics.RetrieveUpdateAPIView):
     def get(self, request, user_id, *args, **kwargs):
         user = MyUser.objects.get(id=user_id)
 
@@ -63,3 +63,7 @@ class Profile(generics.RetrieveAPIView):
         else:
             serializer = serializers.UserProfileSerializer(user)
             return Response(data={'data': serializer.data})
+
+    def put(self, request, *args, **kwargs):
+        # TODO: Finish this crap
+        return super().put(request, *args, **kwargs)

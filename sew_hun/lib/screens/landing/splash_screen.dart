@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/landing/landing_screen.dart';
 import 'package:sew_hun/screens/auth/login_screen.dart';
 import 'package:sew_hun/static.dart';
@@ -17,16 +18,18 @@ class SplashScreen extends ConsumerStatefulWidget {
 
 class _SplashScreenState extends ConsumerState<SplashScreen> {
   final storage = FlutterSecureStorage();
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      color: Colors.teal,
-      child: Center(
-        child: Text(
-          'Splash ...',
-          style: ThemeData.dark().textTheme.headline2,
+    return Scaffold(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        color: Theme.of(context).custom.bgThemeColor,
+        child: Image.asset(
+          'assets/img/logo.png',
+          fit: BoxFit.contain,
+
         ),
       ),
     );
@@ -38,7 +41,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     router();
   }
 
-  void router(){
+  void router() {
     Future.delayed(Duration(seconds: 2), () async {
       var token = await storage.read(key: kToken);
       if (!V.isNull(token) && V.isAlphanumeric(token!)) {

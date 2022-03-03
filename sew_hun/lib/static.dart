@@ -10,6 +10,10 @@ const kAuthorization = 'Authorization';
 const kChatId = 'chat_id';
 const kText = 'text';
 const kVoice = 'voice';
+const kPost = 'post';
+const kTheme = 'theme';
+const kDark = 'dark';
+const kLight = 'light';
 
 Color textColor = new Color(0xFF775CB8);
 const double defaultPadding = 20.0;

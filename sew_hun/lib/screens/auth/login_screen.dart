@@ -34,7 +34,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
           if (signedIn.state == true) {
             Navigator.pushNamed(context, LandingScreen.id);
-            print('To LandingScreen...');
+            // print('To LandingScreen...');
           } else if (signInError.state == true) {
             final error = ref.read(networkErrorProvider.state);
             // print(error.state.toString());

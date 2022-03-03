@@ -44,6 +44,20 @@ class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
             leading: BackButton(
               color: Theme.of(context).custom.textColor,
             ),
+            actions: [
+              GestureDetector(
+                onTap: () async {
+                  print('Save');
+                },
+                child: Icon(
+                  Icons.save,
+                  color: Theme.of(context).custom.textColor,
+                ),
+              ),
+              SizedBox(
+                width: smallPadding,
+              ),
+            ],
           ),
           body: Container(
             height: MediaQuery.of(context).size.height,

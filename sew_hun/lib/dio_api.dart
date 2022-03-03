@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-const baseUrl = 'http://192.168.43.46:8000/';
-// const baseUrl = 'https://app.sewhun.com/';
+// const baseUrl = 'http://192.168.43.46:8000/';
+const baseUrl = 'https://app.sewhun.com/';
 
 var options = BaseOptions(
   baseUrl: baseUrl,

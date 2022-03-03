@@ -66,28 +66,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     super.dispose();
   }
 
-  // bool isAdmin(){
-  //   bool result = false;
-  //
-  //   final user = ref.read(userProvider);
-  //
-  //   user.when(
-  //     data: (data) {
-  //       result = data.user!.isStaff as bool;
-  //       return result;
-  //     },
-  //     error: (error, st) {
-  //       result = false;
-  //       return result;
-  //     },
-  //     loading: () {
-  //       result = false;
-  //       return result;
-  //     },
-  //   );
-  //   return result;
-  // }
-
   alignMessage({required bool isAdmin, required bool fromAdmin}) {
     if (isAdmin == true && fromAdmin == true) {
       return MainAxisAlignment.end;
@@ -99,6 +77,17 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       return MainAxisAlignment.start;
     }
   }
+  alignText({required bool isAdmin, required bool fromAdmin}) {
+    if (isAdmin == true && fromAdmin == true) {
+      return CrossAxisAlignment.end;
+    } else if (isAdmin == true && fromAdmin == false) {
+      return CrossAxisAlignment.start;
+    } else if (isAdmin == false && fromAdmin == false) {
+      return CrossAxisAlignment.end;
+    } else if (isAdmin == false && fromAdmin == true) {
+      return CrossAxisAlignment.start;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +97,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
     final message = TextMessageToSend(chatId: chatId.state);
     final voice = VoiceMessageToSend(chatId: chatId.state);
     final size = MediaQuery.of(context).size;
+    final name = 'Chat';
 
     return Scaffold(
       appBar: AppBar(
@@ -118,7 +108,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
         title: GestureDetector(
           onTap: () => Navigator.pushNamed(context, RecordScreen.id),
           child: Text(
-            'Admin\'s Name or Username',
+            name,
             style: Theme.of(context).custom.textStyle,
           ),
         ),
@@ -167,10 +157,14 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                             ),
                           ),
                           child: Column(
-                            crossAxisAlignment:
-                                messages.data![index].isFromAdmin == true
-                                    ? CrossAxisAlignment.start
-                                    : CrossAxisAlignment.end,
+                            // crossAxisAlignment:
+                            //     messages.data![index].isFromAdmin == true
+                            //         ? CrossAxisAlignment.start
+                            //         : CrossAxisAlignment.end,
+                            crossAxisAlignment: alignText(
+                              isAdmin: messages.isAdmin!,
+                              fromAdmin: messages.data![index].isFromAdmin!,
+                            ),
                             children: [
                               Text(
                                 messages.data![index].text.toString(),

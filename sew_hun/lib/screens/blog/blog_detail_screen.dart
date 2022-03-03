@@ -3,15 +3,16 @@ import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sew_hun/dio_api.dart';
 import 'package:sew_hun/models/blog/post.dart';
 import 'package:sew_hun/providers/blog/post_provider.dart';
+import 'package:sew_hun/providers/favorite/toggle_favorite_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/blog/comments_screen.dart';
 import 'package:sew_hun/static.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:validators/validators.dart';
 
-class BlogDetailScreen extends StatefulWidget {
+class BlogDetailScreen extends ConsumerStatefulWidget {
   static String id = 'BlogDetailScreen';
 
   const BlogDetailScreen({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class BlogDetailScreen extends StatefulWidget {
   _BlogDetailScreenState createState() => _BlogDetailScreenState();
 }
 
-class _BlogDetailScreenState extends State<BlogDetailScreen>
+class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
     with SingleTickerProviderStateMixin {
   late ScrollController _scrollController;
   bool _showBackToTopButton = false;
@@ -83,9 +84,45 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
 
   Future<void> stopPlayer() async {}
 
+  isFavorite(int id){
+    ref.read(favListProvider).forEach((element) {
+      if (element.post!.id! == id){
+        setState(() {
+          _isFavorite = true;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+
     final args = ModalRoute.of(context)!.settings.arguments as BlogArguments;
+
+    final fav = ref.watch(isFavoritedProvider.notifier);
+
+    ref.listen(toggleFavoriteProvider, (previous, next) {
+      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+
+        if(fav.state == true){
+          setState(() {
+
+          });
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Added To Your Favorites',
+              ),
+            ),
+          );
+        } else {
+          setState(() {
+
+          });
+        }
+      });
+    });
     _player.onDurationChanged.listen((event) {
       setState(() {
         totalLength = event;
@@ -108,7 +145,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
             : FloatingActionButton(
                 onPressed: _scrollToTop,
                 mini: true,
-                backgroundColor: Colors.purple,
+                backgroundColor: Theme.of(context).custom.textColor,
                 child: Icon(
                   Icons.arrow_upward,
                 ),
@@ -158,7 +195,7 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: NetworkImage(
-                                        data.image!,
+                                        baseUrl + data.image!.substring(1),
                                       ),
                                       fit: BoxFit.cover,
                                       repeat: ImageRepeat.noRepeat,
@@ -209,7 +246,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                                     BorderRadius.circular(10),
                                               ),
                                               padding: EdgeInsets.symmetric(
-                                                  horizontal: 4, vertical: 0),
+                                                horizontal: 4,
+                                                vertical: 0,
+                                              ),
                                               child: Text(
                                                 data.author!.username!,
                                                 style: TextStyle(
@@ -255,7 +294,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                         CircleAvatar(
                                           radius: 15,
                                           backgroundImage: NetworkImage(
-                                            data.author!.profile!.photo!,
+                                            baseUrl +
+                                                data.author!.profile!.photo!
+                                                    .substring(1),
                                           ),
                                         ),
                                       ],
@@ -263,34 +304,61 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                     Expanded(
                                       child: SizedBox(),
                                     ),
-                                    Text(
-                                      data.title!,
-                                      textAlign: TextAlign.left,
-                                      style: Theme.of(context)
-                                          .custom
-                                          .textStyle
-                                          .copyWith(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 28,
-                                          ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Theme.of(context)
+                                            .custom
+                                            .bgColor
+                                            .withOpacity(0.3),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 4,
+                                        vertical: 0,
+                                      ),
+                                      child: Text(
+                                        data.title!,
+                                        textAlign: TextAlign.left,
+                                        style: Theme.of(context)
+                                            .custom
+                                            .textStyle
+                                            .copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 28,
+                                            ),
+                                      ),
                                     ),
                                     SizedBox(
                                       height: smallPadding,
                                     ),
                                     Row(
                                       children: [
-                                        Text(
-                                          DateTimeFormat.format(
-                                            DateTime.parse(data.createdAt!),
-                                            format: DateTimeFormats.american,
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .custom
+                                                .bgColor
+                                                .withOpacity(0.3),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                           ),
-                                          style: Theme.of(context)
-                                              .custom
-                                              .textStyle
-                                              .copyWith(
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 12,
-                                              ),
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 4,
+                                            vertical: 0,
+                                          ),
+                                          child: Text(
+                                            DateTimeFormat.format(
+                                              DateTime.parse(data.createdAt!),
+                                              format: DateTimeFormats.american,
+                                            ),
+                                            style: Theme.of(context)
+                                                .custom
+                                                .textStyle
+                                                .copyWith(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 12,
+                                                ),
+                                          ),
                                         ),
                                         Text(
                                           ' - ',
@@ -302,15 +370,29 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                                 fontSize: 12,
                                               ),
                                         ),
-                                        Text(
-                                          data.category!.category!,
-                                          style: Theme.of(context)
-                                              .custom
-                                              .textStyle
-                                              .copyWith(
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 12,
-                                              ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .custom
+                                                .bgColor
+                                                .withOpacity(0.3),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 4,
+                                            vertical: 0,
+                                          ),
+                                          child: Text(
+                                            data.category!.category!,
+                                            style: Theme.of(context)
+                                                .custom
+                                                .textStyle
+                                                .copyWith(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 12,
+                                                ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -353,8 +435,10 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                             final val = await _player
                                                 .getCurrentPosition();
                                             print(val);
-                                            _player.seek(Duration(
-                                                milliseconds: val + 10000));
+                                            _player.seek(
+                                              Duration(
+                                                  milliseconds: val + 10000),
+                                            );
                                           },
                                         ),
                                         SizedBox(width: smallPadding),
@@ -369,12 +453,14 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                                   .withOpacity(0.8),
                                               borderRadius:
                                                   BorderRadius.circular(12)),
-                                          child: Text(
-                                            '${currentPosition.toString().split('.')[0]} - ${totalLength.toString().split('.')[0]}',
-                                            style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .custom
-                                                  .bgColor,
+                                          child: Center(
+                                            child: Text(
+                                              '${currentPosition.toString().split('.')[0]} - ${totalLength.toString().split('.')[0]}',
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .custom
+                                                    .bgThemeColor,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -389,7 +475,8 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                             Navigator.pushNamed(
                                               context,
                                               CommentsScreen.id,
-                                              arguments: CommentArgument(comments: data.comments!),
+                                              arguments: CommentArgument(
+                                                  comments: data.comments!),
                                             );
                                           },
                                         ),
@@ -399,9 +486,15 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                         BlogDetailIconButton(
                                           iconData: Icons.share,
                                           onTap: () {
-                                            Share.share(
-                                                data.text!.substring(5) +
-                                                    '\n https://t.me/abd_dba');
+                                            if (data.text!.length >= 50){
+                                              Share.share(
+                                                  data.text!.substring(49) +
+                                                      '\n\nhttps://sew_hun.com');
+                                            } else {
+                                              Share.share(
+                                                  data.text! +
+                                                      '\n\nhttps://sew_hun.com');
+                                            }
                                           },
                                         ),
                                         SizedBox(
@@ -416,13 +509,9 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                               ? Icons.wb_sunny_outlined
                                               : CupertinoIcons.moon_stars,
                                           onTap: () {
-                                            final state = ref
-                                                .read(themeModeProvider.state);
+                                            final state = ref.read(themeModeProvider.state);
 
-                                            ref
-                                                .read(themeModeProvider.state)
-                                                .state = state.state ==
-                                                    ThemeMode.light
+                                            ref.read(themeModeProvider.state).state = state.state == ThemeMode.light
                                                 ? ThemeMode.dark
                                                 : ThemeMode.light;
                                           },
@@ -437,7 +526,11 @@ class _BlogDetailScreenState extends State<BlogDetailScreen>
                                         //       : Theme.of(context)
                                         //           .custom
                                         //           .bgColor,
-                                        //   onTap: () {},
+                                        //   onTap: () {
+                                        //     ref.read(toggleFavoriteProvider.notifier).fav(data.id!);
+                                        //     print('Favorite Clicked');
+                                        //     isFavorite(data.id!);
+                                        //   },
                                         // ), // TODO: implement this feature
                                         SizedBox(),
                                       ],

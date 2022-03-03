@@ -1,7 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="781bd1ff-cb70-4116-b1cb-6ed0ff9f70df" name="Default Changelist" comment="" />
+    <list default="true" id="781bd1ff-cb70-4116-b1cb-6ed0ff9f70df" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/blog/migrations/0004_auto_20220303_1157.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/photos/categories/Screenshot_from_2022-02-28_02-05-09.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/photos/posts/Screenshot_from_2022-02-28_02-05-09.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/favorite/toggle_favorite_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/favorite/toggle_favorite_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/landing/landingProvider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/landing/landingProvider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/theme/theme_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/theme/theme_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/auth/login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/auth/login_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_detail_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_list_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_list_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/comments_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/comments_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/chat/messages_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/chat/messages_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/landing_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/landing_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/splash_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/edit_profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/edit_profile_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/settings/settings_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/settings/settings_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/static.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/static.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/migrations/0004_youtubeplaylist.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/migrations/0005_alter_narration_audio.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/migrations/0006_auto_20220223_2204.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sew_hun_back/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/sew_hun_back/urls.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -11,18 +56,49 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="234R5R44rghTkqFCBNBDH0A5QqV" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.urls">
+    <configuration name="urls" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="sew_hun_back" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/sew_hun_back" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sew_hun_back/urls.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="sew_hun_back" type="Python.DjangoServer" factoryName="Django server">
       <module name="sew_hun_back" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -46,6 +122,11 @@
       <option name="customRunCommand" value="" />
       <method v="2" />
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.urls" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -58,10 +139,32 @@
       <option name="presentableId" value="Default" />
       <updated>1640991188327</updated>
       <workItem from="1640991189785" duration="16000" />
+      <workItem from="1646165131160" duration="84000" />
+      <workItem from="1646298824623" duration="2414000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="348" y="29" width="660" height="739" key="#urls" timestamp="1646308368596">
+      <screen x="0" y="29" width="1366" height="739" />
+    </state>
+    <state x="348" y="29" width="660" height="739" key="#urls/0.29.1366.739/1366.0.1366.768@0.29.1366.739" timestamp="1646308368596" />
   </component>
 </project>

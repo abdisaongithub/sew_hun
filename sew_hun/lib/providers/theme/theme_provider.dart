@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sew_hun/static.dart';
 
 // THEME PROVIDERS
 
@@ -61,4 +63,23 @@ extension CustomTheme on ThemeData {
 // THEME PROVIDERS
 final lightThemeProvider = Provider((ref) => _lightTheme);
 final darkThemeProvider = Provider((ref) => _darkTheme);
-final themeModeProvider = StateProvider((ref) => ThemeMode.light);
+
+final themeModeProvider = StateProvider((ref) {
+  final theme = ref.watch(savedThemeProvider);
+  if (theme.value == kLight){
+    return ThemeMode.light;
+  } else if(theme.value == kDark){
+    return ThemeMode.dark;
+  }
+});
+
+final savedThemeProvider = FutureProvider<String>((ref) async {
+  final storage = FlutterSecureStorage();
+  try {
+    final res = await storage.read(key: kTheme);
+    return res!;
+  } catch (e){
+    await storage.write(key: kTheme, value: kLight);
+    return kLight;
+  }
+});
