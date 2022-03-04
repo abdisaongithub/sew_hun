@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from . import serializers
-from .models import MyUser
+from .models import MyUser, Profile
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -67,3 +67,14 @@ class Profile(generics.RetrieveUpdateAPIView):
     def put(self, request, *args, **kwargs):
         # TODO: Finish this crap
         return super().put(request, *args, **kwargs)
+
+
+class CreateProfile(generics.CreateAPIView):
+    def post(self, request, *args, **kwargs):
+        profile = serializers.CreateProfileSerializer(data=request.data)
+        if profile.is_valid():
+            print('data: ' + str(profile.data))
+            return Response(data=profile.data)
+        else:
+            print(profile.errors)
+            return Response(data=profile.errors)

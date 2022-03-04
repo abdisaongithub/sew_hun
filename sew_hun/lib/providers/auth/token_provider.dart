@@ -21,7 +21,7 @@ import 'login_credentials_provider.dart';
 //   },
 // );
 
-final authTokenProvider = StateNotifierProvider<AuthNotifier, AuthToken>(
+final authTokenProvider = StateNotifierProvider.autoDispose<AuthNotifier, AuthToken>(
   (ref) => AuthNotifier(ref),
 );
 

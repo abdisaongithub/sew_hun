@@ -11,6 +11,7 @@ from .views import (
     YoutubePlaylistListView,
     LandingView,
     SettingsListView,
+    SearchView,
 )
 
 urlpatterns = [
@@ -23,6 +24,7 @@ urlpatterns = [
 
     path('posts/', PostListView.as_view(), name='posts'),
     path('posts/<int:pk>/', PostDetailView.as_view(), name='post'),
+    path('search/', SearchView.as_view(), name='post'),
 
     path('posts/<int:pk>/comments/', CommentCreateView.as_view(), name='comment.create'),
     path('comments/<int:pk>/', CommentRetrieveUpdateDestroyView.as_view(), name='comment.update'),

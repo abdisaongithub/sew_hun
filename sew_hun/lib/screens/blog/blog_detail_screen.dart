@@ -84,9 +84,9 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
 
   Future<void> stopPlayer() async {}
 
-  isFavorite(int id){
+  isFavorite(int id) {
     ref.read(favListProvider).forEach((element) {
-      if (element.post!.id! == id){
+      if (element.post!.id! == id) {
         setState(() {
           _isFavorite = true;
         });
@@ -96,18 +96,14 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
 
   @override
   Widget build(BuildContext context) {
-
     final args = ModalRoute.of(context)!.settings.arguments as BlogArguments;
 
     final fav = ref.watch(isFavoritedProvider.notifier);
 
     ref.listen(toggleFavoriteProvider, (previous, next) {
       WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-
-        if(fav.state == true){
-          setState(() {
-
-          });
+        if (fav.state == true) {
+          setState(() {});
 
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -117,9 +113,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
             ),
           );
         } else {
-          setState(() {
-
-          });
+          setState(() {});
         }
       });
     });
@@ -486,14 +480,23 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                         BlogDetailIconButton(
                                           iconData: Icons.share,
                                           onTap: () {
-                                            if (data.text!.length >= 50){
+                                            if (data.text!.length >= 100) {
                                               Share.share(
-                                                  data.text!.substring(49) +
-                                                      '\n\nhttps://sew_hun.com');
+                                                data.title! +
+                                                    '\n' +
+                                                    data.text!
+                                                        .substring(0, 99) +
+                                                    '\n\nread more...' +
+                                                    '\n\nhttps://sew_hun.com',
+                                              );
                                             } else {
                                               Share.share(
-                                                  data.text! +
-                                                      '\n\nhttps://sew_hun.com');
+                                                data.title! +
+                                                    '\n' +
+                                                    data.text! +
+                                                    ' \nread more...' +
+                                                    '\n\nhttps://sew_hun.com',
+                                              );
                                             }
                                           },
                                         ),
@@ -509,9 +512,13 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                               ? Icons.wb_sunny_outlined
                                               : CupertinoIcons.moon_stars,
                                           onTap: () {
-                                            final state = ref.read(themeModeProvider.state);
+                                            final state = ref
+                                                .read(themeModeProvider.state);
 
-                                            ref.read(themeModeProvider.state).state = state.state == ThemeMode.light
+                                            ref
+                                                .read(themeModeProvider.state)
+                                                .state = state.state ==
+                                                    ThemeMode.light
                                                 ? ThemeMode.dark
                                                 : ThemeMode.light;
                                           },

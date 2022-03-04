@@ -72,6 +72,13 @@ class PostsSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+class PostsMiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'image', 'category', ]
+        depth = 1
+
+
 class PostsCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Post

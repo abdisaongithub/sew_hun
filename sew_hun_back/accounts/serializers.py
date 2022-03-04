@@ -43,6 +43,13 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CreateProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ['city', 'sub_city', 'special_name', 'bio']
+
+
 class ProfileMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile

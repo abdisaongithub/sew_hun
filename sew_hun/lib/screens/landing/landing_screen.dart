@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -156,13 +155,25 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        'My Favorites',
-                        style: Theme.of(context).custom.textStyle.copyWith(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
+                      data.favorites!.isNotEmpty
+                          ? Text(
+                              'My Favorites',
+                              style:
+                                  Theme.of(context).custom.textStyle.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18,
+                                      ),
+                            )
+                          : Center(
+                              child: Text(
+                                'No Favorites Yet ...',
+                                style:
+                                    Theme.of(context).custom.textStyle.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18,
+                                        ),
+                              ),
                             ),
-                      ),
                       SizedBox(
                         height: Theme.of(context).custom.smallPadding,
                       ),
@@ -336,7 +347,10 @@ class LandingScreenDrawer extends ConsumerWidget {
                 label: 'Latest Videos',
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, YoutubeVideosScreen.id,);
+                  Navigator.pushNamed(
+                    context,
+                    YoutubeVideosScreen.id,
+                  );
                 },
               ),
               DrawerItems(
@@ -589,7 +603,9 @@ class FavoriteCard extends StatelessWidget {
               children: [
                 Text(
                   MediaQuery.of(context).orientation == Orientation.portrait
-                      ? (title.length > 29 ? title.substring(0, 30) + '...' : title)
+                      ? (title.length > 29
+                          ? title.substring(0, 30) + '...'
+                          : title)
                       : title,
                   style: Theme.of(context).custom.textStyle.copyWith(
                         fontWeight: FontWeight.w700,
@@ -598,7 +614,9 @@ class FavoriteCard extends StatelessWidget {
                 ),
                 Text(
                   MediaQuery.of(context).orientation == Orientation.portrait
-                      ? (content.length > 29 ? content.substring(0, 30) + '...' : content)
+                      ? (content.length > 29
+                          ? content.substring(0, 30) + '...'
+                          : content)
                       : content.substring(0, 50),
                   style: Theme.of(context).custom.textStyle.copyWith(
                         fontWeight: FontWeight.w400,

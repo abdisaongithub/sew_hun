@@ -11,6 +11,14 @@ const kChatId = 'chat_id';
 const kText = 'text';
 const kVoice = 'voice';
 const kPost = 'post';
+
+const kBio = 'bio';
+const kSpecialName = 'special_name';
+const kCity = 'city';
+const kSubCity = 'sub_city';
+const kPhone = 'phone';
+const kPhoto = 'photo';
+
 const kTheme = 'theme';
 const kDark = 'dark';
 const kLight = 'light';

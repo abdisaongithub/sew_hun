@@ -1,3 +1,4 @@
+from django.db.models import Q, F
 from django.http import JsonResponse
 from rest_framework import generics, status, permissions
 from rest_framework.permissions import IsAuthenticated
@@ -39,7 +40,7 @@ class PostDetailView(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         post = Post.objects.get(pk=kwargs['pk'])
-        post.reads += 1
+        post.reads = F('reads') + 1
         post.save()
         serialized = serializers.PostDetailSerializer(post)
         return Response(data=serialized.data, status=status.HTTP_200_OK)
@@ -166,3 +167,14 @@ class SettingsListView(generics.ListAPIView):
         # print(serialized.data)
 
         return Response(data={'data': serialized.data}, status=status.HTTP_200_OK)
+
+
+class SearchView(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        key = str(request.data['key'])
+        posts = Post.objects.filter(Q(title__icontains=key) | Q(text__icontains=key))
+        if len(posts) > 0:
+            serialized = serializers.PostsMiniSerializer(posts, many=True)
+            return Response(data={'data': serialized.data})
+        else:
+            return Response(status=status.HTTP_204_NO_CONTENT)
