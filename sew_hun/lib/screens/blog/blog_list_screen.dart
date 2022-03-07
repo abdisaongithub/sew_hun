@@ -101,7 +101,6 @@ class BlogListContainer extends StatelessWidget {
           BlogDetailScreen.id,
           arguments: BlogArguments(
             id: id,
-            img: 'et.jpg',
           ),
         );
       },

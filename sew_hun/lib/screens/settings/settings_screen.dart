@@ -31,61 +31,66 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(color: Theme.of(context).custom.bgColor),
+        decoration: BoxDecoration(
+          color: Theme.of(context).custom.bgColor,
+        ),
         child: settings.when(
           data: (data) {
-            return ListView.builder(
-                itemExtent: 10,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          data.data!.darkMode.toString(),
-                        ),
-                      ),
-                    ],
-                  );
-                });
+            return ListView(
+              children: [
+                ListTile(
+                  title: Text('Email subscription '),
+                  subtitle: Text(
+                    data.data!.isSubscribed! ? 'Yes' : 'No',
+                  ),
+                ),
+                ListTile(
+                  title: Text('Dark Mode'),
+                  subtitle: Text(
+                    data.data!.darkMode! ? 'Yes' : 'No',
+                  ),
+                ),
+              ],
+            );
           },
           error: (error, st) {
             return Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Are you connected to the Internet?',
-                      style: Theme.of(context).custom.textStyle,
-                    ),
-                    SizedBox(
-                      height: smallPadding,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        ref.refresh(settingsProvider);
-                      },
-                      child: Text('Reload'),
-                    ),
-                  ],
-                ),
-              );
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Are you connected to the Internet?',
+                    style: Theme.of(context).custom.textStyle,
+                  ),
+                  SizedBox(
+                    height: smallPadding,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      ref.refresh(settingsProvider);
+                    },
+                    child: Text('Reload'),
+                  ),
+                ],
+              ),
+            );
           },
           loading: () {
             return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                    SizedBox(
-                      height: defaultPadding,
-                    ),
-                    Text('Loading...'),
-                  ],
-                ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    height: defaultPadding,
+                  ),
+                  Text('Loading...'),
+                ],
+              ),
             );
           },
         ),

@@ -59,131 +59,134 @@ class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
               ),
             ],
           ),
-          body: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.all(smallPadding),
-            decoration: BoxDecoration(
-              color: Theme.of(context).custom.bgColor,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: defaultPadding,
-                    ),
-                    Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.teal,
-                        borderRadius: BorderRadius.circular(15),
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            baseUrl + data.user!.profile!.photo!.substring(1),
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: defaultPadding,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          data.user!.username!,
-                          style: Theme.of(context).custom.textStyle.copyWith(
-                              fontSize: 28, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: smallPadding,
-                        ),
-                        Text(
-                          data.user!.email!,
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: SizedBox(
+          body: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.all(smallPadding),
+              decoration: BoxDecoration(
+                color: Theme.of(context).custom.bgColor,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
                         width: defaultPadding,
                       ),
-                    ),
-                  ],
-                ),
-                Divider(),
-                EditProfileTile(
-                  icon: Icons.chair_alt,
-                  initialValue: data.user!.profile!.role!.first.role!,
-                  onTap: () {
-                    print('Role');
-                  },
-                ),
-                Divider(),
-                EditProfileTile(
-                  icon: Icons.attach_money,
-                  initialValue: 'Payment: Unimplemented',
-                  onTap: () {
-                    print('Payments');
-                  },
-                  // controller: paymentController,
-                ),
-                Divider(),
-                EditProfileTile(
-                  icon: Icons.phone_android,
-                  initialValue: data.user!.profile!.phone!,
-                  onTap: () {
-                    print('Phone');
-                  },
-                  // controller: phoneController,
-                ),
-                Divider(),
-                EditProfileTile(
-                  icon: Icons.location_on_outlined,
-                  initialValue: data.user!.profile!.city!,
-                  onTap: () {
-                    print('City');
-                  },
-                  // controller: cityController,
-                ),
-                Divider(),
-                EditProfileTile(
-                  icon: Icons.location_city_outlined,
-                  initialValue: data.user!.profile!.subCity!,
-                  onTap: () {
-                    print('Sub City');
-                  },
-                  // controller: subCityController,
-                ),
-                Divider(),
-                EditProfileTile(
-                  icon: Icons.location_city_outlined,
-                  initialValue: data.user!.profile!.specialName!,
-                  onTap: () {
-                    print('Special Name');
-                  },
-                  // controller: specialNameController,
-                ),
-                Divider(),
-                EditProfileTile(
-                  icon: Icons.print,
-                  initialValue: data.user!.profile!.bio!,
-                  onTap: () {
-                    print('Bio');
-                  },
-                  // controller: bioController,
-                ),
-                Divider(),
-                Expanded(child: SizedBox()),
-                Divider(),
-              ],
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.teal,
+                          borderRadius: BorderRadius.circular(15),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              baseUrl + data.user!.profile!.photo!.substring(1),
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: defaultPadding,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            data.user!.username!,
+                            style: Theme.of(context).custom.textStyle.copyWith(
+                                fontSize: 28, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: smallPadding,
+                          ),
+                          Text(
+                            data.user!.email!,
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          width: defaultPadding,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(),
+                  EditProfileTile(
+                    icon: Icons.chair_alt,
+                    initialValue: data.user!.profile!.role!.first.role!,
+                    onTap: () {
+                      print('Role');
+                    },
+                  ),
+                  Divider(),
+                  EditProfileTile(
+                    icon: Icons.attach_money,
+                    initialValue: 'Payment: Unimplemented',
+                    onTap: () {
+                      print('Payments');
+                    },
+                    // controller: paymentController,
+                  ),
+                  Divider(),
+                  EditProfileTile(
+                    icon: Icons.phone_android,
+                    initialValue: data.user!.profile!.phone!,
+                    onTap: () {
+                      print('Phone');
+                    },
+                    // controller: phoneController,
+                  ),
+                  Divider(),
+                  EditProfileTile(
+                    icon: Icons.location_on_outlined,
+                    initialValue: data.user!.profile!.city!,
+                    onTap: () {
+                      print('City');
+                    },
+                    // controller: cityController,
+                  ),
+                  Divider(),
+                  EditProfileTile(
+                    icon: Icons.location_city_outlined,
+                    initialValue: data.user!.profile!.subCity!,
+                    onTap: () {
+                      print('Sub City');
+                    },
+                    // controller: subCityController,
+                  ),
+                  Divider(),
+                  EditProfileTile(
+                    icon: Icons.location_city_outlined,
+                    initialValue: data.user!.profile!.specialName!,
+                    onTap: () {
+                      print('Special Name');
+                    },
+                    // controller: specialNameController,
+                  ),
+                  Divider(),
+                  EditProfileTile(
+                    icon: Icons.print,
+                    initialValue: data.user!.profile!.bio!,
+                    onTap: () {
+                      print('Bio');
+                    },
+                    // controller: bioController,
+                  ),
+                  Divider(),
+                  Expanded(child: SizedBox()),
+                  Divider(),
+                ],
+              ),
             ),
           ),
         );

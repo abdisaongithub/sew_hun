@@ -28,7 +28,6 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
   bool _isPlaying = false;
   bool _isFavorite = false;
 
-  // bool _isSet = false;
   late AudioPlayer _player;
 
   Duration currentPosition = Duration();
@@ -84,39 +83,33 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
 
   Future<void> stopPlayer() async {}
 
-  isFavorite(int id) {
-    ref.read(favListProvider).forEach((element) {
-      if (element.post!.id! == id) {
-        setState(() {
-          _isFavorite = true;
-        });
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as BlogArguments;
+    //
+    // ref.listen(toggleFavoriteProvider, (previous, next) {
+    //   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    //     final favsList = ref.watch(favListProvider);
+    //     favsList.forEach(
+    //       (element) {
+    //         if (element.post!.id == args.id){
+    //           setState(() {
+    //             _isFavorite = true;
+    //           });
+    //           print('Current Favorite Post: ' + element.post!.id.toString());
+    //         }
+    //       },
+    //     );
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //       SnackBar(
+    //         content: Text(
+    //           'Added To Your Favorites',
+    //         ),
+    //       ),
+    //     );
+    //   });
+    // });
 
-    final fav = ref.watch(isFavoritedProvider.notifier);
-
-    ref.listen(toggleFavoriteProvider, (previous, next) {
-      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-        if (fav.state == true) {
-          setState(() {});
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                'Added To Your Favorites',
-              ),
-            ),
-          );
-        } else {
-          setState(() {});
-        }
-      });
-    });
     _player.onDurationChanged.listen((event) {
       setState(() {
         totalLength = event;
@@ -534,9 +527,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                         //           .custom
                                         //           .bgColor,
                                         //   onTap: () {
-                                        //     ref.read(toggleFavoriteProvider.notifier).fav(data.id!);
-                                        //     print('Favorite Clicked');
-                                        //     isFavorite(data.id!);
+                                        //
                                         //   },
                                         // ), // TODO: implement this feature
                                         SizedBox(),
@@ -572,10 +563,36 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                 );
               },
               error: (error, stack) {
-                return Center(child: Text(error.toString()));
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Are you connected to the Internet?',
+                        style: Theme.of(context).custom.textStyle,
+                      ),
+                      SizedBox(
+                        height: smallPadding,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          ref.refresh(postProvider(args.id));
+                        },
+                        child: Text('Reload'),
+                      ),
+                    ],
+                  ),
+                );
               },
               loading: () => Center(
-                child: CircularProgressIndicator(),
+                child: Scaffold(
+                  body: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
               ),
             );
           },
@@ -633,7 +650,7 @@ class BlogDetailIconButton extends StatelessWidget {
 
 class BlogArguments {
   final int id;
-  final String img;
+  final bool? isFav;
 
-  BlogArguments({required this.id, required this.img});
+  BlogArguments({this.isFav,required this.id});
 }

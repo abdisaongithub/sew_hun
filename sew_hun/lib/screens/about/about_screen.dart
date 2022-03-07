@@ -61,13 +61,13 @@ class _AboutScreenState extends State<AboutScreen> {
                     width: size.width * 0.75,
                     height: size.width * 0.75,
                     decoration: BoxDecoration(
-                      color: Colors.teal,
+                      color: Colors.transparent,
                       borderRadius: BorderRadius.circular(
                         size.width * 0.75,
                       ),
                       image: DecorationImage(
                         image: AssetImage(
-                          'assets/img/et.jpg',
+                          'assets/img/logo.png',
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -124,7 +124,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     onTap: () {
                       final Uri launchUri = Uri(
                         scheme: 'tel',
-                        path: '+251913654294',
+                        path: '+251927707000',
                       );
                       launch(launchUri.toString())
                           .then((value) => print(value))
@@ -132,7 +132,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       // print('+251913654294');
                     },
                     child: Text(
-                      '+251913654294',
+                      '+251 92 770 7000',
                       style: Theme.of(context).custom.textStyle.copyWith(
                             fontSize: 18,
                         color: Colors.blue,
@@ -167,7 +167,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     onTap: () {
                       final Uri launchUri = Uri(
                         scheme: 'tel',
-                        path: '+251942410483',
+                        path: '+251964356337',
                       );
                       launch(launchUri.toString())
                           .then((value) => print(value))
@@ -175,7 +175,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       // print('+251913654294');
                     },
                     child: Text(
-                      '+251942410483',
+                      '+251 96 435 6337',
                       style: Theme.of(context).custom.textStyle.copyWith(
                             fontSize: 18,
                         color: Colors.blue,

@@ -82,6 +82,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 child: Form(
                   key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -117,6 +118,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             hintText: 'Enter Email Address',
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                           ),
+                          textInputAction: TextInputAction.next,
                           onChanged: (value) {
                             credentials.setEmail(value);
                           },
@@ -151,11 +153,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                           ),
                           obscureText: true,
+                          textInputAction: TextInputAction.none,
                           onChanged: (value) {
                             credentials.setPassword(value);
                           },
                           keyboardType: TextInputType.text,
-                          // validator: (value) {}, TODO: Implemetn this validation
+                          // validator: (value) {}, TODO: Implement this validation
                         ),
                       ),
                       SizedBox(

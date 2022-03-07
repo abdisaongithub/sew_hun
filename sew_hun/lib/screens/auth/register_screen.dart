@@ -1,5 +1,3 @@
-// ignore_for_file: invalid_use_of_protected_member
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,7 +40,7 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
               SnackBar(
                 content: Text(
                   error.state!.type == DioErrorType.response
-                      ? 'Use Valid Email and Password'
+                      ? 'Use a Valid Email and Password'
                       : 'Are You Connected to the Internet?',
                 ),
               ),

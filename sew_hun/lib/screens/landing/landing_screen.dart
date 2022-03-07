@@ -4,15 +4,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:sew_hun/dio_api.dart';
+import 'package:sew_hun/providers/blog/random_posts_provider.dart';
+import 'package:sew_hun/providers/blog/search_post_provider.dart';
 import 'package:sew_hun/providers/landing/landingProvider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/about/about_screen.dart';
 import 'package:sew_hun/screens/blog/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog/blog_list_screen.dart';
+import 'package:sew_hun/screens/blog/search_result_screen.dart';
 import 'package:sew_hun/screens/chat/chats_screen.dart';
 import 'package:sew_hun/screens/payment/payment_screen.dart';
 import 'package:sew_hun/screens/profile/profile_screen.dart';
-import 'package:sew_hun/screens/settings/settings_screen.dart';
 import 'package:sew_hun/screens/youtube/youtube_videos_screen.dart';
 import 'package:sew_hun/static.dart';
 
@@ -30,6 +32,20 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(postSearchProvider, (previous, next) {
+      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+        Navigator.pushNamed(context, SearchResultScreen.id);
+
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(
+        //       'Added To Your Favorites',
+        //     ),
+        //   ),
+        // );
+      });
+    });
+
     final landing = ref.watch(landingProvider);
     return WillPopScope(
       onWillPop: () async {
@@ -53,13 +69,13 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
             ),
           ),
           title: Text(
-            'Sew Hun', // TODO: Make this text automatically scrolling
+            'Sew Hun',
             style: Theme.of(context).custom.textStyle.copyWith(),
           ),
           actions: [
             GestureDetector(
               onTap: () {
-                print('search');
+                Navigator.pushNamed(context, SearchResultScreen.id);
               },
               child: Icon(
                 Icons.search,
@@ -70,17 +86,17 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
             SizedBox(
               width: smallPadding,
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, ProfileScreen.id);
-              },
-              child: CircleAvatar(
-                foregroundImage: AssetImage('assets/img/baby.png'),
-                backgroundImage: AssetImage('assets/img/et.jpg'),
-                // TODO: change this to a default image
-                radius: 17,
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     Navigator.pushNamed(context, ProfileScreen.id);
+            //   },
+            //   child: CircleAvatar(
+            //     foregroundImage: AssetImage('assets/img/baby.png'),
+            //     backgroundImage: AssetImage('assets/img/et.jpg'),
+            //     // TODO: change this to a default image
+            //     radius: 17,
+            //   ),
+            // ),
             SizedBox(
               width: smallPadding,
             ),
@@ -155,35 +171,72 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      data.favorites!.isNotEmpty
-                          ? Text(
-                              'My Favorites',
-                              style:
-                                  Theme.of(context).custom.textStyle.copyWith(
+                      ref.watch(randomPostProvider).when(
+                        data: (res) {
+                          return Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Top Picks',
+                                  style: Theme.of(context)
+                                      .custom
+                                      .textStyle
+                                      .copyWith(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 18,
                                       ),
-                            )
-                          : Center(
-                              child: Text(
-                                'No Favorites Yet ...',
-                                style:
-                                    Theme.of(context).custom.textStyle.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 18,
-                                        ),
-                              ),
+                                ),
+                                SizedBox(
+                                  height: smallPadding,
+                                ),
+                                for (var post in res.data!)
+                                  FavoriteCard(
+                                    title: post.title!,
+                                    content: post.text!,
+                                    img: post.image!,
+                                    index: post.id!,
+                                  )
+                              ],
                             ),
-                      SizedBox(
-                        height: Theme.of(context).custom.smallPadding,
+                          );
+                        },
+                        error: (error, st) {
+                          return SizedBox();
+                        },
+                        loading: () {
+                          return SizedBox();
+                        },
                       ),
-                      for (var fav in data.favorites!)
-                        FavoriteCard(
-                          title: fav.post!.title.toString(),
-                          content: fav.post!.text.toString(),
-                          index: fav.post!.id!.toInt(),
-                          img: fav.post!.image.toString(),
-                        ),
+                      // data.favorites!.isNotEmpty
+                      //     ? Text(
+                      //         'My Favorites',
+                      //         style:
+                      //             Theme.of(context).custom.textStyle.copyWith(
+                      //                   fontWeight: FontWeight.w500,
+                      //                   fontSize: 18,
+                      //                 ),
+                      //       )
+                      //     : Center(
+                      //         child: Text(
+                      //           'No Favorites Yet ...',
+                      //           style:
+                      //               Theme.of(context).custom.textStyle.copyWith(
+                      //                     fontWeight: FontWeight.w500,
+                      //                     fontSize: 18,
+                      //                   ),
+                      //         ),
+                      //       ),
+                      // SizedBox(
+                      //   height: Theme.of(context).custom.smallPadding,
+                      // ),
+                      // for (var fav in data.favorites!)
+                      //   FavoriteCard(
+                      //     title: fav.post!.title.toString(),
+                      //     content: fav.post!.text.toString(),
+                      //     index: fav.post!.id!.toInt(),
+                      //     img: fav.post!.image.toString(),
+                      //   ),
                     ],
                   ),
                 ),
@@ -274,7 +327,7 @@ class LandingScreenDrawer extends ConsumerWidget {
                         Theme.of(context).custom.defaultPadding,
                       ),
                       image: DecorationImage(
-                        image: AssetImage('assets/img/baby.png'),
+                        image: AssetImage('assets/img/logo.png'),
                       ),
                     ),
                   ),
@@ -286,12 +339,15 @@ class LandingScreenDrawer extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Hello 👋',
+                        'Sew Hun Kesewm Sew Hun',
+                        textAlign: TextAlign.center,
+                        // 'Hello 👋',
                         style: Theme.of(context).custom.textStyle.copyWith(
                               color: Theme.of(context).custom.textColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
+                        maxLines: 2,
                       ),
                       SizedBox(
                         height: Theme.of(context).custom.smallPadding,
@@ -354,14 +410,25 @@ class LandingScreenDrawer extends ConsumerWidget {
                 },
               ),
               DrawerItems(
-                iconData: Icons.settings,
-                label: 'Settings',
+                iconData: Icons.person,
+                label: 'Profile',
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, SettingsScreen.id);
-                  // TODO: NNavigate to SettingsScreen
+                  Navigator.pushNamed(
+                    context,
+                    ProfileScreen.id,
+                  );
                 },
               ),
+              // DrawerItems(
+              //   iconData: Icons.settings,
+              //   label: 'Settings',
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     Navigator.pushNamed(context, SettingsScreen.id);
+              //     // TODO: NNavigate to SettingsScreen
+              //   },
+              // ),
               DrawerItems(
                 iconData: Icons.attach_money,
                 label: 'Payments',
@@ -371,6 +438,7 @@ class LandingScreenDrawer extends ConsumerWidget {
                   // TODO: NNavigate to SettingsScreen
                 },
               ),
+
               Divider(
                 color: Theme.of(context).custom.textColor,
                 indent: Theme.of(context).custom.smallPadding,
@@ -559,7 +627,6 @@ class FavoriteCard extends StatelessWidget {
           BlogDetailScreen.id,
           arguments: BlogArguments(
             id: index,
-            img: img,
           ),
         );
       },

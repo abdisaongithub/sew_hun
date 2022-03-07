@@ -5,6 +5,7 @@ import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/about/about_screen.dart';
 import 'package:sew_hun/screens/blog/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog/blog_list_screen.dart';
+import 'package:sew_hun/screens/blog/search_result_screen.dart';
 import 'package:sew_hun/screens/chat/chats_screen.dart';
 import 'package:sew_hun/screens/blog/comments_screen.dart';
 import 'package:sew_hun/screens/chat/record_screen.dart';
@@ -62,6 +63,8 @@ class MyApp extends StatelessWidget {
             YoutubeVideosScreen.id: (context) => YoutubeVideosScreen(),
             YoutubeVideoPlayerScreen.id: (context) => YoutubeVideoPlayerScreen(),
             PaymentsScreen.id: (context) => PaymentsScreen(),
+            SearchResultScreen.id: (context) => SearchResultScreen(),
+
           },
         );
       },

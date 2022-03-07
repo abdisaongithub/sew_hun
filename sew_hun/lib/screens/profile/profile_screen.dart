@@ -19,8 +19,6 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     return ref.watch(userProvider).when(
@@ -38,29 +36,29 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               color: Theme.of(context).custom.textColor,
             ),
             actions: [
-              Tooltip(
-                message: 'Logout',
-                child: GestureDetector(
-                  onTap: () async {
-                    // final storage = FlutterSecureStorage();
-                    // await storage.delete(key: kToken);
-                    // ref.read(isSignedInProvider.notifier).state = false;
-                    // ref.read(signInErrorProvider.notifier).state = false;
-                    // ref.read(networkErrorProvider.notifier).state = null;
-                    //
-                    Navigator.pushNamed(
-                      context,
-                      EditProfileScreen.id,
-                    );
-
-                    // Restart.restartApp();
-                  },
-                  child: Icon(
-                    Icons.edit,
-                    color: Theme.of(context).custom.textColor,
-                  ),
-                ),
-              ),
+              // Tooltip(
+              //   message: 'Logout',
+              //   child: GestureDetector(
+              //     onTap: () async {
+              //       // final storage = FlutterSecureStorage();
+              //       // await storage.delete(key: kToken);
+              //       // ref.read(isSignedInProvider.notifier).state = false;
+              //       // ref.read(signInErrorProvider.notifier).state = false;
+              //       // ref.read(networkErrorProvider.notifier).state = null;
+              //       //
+              //       Navigator.pushNamed(
+              //         context,
+              //         EditProfileScreen.id,
+              //       );
+              //
+              //       // Restart.restartApp();
+              //     },
+              //     child: Icon(
+              //       Icons.edit,
+              //       color: Theme.of(context).custom.textColor,
+              //     ),
+              //   ),
+              // ),
               SizedBox(
                 width: smallPadding,
               ),
@@ -193,7 +191,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ProfileTile(
                   icon: Icons.attach_money,
                   label: 'Payment: Unimplemented',
-
                   onTap: () {
                     print('Payments');
                   },
@@ -202,22 +199,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 Expanded(child: SizedBox()),
                 Divider(),
                 ProfileTile(
-                    icon: Icons.logout_rounded,
-                    label: 'Logout',
-                    onTap: () async {
-                      final storage = FlutterSecureStorage();
-                      await storage.delete(key: kToken);
-                      ref.read(isSignedInProvider.notifier).state = false;
-                      ref.read(signInErrorProvider.notifier).state = false;
-                      ref.read(networkErrorProvider.notifier).state = null;
+                  icon: Icons.logout_rounded,
+                  label: 'Logout',
+                  onTap: () async {
+                    final storage = FlutterSecureStorage();
+                    await storage.delete(key: kToken);
+                    ref.read(isSignedInProvider.notifier).state = false;
+                    ref.read(signInErrorProvider.notifier).state = false;
+                    ref.read(networkErrorProvider.notifier).state = null;
 
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        LoginScreen.id,
-                        (route) => route.currentResult == LoginScreen.id,
-                      );
-                    },
-                    textColor: Colors.red),
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      LoginScreen.id,
+                      (route) => route.currentResult == LoginScreen.id,
+                    );
+                  },
+                  textColor: Colors.red,
+                ),
                 Divider(),
               ],
             ),

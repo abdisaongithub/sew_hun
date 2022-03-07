@@ -10,7 +10,7 @@ import 'package:sew_hun/static.dart';
 
 
 final registerDataProvider =
-    StateNotifierProvider<RegisterNotifier, Register>(
+    StateNotifierProvider.autoDispose<RegisterNotifier, Register>(
   (ref) => RegisterNotifier(ref),
 );
 
