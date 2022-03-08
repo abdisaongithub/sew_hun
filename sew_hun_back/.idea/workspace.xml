@@ -20,31 +20,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="781bd1ff-cb70-4116-b1cb-6ed0ff9f70df" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/blog/migrations/0004_auto_20220303_1157.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/photos/categories/Screenshot_from_2022-02-28_02-05-09.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/photos/posts/Screenshot_from_2022-02-28_02-05-09.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/favorite/toggle_favorite_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/favorite/toggle_favorite_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/landing/landingProvider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/landing/landingProvider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/theme/theme_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/theme/theme_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/auth/login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/auth/login_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_detail_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_list_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_list_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/comments_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/comments_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/chat/messages_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/chat/messages_screen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/blog/migrations/0007_alter_post_reads.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/migrations/0002_alter_file_file.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/static/pages/static/images/facebook.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/static/pages/static/images/telegram.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/static/pages/static/images/youtube.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/jsLibraryMappings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/landing_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/landing_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/splash_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/edit_profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/edit_profile_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/settings/settings_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/settings/settings_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/static.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/static.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/migrations/0004_youtubeplaylist.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/migrations/0005_alter_narration_audio.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/migrations/0006_auto_20220223_2204.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/blog/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/permissions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blog/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/static/pages/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/pages/static/pages/static/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/static/pages/static/js/custom.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/static/pages/static/js/custom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/templates/pages/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/pages/templates/pages/templates/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/pages/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sew_hun_back/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/sew_hun_back/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sew_hun_back/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/sew_hun_back/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -68,7 +65,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../sew_hun_env" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -76,7 +73,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
-  <component name="RunManager" selected="Python.urls">
+  <component name="RunManager" selected="Django Server.sew_hun_back">
     <configuration name="urls" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="sew_hun_back" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -105,6 +102,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="sew_hun_back.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -141,6 +139,11 @@
       <workItem from="1640991189785" duration="16000" />
       <workItem from="1646165131160" duration="84000" />
       <workItem from="1646298824623" duration="2414000" />
+      <workItem from="1646679461893" duration="1580000" />
+      <workItem from="1646723053575" duration="5344000" />
+      <workItem from="1646731142027" duration="3664000" />
+      <workItem from="1646739899363" duration="361000" />
+      <workItem from="1646740501242" duration="5024000" />
     </task>
     <servers />
   </component>
@@ -157,6 +160,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
@@ -166,5 +170,25 @@
       <screen x="0" y="29" width="1366" height="739" />
     </state>
     <state x="348" y="29" width="660" height="739" key="#urls/0.29.1366.739/1366.0.1366.768@0.29.1366.739" timestamp="1646308368596" />
+    <state x="461" y="157" width="424" height="486" key="FileChooserDialogImpl" timestamp="1646679598858">
+      <screen x="0" y="29" width="1366" height="739" />
+    </state>
+    <state x="461" y="157" width="424" height="486" key="FileChooserDialogImpl/0.29.1366.739@0.29.1366.739" timestamp="1646679598858" />
+    <state width="1320" height="173" key="GridCell.Tab.0.bottom" timestamp="1646724795679">
+      <screen x="0" y="29" width="1366" height="739" />
+    </state>
+    <state width="1320" height="173" key="GridCell.Tab.0.bottom/0.29.1366.739/1366.0.1366.768@0.29.1366.739" timestamp="1646724795679" />
+    <state width="1320" height="173" key="GridCell.Tab.0.center" timestamp="1646724795679">
+      <screen x="0" y="29" width="1366" height="739" />
+    </state>
+    <state width="1320" height="173" key="GridCell.Tab.0.center/0.29.1366.739/1366.0.1366.768@0.29.1366.739" timestamp="1646724795679" />
+    <state width="1320" height="173" key="GridCell.Tab.0.left" timestamp="1646724795679">
+      <screen x="0" y="29" width="1366" height="739" />
+    </state>
+    <state width="1320" height="173" key="GridCell.Tab.0.left/0.29.1366.739/1366.0.1366.768@0.29.1366.739" timestamp="1646724795679" />
+    <state width="1320" height="173" key="GridCell.Tab.0.right" timestamp="1646724795679">
+      <screen x="0" y="29" width="1366" height="739" />
+    </state>
+    <state width="1320" height="173" key="GridCell.Tab.0.right/0.29.1366.739/1366.0.1366.768@0.29.1366.739" timestamp="1646724795679" />
   </component>
 </project>

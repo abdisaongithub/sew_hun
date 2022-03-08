@@ -12,6 +12,7 @@ from .views import (
     LandingView,
     SettingsListView,
     SearchView,
+    RandomPostListView
 )
 
 urlpatterns = [
@@ -23,8 +24,9 @@ urlpatterns = [
     path('landing/', LandingView.as_view(), name='landing'),
 
     path('posts/', PostListView.as_view(), name='posts'),
+    path('posts/random/', RandomPostListView.as_view(), name='posts.random'),
     path('posts/<int:pk>/', PostDetailView.as_view(), name='post'),
-    path('search/', SearchView.as_view(), name='post'),
+    path('search/<str:key>/', SearchView.as_view(), name='search'),
 
     path('posts/<int:pk>/comments/', CommentCreateView.as_view(), name='comment.create'),
     path('comments/<int:pk>/', CommentRetrieveUpdateDestroyView.as_view(), name='comment.update'),

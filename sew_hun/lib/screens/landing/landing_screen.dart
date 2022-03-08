@@ -63,7 +63,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
               _globalKey.currentState!.openDrawer();
             },
             child: Icon(
-              Ionicons.menu_sharp,
+              Ionicons.menu_outline,
               size: 34,
               color: Theme.of(context).custom.textColor,
             ),

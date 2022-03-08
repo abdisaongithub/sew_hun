@@ -1,6 +1,8 @@
-from django.db.models import Q, F
+import random
+
+from django.db.models import Q
 from django.http import JsonResponse
-from rest_framework import generics, status, permissions
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -32,6 +34,16 @@ class PostListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
 
+class RandomPostListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        rand = list(Post.objects.filter(is_published=True))
+        posts = random.sample(rand, 2)
+        ser = serializers.PostsSerializer(posts, many=True)
+        return Response(data={'data': ser.data})
+
+
 class PostDetailView(generics.RetrieveAPIView):
     # serializer_class = serializers.PostDetailSerializer
     # queryset = Post.objects.all()
@@ -39,9 +51,13 @@ class PostDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        post = Post.objects.get(pk=kwargs['pk'])
-        post.reads = F('reads') + 1
-        post.save()
+        pk = kwargs['pk']
+        post = Post.objects.get(pk=pk)
+
+        # post.reads = F('reads') + 1
+        # post.save()
+        # TODO: make this little shit work
+
         serialized = serializers.PostDetailSerializer(post)
         return Response(data=serialized.data, status=status.HTTP_200_OK)
 
@@ -121,6 +137,8 @@ class FavoritesListCreateView(generics.ListCreateAPIView):
 
 
 class FavoriteDestroyView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+
     def delete(self, request, *args, **kwargs):
         try:
             fav = Favorite.objects.get(pk=kwargs['pk'])
@@ -134,6 +152,8 @@ class FavoriteDestroyView(generics.DestroyAPIView):
 
 
 class YoutubePlaylistListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         playlists = YoutubePlaylist.objects.all()
         serialized = serializers.YoutubePlaylistSerializer(playlists, many=True)
@@ -142,6 +162,8 @@ class YoutubePlaylistListView(generics.ListAPIView):
 
 
 class LandingView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         categories = Category.objects.all()
         cat_ser = serializers.CategoriesSerializer(categories, many=True)
@@ -158,7 +180,7 @@ class LandingView(generics.ListAPIView):
 
 
 class SettingsListView(generics.ListAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         setting = Settings.objects.get(user_id=request.user.id)
@@ -170,11 +192,14 @@ class SettingsListView(generics.ListAPIView):
 
 
 class SearchView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
-        key = str(request.data['key'])
-        posts = Post.objects.filter(Q(title__icontains=key) | Q(text__icontains=key))
+        # key = str(request.data['key'])
+        key = str(kwargs['key'])
+        posts = Post.objects.filter(Q(title__icontains=key) | Q(text__icontains=key)).filter(is_published=True)
         if len(posts) > 0:
             serialized = serializers.PostsMiniSerializer(posts, many=True)
             return Response(data={'data': serialized.data})
         else:
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_404_NOT_FOUND)

@@ -46,7 +46,7 @@ class Post(models.Model):
     updated_at = models.DateField(auto_now=True)
 
     reads = models.BigIntegerField(default=0, blank=False, )
-    shares = models.BigIntegerField(default=0, blank=False, )
+    shares = models.IntegerField(default=0, blank=False, )
 
     # TODO: not migrated, also update the pots provider after uncommenting this shit
     is_published = models.BooleanField(default=True)

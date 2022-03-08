@@ -33,6 +33,7 @@ ALLOWED_HOSTS = [
     '192.168.42.25',
     'sewhun.com',
     'app.sewhun.com',
+    '10.240.93.61',
 ]
 
 # Application definition
@@ -64,6 +65,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'blog.apps.BlogConfig',
     'chat.apps.ChatConfig',
+    'pages.apps.PagesConfig',
 ]
 
 MIDDLEWARE = [
