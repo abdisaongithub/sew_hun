@@ -7,6 +7,19 @@ from django.contrib.auth import get_user_model
 from .models import MyUser, Profile, Role
 
 
+class UserCreationSerializer(serializers.Serializer):
+    def update(self, instance, validated_data):
+        pass
+
+    def create(self, validated_data):
+        user = get_user_model().objects.create(email=validated_data['email'], password=validated_data['password'],
+                                               username=validated_data['username'], )
+
+    email = serializers.CharField(max_length=120)
+    password1 = serializers.CharField(max_length=120)
+    password2 = serializers.CharField(max_length=120)
+
+
 class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
@@ -44,7 +57,6 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class CreateProfileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Profile
         fields = ['city', 'sub_city', 'special_name', 'bio']

@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sew_hun/models/auth/register.dart';
 import 'package:sew_hun/providers/auth/register_data_provider.dart';
 import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/screens/landing/landing_screen.dart';
@@ -39,8 +39,8 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  error.state!.type == DioErrorType.response
-                      ? 'Use a Valid Email and Password'
+                  error.state!.response!.statusCode.toString().startsWith('4')
+                      ? error.state!.response!.data
                       : 'Are You Connected to the Internet?',
                 ),
               ),
@@ -71,12 +71,12 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/img/et.jpg',
-              fit: BoxFit.cover,
-            ),
-          ),
+          // Positioned.fill(
+          //   child: Image.asset(
+          //     'assets/img/et.jpg',
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
           Align(
             alignment: Alignment.center,
             child: SingleChildScrollView(
@@ -99,6 +99,15 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Center(
+                        child: CircleAvatar(
+                          radius: 50,
+                          child: Image.asset(
+                            'assets/img/logo.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                       SizedBox(
                         height: 20,
                       ),
@@ -135,6 +144,8 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
                             registerData.addEmail(value);
                           },
                           keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (value) {
                             if (isNull(value)) {
                               return 'Please Enter An Email Address';
@@ -169,12 +180,20 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
                             registerData.addPassword1(value);
                           },
                           keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.next,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (value) {
                             if (isNull(value)) {
                               return 'Enter A Password';
                             }
                             if (value!.isEmpty) {
                               return 'Enter A Password';
+                            }
+                            if (isNumeric(value)) {
+                              return 'Password can\'t be numbers only';
+                            }
+                            if (isAlpha(value)) {
+                              return 'Password can\'t be letters only';
                             }
                             return null;
                           },
@@ -204,6 +223,21 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
                             registerData.addPassword2(value);
                           },
                           keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.go,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          onEditingComplete: () {
+                            if (_formKey.currentState!.validate()) {
+                              ref.read(registerDataProvider.notifier).register(
+                                    register: Register(
+                                      email: registerData.state.email,
+                                      password1: registerData.state.password1,
+                                      password2: registerData.state.password2,
+                                    ),
+                                  );
+                            } else {
+                              print('Validation Error');
+                            }
+                          },
                           validator: (value) {
                             if (isNull(value)) {
                               return 'Enter A Password';
@@ -223,7 +257,13 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            ref.read(registerDataProvider.notifier).register();
+                            ref.read(registerDataProvider.notifier).register(
+                                  register: Register(
+                                    email: registerData.state.email,
+                                    password1: registerData.state.password1,
+                                    password2: registerData.state.password2,
+                                  ),
+                                );
                           } else {
                             print('Validation Error');
                           }
@@ -240,7 +280,7 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              print('Login');
+                              Navigator.pop(context);
                             },
                             child: Text(
                               'Login?',

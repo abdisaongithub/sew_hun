@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_time_format/date_time_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/dio_api.dart';
 import 'package:sew_hun/models/blog/post.dart';
 import 'package:sew_hun/providers/blog/post_provider.dart';
-import 'package:sew_hun/providers/favorite/toggle_favorite_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/blog/comments_screen.dart';
 import 'package:sew_hun/static.dart';
@@ -26,11 +26,12 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
   late ScrollController _scrollController;
   bool _showBackToTopButton = false;
   bool _isPlaying = false;
-  bool _isFavorite = false;
+  // bool _isFavorite = false;
 
   late AudioPlayer _player;
 
   Duration currentPosition = Duration();
+
   Duration totalLength = Duration();
 
   @override
@@ -145,19 +146,18 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
             return post.when(
               data: (data) {
                 final narration = data.narration as List<Narration>;
-
                 if (narration.length == 0) {
                   // pass
                   _player.setUrl(
                     'https://filesamples.com/samples/audio/mp3/sample1.mp3',
                   );
                 } else {
-                  // _player.setUrl(
-                  //   data.narration!.first.audio.toString(),
-                  // );
                   _player.setUrl(
-                    'https://filesamples.com/samples/audio/mp3/sample1.mp3',
+                    data.narration!.first.audio!,
                   );
+                  // _player.setUrl(
+                  //   'https://filesamples.com/samples/audio/mp3/sample1.mp3',
+                  // );
                 }
                 return CustomScrollView(
                   controller: _scrollController,
@@ -181,8 +181,8 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                   height: 325,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                      image: NetworkImage(
-                                        baseUrl + data.image!.substring(1),
+                                      image: CachedNetworkImageProvider(
+                                        data.image!,
                                       ),
                                       fit: BoxFit.cover,
                                       repeat: ImageRepeat.noRepeat,
@@ -280,10 +280,8 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                         ),
                                         CircleAvatar(
                                           radius: 15,
-                                          backgroundImage: NetworkImage(
-                                            baseUrl +
-                                                data.author!.profile!.photo!
-                                                    .substring(1),
+                                          backgroundImage: CachedNetworkImageProvider(
+                                            data.author!.profile!.photo!,
                                           ),
                                         ),
                                       ],
@@ -392,9 +390,23 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                         // BlogDetailIconButton(
                                         //   iconData: Icons.fast_rewind,
                                         // ),
+                                        narration.isNotEmpty ?
+                                        BlogDetailIconButton(
+                                          iconData: Icons.fast_rewind,
+                                          onTap: () async {
+                                            final val = await _player
+                                                .getCurrentPosition();
+                                            print(val);
+                                            _player.seek(
+                                              Duration(
+                                                  milliseconds: val - 10000),
+                                            );
+                                          },
+                                        ) : SizedBox(),
                                         SizedBox(
                                           width: 8,
                                         ),
+                                        narration.isNotEmpty ?
                                         BlogDetailIconButton(
                                           iconData: _isPlaying
                                               ? Icons.pause
@@ -412,10 +424,11 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                               });
                                             }
                                           },
-                                        ),
+                                        ) : SizedBox(),
                                         SizedBox(
                                           width: 8,
                                         ),
+                                        narration.isNotEmpty ?
                                         BlogDetailIconButton(
                                           iconData: Icons.fast_forward,
                                           onTap: () async {
@@ -427,8 +440,9 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                                   milliseconds: val + 10000),
                                             );
                                           },
-                                        ),
+                                        ) : SizedBox(),
                                         SizedBox(width: smallPadding),
+                                        narration.isNotEmpty ?
                                         Container(
                                           height: 30,
                                           padding: EdgeInsets.symmetric(
@@ -439,7 +453,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                                   .textColor
                                                   .withOpacity(0.8),
                                               borderRadius:
-                                                  BorderRadius.circular(12)),
+                                                  BorderRadius.circular(12),),
                                           child: Center(
                                             child: Text(
                                               '${currentPosition.toString().split('.')[0]} - ${totalLength.toString().split('.')[0]}',
@@ -450,7 +464,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                               ),
                                             ),
                                           ),
-                                        ),
+                                        ) : SizedBox(),
                                         Expanded(
                                           child: SizedBox(
                                             width: 8,

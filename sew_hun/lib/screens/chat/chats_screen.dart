@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/providers/chat/admin_chooser_screen.dart';
@@ -47,12 +48,10 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         image: DecorationImage(
-                          image: NetworkImage(
+                          image: CachedNetworkImageProvider(
                             data.isAdmin!
-                                ? data.chats![index].client!.profile!.photo
-                                    .toString()
-                                : data.chats![index].admin!.profile!.photo
-                                    .toString(),
+                                ? data.chats![index].client!.profile!.photo!
+                                : data.chats![index].admin!.profile!.photo!,
                           ),
                           fit: BoxFit.cover,
                         ),

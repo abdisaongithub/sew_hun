@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -7,8 +9,6 @@ import 'package:sew_hun/models/auth/register.dart';
 import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/static.dart';
 
-
-
 final registerDataProvider =
     StateNotifierProvider.autoDispose<RegisterNotifier, Register>(
   (ref) => RegisterNotifier(ref),
@@ -17,18 +17,33 @@ final registerDataProvider =
 class RegisterNotifier extends StateNotifier<Register> {
   RegisterNotifier(this.ref) : super(Register());
   final Ref ref;
-  register() async {
+
+  register({required Register register}) async {
     final _isSignedIn = ref.watch(isSignedInProvider.notifier);
     final signInError = ref.watch(signInErrorProvider.notifier);
+    final error = ref.watch(networkErrorProvider.notifier);
+
     Response _response;
+
     final storage = FlutterSecureStorage();
+
     try {
-      _response = await dio_api.post('auth/registration/',
-          data: FormData.fromMap({
-            kEmail: state.email,
-            kPassword1: state.password1,
-            kPassword2: state.password2
-          }));
+      var formData = {
+        kEmail: register.email,
+        kPassword1: register.password1,
+        kPassword2: register.password2,
+      };
+      print('register called');
+      _response = await dio_api.post(
+        'auth/registration/',
+        options: Options(
+          headers: {HttpHeaders.hostHeader: hostAddress},
+        ),
+        data: FormData.fromMap(formData),
+      );
+
+      print('_response received');
+
       final token = AuthToken.fromJson(_response.data);
 
       await storage.write(key: kToken, value: token.key);
@@ -36,9 +51,11 @@ class RegisterNotifier extends StateNotifier<Register> {
       _isSignedIn.update((state) => true);
 
       return token;
-    } on DioError catch(e){
+
+    } on DioError catch (e) {
+      print(e.response!.data);
       signInError.state = true;
-      print(e.error.toString());
+      error.state = e;
     }
   }
 

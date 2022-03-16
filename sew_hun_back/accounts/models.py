@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 from django.dispatch import receiver
@@ -19,8 +18,12 @@ class MyUser(AbstractUser):
 @receiver(models.signals.post_save, sender=MyUser)
 def create_profile(sender, instance, created, **kwargs):
     if created and instance is not None:
-        role = Role.objects.filter(role__exact='customer')
-        Profile.objects.create(user_id=instance.id, role=role.id)
+        print('trying to create profile')
+        print(instance.id)
+        print(instance.email)
+        customer_role = Role.objects.get(role__exact='customer')
+        profile = Profile.objects.create(user_id=instance.id, )
+        profile.role.add(customer_role)
 
 
 class Settings(models.Model):
@@ -50,10 +53,10 @@ class Profile(models.Model):
     """
     user = models.OneToOneField(MyUser, on_delete=models.CASCADE, related_name='profile')
     phone = models.CharField(max_length=15, blank=False, default='0900000000')
-    city = models.CharField(max_length=50, blank=True)
-    sub_city = models.CharField(max_length=50, blank=True)
-    special_name = models.CharField(max_length=50, blank=True)
-    bio = models.TextField(blank=True)
+    city = models.CharField(max_length=50, blank=True, default='Addis Ababa')
+    sub_city = models.CharField(max_length=50, blank=True, default='bole')
+    special_name = models.CharField(max_length=50, blank=True, default='bole-bulbula')
+    bio = models.TextField(blank=True, default='')
     photo = models.ImageField(upload_to='photos/profiles/', blank=True)
 
     role = models.ManyToManyField(Role, related_name='profiles', )

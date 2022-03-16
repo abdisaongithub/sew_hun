@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
-import 'package:sew_hun/screens/about/logo_screen.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutScreen extends StatefulWidget {
@@ -13,6 +16,17 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
+
+  Future<void> _shareImage() async {
+    final bytes = await rootBundle.load('assets/img/logo.png');
+    final list = bytes.buffer.asUint8List();
+
+    final tempDir = await getTemporaryDirectory();
+    final file = await File('${tempDir.path}/logo.png').create();
+    // print(file.path);
+    file.writeAsBytesSync(list);
+    Share.shareFiles([file.path], text: 'https://app.sewhun.com');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +41,20 @@ class _AboutScreenState extends State<AboutScreen> {
         leading: BackButton(
           color: Theme.of(context).custom.textColor,
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              _shareImage();
+            },
+            icon: Icon(
+              Icons.share,
+              color: Theme.of(context).custom.textColor,
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+        ],
       ),
       body: Container(
         height: size.height,
@@ -44,16 +72,16 @@ class _AboutScreenState extends State<AboutScreen> {
               Text(
                 'ሰው ሁን ከሰውም ሰው ሁን',
                 style: Theme.of(context).custom.textStyle.copyWith(
-                  fontSize: 26,
-                ),
+                      fontSize: 26,
+                    ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
                 height: 20,
               ),
               GestureDetector(
-                onTap: (){
-                  Navigator.pushNamed(context, LogoScreen.id);
+                onTap: () {
+                  // Navigator.pushNamed(context, LogoScreen.id);
                 },
                 child: Hero(
                   tag: 'logo',
@@ -104,8 +132,8 @@ class _AboutScreenState extends State<AboutScreen> {
               Text(
                 'Call Us',
                 style: Theme.of(context).custom.textStyle.copyWith(
-                  fontSize: 18,
-                ),
+                      fontSize: 18,
+                    ),
               ),
               SizedBox(
                 height: Theme.of(context).custom.smallPadding,
@@ -135,7 +163,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       '+251 92 770 7000',
                       style: Theme.of(context).custom.textStyle.copyWith(
                             fontSize: 18,
-                        color: Colors.blue,
+                            color: Colors.blue,
                           ),
                     ),
                   ),
@@ -178,7 +206,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       '+251 96 435 6337',
                       style: Theme.of(context).custom.textStyle.copyWith(
                             fontSize: 18,
-                        color: Colors.blue,
+                            color: Colors.blue,
                           ),
                     ),
                   ),
@@ -188,8 +216,8 @@ class _AboutScreenState extends State<AboutScreen> {
                   Text(
                     'Office',
                     style: Theme.of(context).custom.textStyle.copyWith(
-                      fontSize: 18,
-                    ),
+                          fontSize: 18,
+                        ),
                   ),
                 ],
               ),

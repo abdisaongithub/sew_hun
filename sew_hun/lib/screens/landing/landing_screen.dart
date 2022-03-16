@@ -17,6 +17,9 @@ import 'package:sew_hun/screens/payment/payment_screen.dart';
 import 'package:sew_hun/screens/profile/profile_screen.dart';
 import 'package:sew_hun/screens/youtube/youtube_videos_screen.dart';
 import 'package:sew_hun/static.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+
 
 class LandingScreen extends ConsumerStatefulWidget {
   static String id = 'LandingScreen';
@@ -565,8 +568,8 @@ class CategoryCard extends StatelessWidget {
             ),
           ],
           image: DecorationImage(
-            image: NetworkImage(
-              baseUrl.substring(0, baseUrl.length - 1) + img,
+            image: CachedNetworkImageProvider(
+              img,
             ),
             fit: BoxFit.cover,
           ),
@@ -581,7 +584,10 @@ class CategoryCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 4,
+                  vertical: 0,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(10),
@@ -648,20 +654,21 @@ class FavoriteCard extends StatelessWidget {
               width: 100,
               height: 130,
               decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
+                color: Colors.transparent,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
+                ),
+                image: DecorationImage(
+                  image: CachedNetworkImageProvider(
+                    img,
                   ),
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      baseUrl.substring(0, baseUrl.length - 1) + img,
-                    ),
-                    fit: BoxFit.cover,
-                    // colorFilter: ColorFilter.mode(
-                    //   Colors.black87,
-                    //   BlendMode.dstATop,
-                    // ),
-                  )),
+                  fit: BoxFit.cover,
+                  // colorFilter: ColorFilter.mode(
+                  //   Colors.black87,
+                  //   BlendMode.dstATop,
+                  // ),
+                ),
+              ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -670,8 +677,8 @@ class FavoriteCard extends StatelessWidget {
               children: [
                 Text(
                   MediaQuery.of(context).orientation == Orientation.portrait
-                      ? (title.length > 29
-                          ? title.substring(0, 30) + '...'
+                      ? (title.length > 15
+                          ? title.substring(0, 14) + '...'
                           : title)
                       : title,
                   style: Theme.of(context).custom.textStyle.copyWith(
@@ -681,8 +688,8 @@ class FavoriteCard extends StatelessWidget {
                 ),
                 Text(
                   MediaQuery.of(context).orientation == Orientation.portrait
-                      ? (content.length > 29
-                          ? content.substring(0, 30) + '...'
+                      ? (content.length > 20
+                          ? content.substring(0, 19) + '...'
                           : content)
                       : content.substring(0, 50),
                   style: Theme.of(context).custom.textStyle.copyWith(

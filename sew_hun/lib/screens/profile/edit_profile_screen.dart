@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -7,6 +8,7 @@ import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/providers/user/user_provider.dart';
 import 'package:sew_hun/screens/auth/login_screen.dart';
 import 'package:sew_hun/static.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   static String id = 'EditProfileScreen';
@@ -20,13 +22,14 @@ class EditProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
-  TextEditingController roleController = TextEditingController(); // TODO: Include names too
   TextEditingController paymentController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController cityController = TextEditingController();
   TextEditingController subCityController = TextEditingController();
   TextEditingController specialNameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
+
+  final ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -79,17 +82,27 @@ class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
                       SizedBox(
                         width: defaultPadding,
                       ),
-                      Container(
-                        height: 100,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: Colors.teal,
-                          borderRadius: BorderRadius.circular(15),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              baseUrl + data.user!.profile!.photo!.substring(1),
+                      GestureDetector(
+                        onTap: () async {
+                          final img = await _picker.pickImage(
+                            source: ImageSource.gallery,
+                          );
+                          print(img!.path);
+                          MultipartFile.fromFile(img.path);
+                        },
+                        child: Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            color: Colors.teal,
+                            borderRadius: BorderRadius.circular(15),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                baseUrl +
+                                    data.user!.profile!.photo!.substring(1),
+                              ),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
@@ -122,20 +135,12 @@ class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
                   ),
                   Divider(),
                   EditProfileTile(
-                    icon: Icons.chair_alt,
-                    initialValue: data.user!.profile!.role!.first.role!,
+                    icon: Icons.person,
+                    hint: 'Name',
+                    initialValue: data.user!.firstName!,
                     onTap: () {
-                      print('Role');
+                      print('Name');
                     },
-                  ),
-                  Divider(),
-                  EditProfileTile(
-                    icon: Icons.attach_money,
-                    initialValue: 'Payment: Unimplemented',
-                    onTap: () {
-                      print('Payments');
-                    },
-                    // controller: paymentController,
                   ),
                   Divider(),
                   EditProfileTile(
@@ -144,6 +149,7 @@ class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
                     onTap: () {
                       print('Phone');
                     },
+                    hint: 'Phone number',
                     // controller: phoneController,
                   ),
                   Divider(),
@@ -153,6 +159,7 @@ class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
                     onTap: () {
                       print('City');
                     },
+                    hint: 'City',
                     // controller: cityController,
                   ),
                   Divider(),
@@ -162,24 +169,17 @@ class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
                     onTap: () {
                       print('Sub City');
                     },
+                    hint: 'Subcity',
                     // controller: subCityController,
                   ),
                   Divider(),
                   EditProfileTile(
-                    icon: Icons.location_city_outlined,
-                    initialValue: data.user!.profile!.specialName!,
-                    onTap: () {
-                      print('Special Name');
-                    },
-                    // controller: specialNameController,
-                  ),
-                  Divider(),
-                  EditProfileTile(
-                    icon: Icons.print,
+                    icon: Icons.menu_book_outlined,
                     initialValue: data.user!.profile!.bio!,
                     onTap: () {
                       print('Bio');
                     },
+                    hint: 'Bio',
                     // controller: bioController,
                   ),
                   Divider(),
@@ -274,6 +274,7 @@ class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
 class EditProfileTile extends StatelessWidget {
   final IconData icon;
   final String initialValue;
+  final String hint;
   final VoidCallback onTap;
   final Color? textColor;
   final TextEditingController? controller;
@@ -285,6 +286,7 @@ class EditProfileTile extends StatelessWidget {
     required this.onTap,
     this.textColor,
     this.controller,
+    required this.hint,
   }) : super(key: key);
 
   @override
@@ -294,6 +296,7 @@ class EditProfileTile extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
             width: defaultPadding,
@@ -309,6 +312,12 @@ class EditProfileTile extends StatelessWidget {
             child: TextFormField(
               controller: controller,
               decoration: InputDecoration(
+                hintText: hint,
+                hintStyle: Theme.of(context).custom.textStyle.copyWith(
+                      fontSize: 18,
+                      color:
+                          Theme.of(context).custom.textColor.withOpacity(0.8),
+                    ),
                 border: InputBorder.none,
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),

@@ -1,3 +1,4 @@
+from dj_rest_auth.registration.views import RegisterView
 from django.contrib import auth
 from django.contrib.auth import get_user_model
 from django.forms import model_to_dict
@@ -6,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from . import serializers
 from .models import MyUser, Profile
 
@@ -26,18 +27,21 @@ class CustomAuthToken(ObtainAuthToken):
         })
 
 
-class RegisterView(generics.CreateAPIView):
-    def post(self, request, *args, **kwargs):
-        serialized = serializers.UserSerializer(data=request.data)
-        if serialized.is_valid():
-            user = MyUser.objects.create(serialized.data)
-
-            return Response(data=user, status=status.HTTP_200_OK)
-        return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
+# class RegisterView(generics.CreateAPIView):
+#     permission_classes = [AllowAny]
+#
+#     def post(self, request, *args, **kwargs):
+#         serialized = serializers.UserSerializer(data=request.data)
+#         if serialized.is_valid():
+#             user = MyUser.objects.create(serialized.data)
+#
+#             return Response(data=user, status=status.HTTP_200_OK)
+#         return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
 
 
 class Me(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
+
     # serializer_class = serializers.MeSerializer
 
     def get(self, request, *args, **kwargs):
@@ -78,3 +82,8 @@ class CreateProfile(generics.CreateAPIView):
         else:
             print(profile.errors)
             return Response(data=profile.errors)
+
+
+class Register(RegisterView):
+    permission_classes = [AllowAny]
+

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CustomAuthToken, Me, CreateProfile
+from .views import Me
 
 urlpatterns = [
     # path('register/', CustomAuthToken.as_view(), name='register'),

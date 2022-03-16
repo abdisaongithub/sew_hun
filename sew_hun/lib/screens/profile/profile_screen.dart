@@ -1,12 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:sew_hun/dio_api.dart';
 import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/providers/user/user_provider.dart';
 import 'package:sew_hun/screens/auth/login_screen.dart';
-import 'package:sew_hun/screens/profile/edit_profile_screen.dart';
 import 'package:sew_hun/static.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -36,31 +35,31 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               color: Theme.of(context).custom.textColor,
             ),
             actions: [
-              // Tooltip(
-              //   message: 'Logout',
-              //   child: GestureDetector(
-              //     onTap: () async {
-              //       // final storage = FlutterSecureStorage();
-              //       // await storage.delete(key: kToken);
-              //       // ref.read(isSignedInProvider.notifier).state = false;
-              //       // ref.read(signInErrorProvider.notifier).state = false;
-              //       // ref.read(networkErrorProvider.notifier).state = null;
-              //       //
-              //       Navigator.pushNamed(
-              //         context,
-              //         EditProfileScreen.id,
-              //       );
-              //
-              //       // Restart.restartApp();
-              //     },
-              //     child: Icon(
-              //       Icons.edit,
-              //       color: Theme.of(context).custom.textColor,
-              //     ),
-              //   ),
-              // ),
+              Tooltip(
+                message: 'Edit Profile',
+                child: GestureDetector(
+                  onTap: () async {
+                    // final storage = FlutterSecureStorage();
+                    // await storage.delete(key: kToken);
+                    // ref.read(isSignedInProvider.notifier).state = false;
+                    // ref.read(signInErrorProvider.notifier).state = false;
+                    // ref.read(networkErrorProvider.notifier).state = null;
+                    //
+                    // Navigator.pushNamed(
+                    //   context,
+                    //   EditProfileScreen.id,
+                    // );
+
+                    // Restart.restartApp();
+                  },
+                  child: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).custom.textColor,
+                  ),
+                ),
+              ),
               SizedBox(
-                width: smallPadding,
+                width: defaultPadding,
               ),
             ],
           ),
@@ -71,13 +70,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             decoration: BoxDecoration(
               color: Theme.of(context).custom.bgColor,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: ListView(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
                       width: defaultPadding,
@@ -89,8 +89,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         color: Colors.teal,
                         borderRadius: BorderRadius.circular(15),
                         image: DecorationImage(
-                          image: NetworkImage(
-                            baseUrl + data.user!.profile!.photo!.substring(1),
+                          image: CachedNetworkImageProvider(
+                            data.user!.profile!.photo != null
+                                ? data.user!.profile!.photo!
+                                : '',
                           ),
                           fit: BoxFit.cover,
                         ),
@@ -106,20 +108,30 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         Text(
                           data.user!.username!,
                           style: Theme.of(context).custom.textStyle.copyWith(
-                              fontSize: 28, fontWeight: FontWeight.bold),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.clip,
+                              ),
+                          overflow: TextOverflow.clip,
+                          softWrap: true,
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
                         ),
                         SizedBox(
                           height: smallPadding,
                         ),
-                        Text(
-                          data.user!.email!,
-                        ),
+                        // Text(
+                        //   data.user!.email!,
+                        //   style: Theme.of(context).custom.textStyle.copyWith(
+                        //     fontSize: 18,
+                        //     fontWeight: FontWeight.bold,
+                        //     overflow: TextOverflow.clip,
+                        //   ),
+                        // ),
                       ],
                     ),
-                    Expanded(
-                      child: SizedBox(
-                        width: defaultPadding,
-                      ),
+                    SizedBox(
+                      width: defaultPadding,
                     ),
                   ],
                 ),
@@ -130,14 +142,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   onTap: () {
                     print('Role');
                   },
+                  hint: 'role',
                 ),
                 Divider(),
                 ProfileTile(
                   icon: Icons.chair_alt,
-                  label: 'First Name',
+                  label: data.user!.firstName.toString(),
                   onTap: () {
-                    print('Role');
+                    print('');
                   },
+                  hint: 'First Name',
                 ),
                 Divider(),
                 ProfileTile(
@@ -146,6 +160,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   onTap: () {
                     print('Role');
                   },
+                  hint: 'Last Name',
                 ),
                 Divider(),
                 ProfileTile(
@@ -154,6 +169,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   onTap: () {
                     print('Phone');
                   },
+                  hint: 'Phone Number',
                 ),
                 Divider(),
                 ProfileTile(
@@ -162,6 +178,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   onTap: () {
                     print('City');
                   },
+                  hint: 'City',
                 ),
                 Divider(),
                 ProfileTile(
@@ -170,33 +187,29 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   onTap: () {
                     print('Sub City');
                   },
+                  hint: 'Sub City',
                 ),
                 Divider(),
                 ProfileTile(
-                  icon: Icons.location_city_outlined,
-                  label: data.user!.profile!.specialName!,
-                  onTap: () {
-                    print('Special Name');
-                  },
-                ),
-                Divider(),
-                ProfileTile(
-                  icon: Icons.print,
+                  icon: Icons.menu_book,
                   label: data.user!.profile!.bio!,
                   onTap: () {
                     print('Bio');
                   },
+                  hint: 'Bio',
                 ),
                 Divider(),
-                ProfileTile(
-                  icon: Icons.attach_money,
-                  label: 'Payment: Unimplemented',
-                  onTap: () {
-                    print('Payments');
-                  },
+                // ProfileTile(
+                //   icon: Icons.attach_money,
+                //   label: 'Payment: Unimplemented',
+                //   onTap: () {
+                //     print('Payments');
+                //   }, hint: 'Payments',
+                // ),
+                // Divider(),
+                SizedBox(
+                  height: 50,
                 ),
-                Divider(),
-                Expanded(child: SizedBox()),
                 Divider(),
                 ProfileTile(
                   icon: Icons.logout_rounded,
@@ -215,6 +228,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     );
                   },
                   textColor: Colors.red,
+                  hint: 'Logout',
                 ),
                 Divider(),
               ],
@@ -305,6 +319,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 class ProfileTile extends StatelessWidget {
   final IconData icon;
   final String label;
+  final String hint;
   final VoidCallback onTap;
   final Color? textColor;
 
@@ -314,6 +329,7 @@ class ProfileTile extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.textColor,
+    required this.hint,
   }) : super(key: key);
 
   @override
@@ -335,13 +351,26 @@ class ProfileTile extends StatelessWidget {
             SizedBox(
               width: defaultPadding,
             ),
-            Text(
-              label,
-              style: Theme.of(context).custom.textStyle.copyWith(
-                    fontSize: 22,
-                    color: textColor ?? Theme.of(context).custom.textColor,
+            hint.isNotEmpty
+                ? Text(
+                    label,
+                    style: Theme.of(context).custom.textStyle.copyWith(
+                          fontSize: 22,
+                          color:
+                              textColor ?? Theme.of(context).custom.textColor,
+                        ),
+                  )
+                : Text(
+                    hint,
+                    style: Theme.of(context).custom.textStyle.copyWith(
+                          fontSize: 22,
+                          color: textColor ??
+                              Theme.of(context)
+                                  .custom
+                                  .textColor
+                                  .withOpacity(0.8),
+                        ),
                   ),
-            ),
           ],
         ),
       ),

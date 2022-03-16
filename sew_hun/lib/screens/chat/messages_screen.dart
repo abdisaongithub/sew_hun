@@ -77,6 +77,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       return MainAxisAlignment.start;
     }
   }
+
   alignText({required bool isAdmin, required bool fromAdmin}) {
     if (isAdmin == true && fromAdmin == true) {
       return CrossAxisAlignment.end;
@@ -136,7 +137,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                         Container(
                           width: size.width * 0.6,
                           margin: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
+                              vertical: 10, horizontal: 10,),
                           padding: EdgeInsets.symmetric(
                             vertical: 10,
                             horizontal: 10,
@@ -278,6 +279,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               );
             },
           ),
+
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(

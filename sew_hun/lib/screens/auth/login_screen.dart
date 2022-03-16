@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sew_hun/models/auth/auth_token.dart';
 import 'package:sew_hun/providers/auth/login_credentials_provider.dart';
 import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/providers/auth/token_provider.dart';
@@ -29,7 +30,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     ref.listen(
       authTokenProvider,
-      (a, b) {
+      (AuthToken? a, AuthToken? b) {
         print('About to bind');
         WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
           if (signedIn.state == true) {
@@ -56,12 +57,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/img/et.jpg',
-              fit: BoxFit.cover,
-            ),
-          ),
+          // Positioned.fill(
+          //   child: Image.asset(
+          //     'assets/img/et.jpg',
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
           Align(
             alignment: Alignment.center,
             child: SingleChildScrollView(
@@ -86,6 +87,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Center(
+                        child: CircleAvatar(
+                          radius: 50,
+                          child: Image.asset(
+                            'assets/img/logo.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                       SizedBox(
                         height: 20,
                       ),
@@ -153,9 +163,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                           ),
                           obscureText: true,
-                          textInputAction: TextInputAction.none,
+                          textInputAction: TextInputAction.go,
                           onChanged: (value) {
                             credentials.setPassword(value);
+                          },
+                          onEditingComplete: () {
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Trying to log you in'),
+                                ),
+                              );
+                              ref.read(authTokenProvider.notifier).login();
+                            } else {
+                              print('Validation Error');
+                            }
                           },
                           keyboardType: TextInputType.text,
                           // validator: (value) {}, TODO: Implement this validation
@@ -167,6 +189,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Trying to log you in'),
+                              ),
+                            );
                             ref.read(authTokenProvider.notifier).login();
                           } else {
                             print('Validation Error');

@@ -14,13 +14,16 @@
 
 
 
+
+
 /* ON-PROGRESS TODOS */
 // TODO: recolor the whole app according to the theme
 // TODO: chat
 // TODO: chat->change read according to the user type
 // TODO: Profile
 
-// TODO: Cast every shit from RIVERPOD to the model class
+
+
 
 
 /* COMPLETED TODOS */

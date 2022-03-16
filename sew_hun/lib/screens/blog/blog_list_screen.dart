@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/dio_api.dart';
@@ -131,8 +132,8 @@ class BlogListContainer extends StatelessWidget {
                     Radius.circular(20),
                   ),
                   image: DecorationImage(
-                    image: NetworkImage(
-                      '${baseUrl}${img.substring(1)}',
+                    image: CachedNetworkImageProvider(
+                      img,
                     ),
                     fit: BoxFit.cover,
                   ),
@@ -154,13 +155,14 @@ class BlogListContainer extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    content.length < 36 ? content : content.substring(0,35) + ' ...',
+                    content.length < 20 ? content : content.substring(0,20) + ' ...',
                     style: Theme.of(context).custom.textStyle.copyWith(
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
                     ),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
+                    softWrap: true,
                   ),
                   Expanded(
                     child: SizedBox(

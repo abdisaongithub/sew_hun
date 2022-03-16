@@ -31,7 +31,7 @@ class _PaymentsScreenState extends State<PaymentsScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(
-            child: Text('Payment Coming Soon'),
+            child: Text('Coming Soon ...', style: Theme.of(context).custom.textStyle.copyWith(fontSize: 22),),
           ),
         ],
       ),

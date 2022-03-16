@@ -64,7 +64,7 @@ class _CommentsScreenState extends ConsumerState<CommentsScreen> {
                 leading: CircleAvatar(
                   radius: 25,
                   foregroundImage: NetworkImage(
-                    baseUrl + args.comments[index].user!.profile!.photo!.substring(1),
+                    args.comments[index].user!.profile!.photo!,
                   ),
                 ),
               );
