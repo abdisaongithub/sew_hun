@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:sew_hun/providers/blog/random_posts_provider.dart';
-import 'package:sew_hun/providers/blog/search_post_provider.dart';
 import 'package:sew_hun/providers/landing/landingProvider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/about/about_screen.dart';
@@ -18,6 +16,7 @@ import 'package:sew_hun/screens/profile/profile_screen.dart';
 import 'package:sew_hun/screens/youtube/youtube_videos_screen.dart';
 import 'package:sew_hun/static.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 
 class LandingScreen extends ConsumerStatefulWidget {
   static String id = 'LandingScreen';
@@ -33,22 +32,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(postSearchProvider, (previous, next) {
-      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-        Navigator.pushNamed(context, SearchResultScreen.id);
-
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(
-        //     content: Text(
-        //       'Added To Your Favorites',
-        //     ),
-        //   ),
-        // );
-      });
-    });
-
     final landing = ref.watch(landingProvider);
-    var currentIndex = 0;
     return WillPopScope(
       onWillPop: () async {
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Press back again to exit')));
@@ -56,75 +40,6 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
         return true;
       },
       child: Scaffold(
-        key: _globalKey,
-        drawerEnableOpenDragGesture: true,
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).custom.bgColor,
-          leading: GestureDetector(
-            onTap: () {
-              _globalKey.currentState!.openDrawer();
-            },
-            child: Icon(
-              Ionicons.menu_outline,
-              size: 34,
-              color: Theme.of(context).custom.textColor,
-            ),
-          ),
-          title: Text(
-            'Sew Hun',
-            style: Theme.of(context).custom.textStyle.copyWith(),
-          ),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, SearchResultScreen.id);
-              },
-              child: Icon(
-                Icons.search,
-                size: 34,
-                color: Theme.of(context).custom.textColor,
-              ),
-            ),
-            SizedBox(
-              width: defaultPadding,
-            ),
-          ],
-        ),
-        drawer: Drawer(
-          elevation: 6.0,
-          child: LandingScreenDrawer(),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          // type: BottomNavigationBarType.shifting,
-          currentIndex: currentIndex,
-          elevation: 6.0,
-          onTap: (newIndex){
-            setState(() {
-              currentIndex = newIndex;
-              print(newIndex);
-            });
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home, color: Colors.black54,),
-              activeIcon: Icon(Icons.home, color: Colors.black,),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.email),
-              label: 'Messages',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.ondemand_video),
-              label: 'Videos',
-            ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.person),
-            //   label: 'Profile',
-            // ),
-          ],
-        ),
-
         body: Stack(
           children: [
             Positioned.fill(
@@ -552,229 +467,6 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
   }
 }
 
-class LandingScreenDrawer extends ConsumerWidget {
-  const LandingScreenDrawer({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: 400,
-      decoration: BoxDecoration(
-        color: Theme.of(context).custom.bgColor,
-      ),
-      padding: EdgeInsets.all(Theme.of(context).custom.smallPadding),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        Theme.of(context).custom.defaultPadding,
-                      ),
-                      image: DecorationImage(
-                        image: AssetImage('assets/img/logo.png'),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: Theme.of(context).custom.smallPadding,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Sew Hun Kesewm Sew Hun',
-                        textAlign: TextAlign.center,
-                        // 'Hello 👋',
-                        style: Theme.of(context).custom.textStyle.copyWith(
-                              color: Theme.of(context).custom.textColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                        maxLines: 2,
-                      ),
-                      SizedBox(
-                        height: Theme.of(context).custom.smallPadding,
-                      ),
-                      Text(
-                        '',
-                        style: Theme.of(context).custom.textStyle.copyWith(
-                              color: Theme.of(context).custom.textColor,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                      ),
-                    ],
-                  ),
-                  Expanded(
-                    child: SizedBox(),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      final state = ref.read(themeModeProvider.state);
-
-                      ref.read(themeModeProvider.state).state =
-                          state.state == ThemeMode.light
-                              ? ThemeMode.dark
-                              : ThemeMode.light;
-                    },
-                    child: Icon(
-                      ref.watch(themeModeProvider.state).state ==
-                              ThemeMode.light
-                          ? Icons.wb_sunny_outlined
-                          : CupertinoIcons.moon_stars,
-                    ),
-                  ),
-                ],
-              ),
-              Divider(
-                color: Theme.of(context).custom.textColor,
-                indent: Theme.of(context).custom.smallPadding,
-                endIndent: Theme.of(context).custom.smallPadding,
-                thickness: 0.5,
-              ),
-              DrawerItems(
-                iconData: Icons.message,
-                label: 'Chats',
-                // number: 2,
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, ChatsScreen.id);
-                },
-              ),
-              DrawerItems(
-                iconData: Icons.ondemand_video_sharp,
-                label: 'Latest Videos',
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(
-                    context,
-                    YoutubeVideosScreen.id,
-                  );
-                },
-              ),
-              DrawerItems(
-                iconData: Icons.person,
-                label: 'Profile',
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(
-                    context,
-                    ProfileScreen.id,
-                  );
-                },
-              ),
-              // DrawerItems(
-              //   iconData: Icons.settings,
-              //   label: 'Settings',
-              //   onTap: () {
-              //     Navigator.pop(context);
-              //     Navigator.pushNamed(context, SettingsScreen.id);
-              //     // TODO: NNavigate to SettingsScreen
-              //   },
-              // ),
-              DrawerItems(
-                iconData: Icons.attach_money,
-                label: 'Payments',
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, PaymentsScreen.id);
-                  // TODO: NNavigate to SettingsScreen
-                },
-              ),
-
-              Divider(
-                color: Theme.of(context).custom.textColor,
-                indent: Theme.of(context).custom.smallPadding,
-                endIndent: Theme.of(context).custom.smallPadding,
-                thickness: 0.5,
-              ),
-              DrawerItems(
-                iconData: Icons.help,
-                label: 'About',
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, AboutScreen.id);
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class DrawerItems extends StatelessWidget {
-  final IconData iconData;
-  final String label;
-  final int? number;
-  final VoidCallback? onTap;
-
-  const DrawerItems({
-    Key? key,
-    required this.iconData,
-    required this.label,
-    this.number,
-    this.onTap,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 40.0,
-        child: Row(
-          children: [
-            Icon(
-              iconData,
-              color: Theme.of(context).custom.textColor,
-              size: 24,
-            ),
-            SizedBox(
-              width: Theme.of(context).custom.smallPadding,
-            ),
-            Text(
-              label,
-              style: Theme.of(context).custom.textStyle.copyWith(
-                    fontSize: 18,
-                  ),
-            ),
-            Expanded(
-              child: SizedBox(),
-            ),
-            CircleAvatar(
-              radius: 14,
-              backgroundColor: Colors.transparent,
-              child: Text(
-                number != null ? number.toString() : '',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class CategoryCard extends StatelessWidget {
   // final storage = FlutterSecureStorage();
   final String category;
@@ -969,3 +661,226 @@ class BlogListTile extends StatelessWidget {
     );
   }
 }
+
+// class LandingScreenDrawer extends ConsumerWidget {
+//   const LandingScreenDrawer({
+//     Key? key,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     return Container(
+//       height: MediaQuery.of(context).size.height,
+//       width: 400,
+//       decoration: BoxDecoration(
+//         color: Theme.of(context).custom.bgColor,
+//       ),
+//       padding: EdgeInsets.all(Theme.of(context).custom.smallPadding),
+//       child: SafeArea(
+//         child: SingleChildScrollView(
+//           scrollDirection: Axis.vertical,
+//           child: Column(
+//             children: [
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.start,
+//                 crossAxisAlignment: CrossAxisAlignment.end,
+//                 children: [
+//                   Container(
+//                     width: 60,
+//                     height: 60,
+//                     decoration: BoxDecoration(
+//                       borderRadius: BorderRadius.circular(
+//                         Theme.of(context).custom.defaultPadding,
+//                       ),
+//                       image: DecorationImage(
+//                         image: AssetImage('assets/img/logo.png'),
+//                       ),
+//                     ),
+//                   ),
+//                   SizedBox(
+//                     width: Theme.of(context).custom.smallPadding,
+//                   ),
+//                   Column(
+//                     mainAxisAlignment: MainAxisAlignment.end,
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       Text(
+//                         'Sew Hun Kesewm Sew Hun',
+//                         textAlign: TextAlign.center,
+//                         // 'Hello 👋',
+//                         style: Theme.of(context).custom.textStyle.copyWith(
+//                               color: Theme.of(context).custom.textColor,
+//                               fontSize: 14,
+//                               fontWeight: FontWeight.w600,
+//                             ),
+//                         maxLines: 2,
+//                       ),
+//                       SizedBox(
+//                         height: Theme.of(context).custom.smallPadding,
+//                       ),
+//                       Text(
+//                         '',
+//                         style: Theme.of(context).custom.textStyle.copyWith(
+//                               color: Theme.of(context).custom.textColor,
+//                               fontSize: 18,
+//                               fontWeight: FontWeight.w600,
+//                             ),
+//                       ),
+//                     ],
+//                   ),
+//                   Expanded(
+//                     child: SizedBox(),
+//                   ),
+//                   GestureDetector(
+//                     onTap: () {
+//                       final state = ref.read(themeModeProvider.state);
+//
+//                       ref.read(themeModeProvider.state).state =
+//                           state.state == ThemeMode.light
+//                               ? ThemeMode.dark
+//                               : ThemeMode.light;
+//                     },
+//                     child: Icon(
+//                       ref.watch(themeModeProvider.state).state ==
+//                               ThemeMode.light
+//                           ? Icons.wb_sunny_outlined
+//                           : CupertinoIcons.moon_stars,
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//               Divider(
+//                 color: Theme.of(context).custom.textColor,
+//                 indent: Theme.of(context).custom.smallPadding,
+//                 endIndent: Theme.of(context).custom.smallPadding,
+//                 thickness: 0.5,
+//               ),
+//               DrawerItems(
+//                 iconData: Icons.message,
+//                 label: 'Chats',
+//                 // number: 2,
+//                 onTap: () {
+//                   Navigator.pop(context);
+//                   Navigator.pushNamed(context, ChatsScreen.id);
+//                 },
+//               ),
+//               DrawerItems(
+//                 iconData: Icons.ondemand_video_sharp,
+//                 label: 'Latest Videos',
+//                 onTap: () {
+//                   Navigator.pop(context);
+//                   Navigator.pushNamed(
+//                     context,
+//                     YoutubeVideosScreen.id,
+//                   );
+//                 },
+//               ),
+//               DrawerItems(
+//                 iconData: Icons.person,
+//                 label: 'Profile',
+//                 onTap: () {
+//                   Navigator.pop(context);
+//                   Navigator.pushNamed(
+//                     context,
+//                     ProfileScreen.id,
+//                   );
+//                 },
+//               ),
+//               // DrawerItems(
+//               //   iconData: Icons.settings,
+//               //   label: 'Settings',
+//               //   onTap: () {
+//               //     Navigator.pop(context);
+//               //     Navigator.pushNamed(context, SettingsScreen.id);
+//               //     // TODO: NNavigate to SettingsScreen
+//               //   },
+//               // ),
+//               DrawerItems(
+//                 iconData: Icons.attach_money,
+//                 label: 'Payments',
+//                 onTap: () {
+//                   Navigator.pop(context);
+//                   Navigator.pushNamed(context, PaymentsScreen.id);
+//                   // TODO: NNavigate to SettingsScreen
+//                 },
+//               ),
+//
+//               Divider(
+//                 color: Theme.of(context).custom.textColor,
+//                 indent: Theme.of(context).custom.smallPadding,
+//                 endIndent: Theme.of(context).custom.smallPadding,
+//                 thickness: 0.5,
+//               ),
+//               DrawerItems(
+//                 iconData: Icons.help,
+//                 label: 'About',
+//                 onTap: () {
+//                   Navigator.pop(context);
+//                   Navigator.pushNamed(context, AboutScreen.id);
+//                 },
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class DrawerItems extends StatelessWidget {
+//   final IconData iconData;
+//   final String label;
+//   final int? number;
+//   final VoidCallback? onTap;
+//
+//   const DrawerItems({
+//     Key? key,
+//     required this.iconData,
+//     required this.label,
+//     this.number,
+//     this.onTap,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: onTap,
+//       child: Container(
+//         height: 40.0,
+//         child: Row(
+//           children: [
+//             Icon(
+//               iconData,
+//               color: Theme.of(context).custom.textColor,
+//               size: 24,
+//             ),
+//             SizedBox(
+//               width: Theme.of(context).custom.smallPadding,
+//             ),
+//             Text(
+//               label,
+//               style: Theme.of(context).custom.textStyle.copyWith(
+//                     fontSize: 18,
+//                   ),
+//             ),
+//             Expanded(
+//               child: SizedBox(),
+//             ),
+//             CircleAvatar(
+//               radius: 14,
+//               backgroundColor: Colors.transparent,
+//               child: Text(
+//                 number != null ? number.toString() : '',
+//                 style: TextStyle(
+//                   color: Colors.red,
+//                   fontSize: 16,
+//                   fontWeight: FontWeight.w700,
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

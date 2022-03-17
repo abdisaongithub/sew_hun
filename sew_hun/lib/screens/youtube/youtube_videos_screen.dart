@@ -5,6 +5,8 @@ import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/providers/youtube/channel_provider.dart';
 import 'package:sew_hun/providers/youtube/current_video_id_provider.dart';
 import 'package:sew_hun/providers/youtube/videos_provider.dart';
+import 'package:sew_hun/screens/components/LoadingError.dart';
+import 'package:sew_hun/screens/components/LoadingIndicator.dart';
 import 'package:sew_hun/screens/youtube/youtube_video_player_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,19 +36,19 @@ class _YoutubeVideosScreenState extends ConsumerState<YoutubeVideosScreen> {
     return Scaffold(
       appBar: AppBar(
         title: channel.when(
-            data: (ch) {
-              return Text(
-                ch.title,
-                style: Theme.of(context).custom.textStyle,
-              );
+          data: (ch) {
+            return Text(
+              ch.title,
+              style: Theme.of(context).custom.textStyle,
+            );
+          },
+          error: (error, st) => LoadingError(
+            onTap: () {
+              ref.refresh(videosProvider);
             },
-            error: (error, st) {},
-            loading: () {
-              return Text(
-                'Loading ...',
-                style: Theme.of(context).custom.textStyle,
-              );
-            }),
+          ),
+          loading: () => LoadingIndicator(),
+        ),
         backgroundColor: Theme.of(context).custom.appBarColor,
         leading: BackButton(
           color: Theme.of(context).custom.textColor,

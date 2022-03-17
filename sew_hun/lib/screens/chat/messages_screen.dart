@@ -14,6 +14,8 @@ import 'package:sew_hun/providers/chat/chat_id_provider.dart';
 import 'package:sew_hun/providers/chat/messages_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/chat/record_screen.dart';
+import 'package:sew_hun/screens/components/LoadingError.dart';
+import 'package:sew_hun/screens/components/LoadingIndicator.dart';
 import 'package:sew_hun/static.dart';
 import 'package:validators/validators.dart';
 
@@ -246,41 +248,8 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                 );
               }
             },
-            error: (error, st) {
-              return Center(
-                child: Column(
-                  children: [
-                    Text(
-                      'Are you connected to the internet',
-                      style: Theme.of(context).custom.textStyle,
-                    ),
-                    SizedBox(
-                      height: defaultPadding,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        ref.refresh(messagesProvider);
-                      },
-                      child: Text('Reload'),
-                    ),
-                  ],
-                ),
-              );
-            },
-            loading: () {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                    SizedBox(
-                      height: defaultPadding,
-                    ),
-                    Text('Loading...'),
-                  ],
-                ),
-              );
-            },
+            error: (error, st) => LoadingError(onTap: (){ref.refresh(messagesProvider);},),
+            loading: () => LoadingIndicator(),
           ),
           Align(
             alignment: Alignment.bottomLeft,

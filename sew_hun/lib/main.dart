@@ -13,6 +13,7 @@ import 'package:sew_hun/screens/landing/landing_screen.dart';
 import 'package:sew_hun/screens/auth/login_screen.dart';
 import 'package:sew_hun/screens/about/logo_screen.dart';
 import 'package:sew_hun/screens/chat/messages_screen.dart';
+import 'package:sew_hun/screens/landing/menu_screen.dart';
 import 'package:sew_hun/screens/onboarding/onboarding.dart';
 import 'package:sew_hun/screens/payment/payment_screen.dart';
 import 'package:sew_hun/screens/profile/edit_profile_screen.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
             OnboardingScreen.id: (context) => OnboardingScreen(),
             LoginScreen.id: (context) => LoginScreen(),
             RegisterScreen.id: (context) => RegisterScreen(),
+            MenuScreen.id: (context) => MenuScreen(),
             LandingScreen.id: (context) => LandingScreen(),
             BlogListScreen.id: (context) => BlogListScreen(),
             BlogDetailScreen.id: (context) => BlogDetailScreen(),

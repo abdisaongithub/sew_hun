@@ -5,6 +5,8 @@ import 'package:sew_hun/dio_api.dart';
 import 'package:sew_hun/providers/blog/blog_list_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/blog/blog_detail_screen.dart';
+import 'package:sew_hun/screens/components/LoadingError.dart';
+import 'package:sew_hun/screens/components/LoadingIndicator.dart';
 import 'package:sew_hun/static.dart';
 
 class BlogListScreen extends ConsumerStatefulWidget {
@@ -67,10 +69,10 @@ class _BlogListScreenState extends ConsumerState<BlogListScreen> {
                       )),
                 );
               },
-              error: (error, stack) {
-                return Text(error.toString());
-              },
-              loading: () => Center(child: CircularProgressIndicator()),
+              error: (error, stack) => LoadingError(onTap: (){
+                ref.refresh(categoryPostsProvider(args.id));
+              }),
+              loading: () => LoadingIndicator(),
             );
           },
         ),

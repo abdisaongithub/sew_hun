@@ -7,6 +7,8 @@ import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/providers/user/user_provider.dart';
 import 'package:sew_hun/screens/auth/login_screen.dart';
+import 'package:sew_hun/screens/components/LoadingError.dart';
+import 'package:sew_hun/screens/components/LoadingIndicator.dart';
 import 'package:sew_hun/static.dart';
 import 'package:validators/validators.dart';
 
@@ -199,7 +201,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             },
                             label: 'role',
                           ),
-                          whiteDivider(),
+                          WhiteDivider(),
                           ProfileTile(
                             value: data.user!.firstName.toString(),
                             onTap: () {
@@ -207,7 +209,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             },
                             label: 'First Name',
                           ),
-                          whiteDivider(),
+                          WhiteDivider(),
                           ProfileTile(
                             value: 'Last Name',
                             onTap: () {
@@ -215,7 +217,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             },
                             label: 'Last Name',
                           ),
-                          whiteDivider(),
+                          WhiteDivider(),
                           ProfileTile(
                             value: data.user!.profile!.phone!,
                             onTap: () {
@@ -223,7 +225,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             },
                             label: 'Phone Number',
                           ),
-                          whiteDivider(),
+                          WhiteDivider(),
                           ProfileTile(
                             value: data.user!.profile!.city!,
                             onTap: () {
@@ -231,7 +233,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             },
                             label: 'City',
                           ),
-                          whiteDivider(),
+                          WhiteDivider(),
                           ProfileTile(
                             value: data.user!.profile!.subCity!,
                             onTap: () {
@@ -239,7 +241,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             },
                             label: 'Sub City',
                           ),
-                          whiteDivider(),
+                          WhiteDivider(),
                           ProfileTile(
                             value: data.user!.profile!.bio!,
                             onTap: () {
@@ -313,87 +315,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         );
       },
       error: (error, st) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: Theme.of(context).custom.appBarColor,
-            leading: BackButton(
-              color: Theme.of(context).custom.textColor,
-            ),
-            actions: [
-              GestureDetector(
-                onTap: () async {
-                  final storage = FlutterSecureStorage();
-                  await storage.delete(key: kToken);
-                  ref.read(isSignedInProvider.notifier).state = false;
-                  ref.read(signInErrorProvider.notifier).state = false;
-                  ref.read(networkErrorProvider.notifier).state = null;
-
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    LoginScreen.id,
-                    (route) => route.currentResult == LoginScreen.id,
-                  );
-
-                  // Restart.restartApp();
-                },
-                child: Icon(
-                  Icons.logout,
-                  color: Theme.of(context).custom.textColor,
-                ),
-              ),
-              SizedBox(
-                width: smallPadding,
-              ),
-            ],
-          ),
-          body: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Are you connected to the Internet?',
-                  style: Theme.of(context).custom.textStyle,
-                ),
-                SizedBox(
-                  height: smallPadding,
-                ),
-                TextButton(
-                  onPressed: () {
-                    ref.refresh(userProvider);
-                  },
-                  child: Text('Reload'),
-                ),
-              ],
-            ),
-          ),
+        return LoadingError(
+            onTap: () {
+              ref.refresh(userProvider);
+            },
         );
       },
       loading: () {
-        return Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(
-                  height: defaultPadding,
-                ),
-                Text('Loading...'),
-              ],
-            ),
-          ),
-        );
+        return LoadingIndicator();
       },
     );
   }
 }
 
-class whiteDivider extends StatelessWidget {
-  const whiteDivider({
+
+class WhiteDivider extends StatelessWidget {
+  const WhiteDivider({
     Key? key,
   }) : super(key: key);
 

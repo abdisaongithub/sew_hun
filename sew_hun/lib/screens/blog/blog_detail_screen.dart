@@ -9,6 +9,8 @@ import 'package:sew_hun/models/blog/post.dart';
 import 'package:sew_hun/providers/blog/post_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/blog/comments_screen.dart';
+import 'package:sew_hun/screens/components/LoadingError.dart';
+import 'package:sew_hun/screens/components/LoadingIndicator.dart';
 import 'package:sew_hun/static.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -26,6 +28,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
   late ScrollController _scrollController;
   bool _showBackToTopButton = false;
   bool _isPlaying = false;
+
   // bool _isFavorite = false;
 
   late AudioPlayer _player;
@@ -280,7 +283,8 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                         ),
                                         CircleAvatar(
                                           radius: 15,
-                                          backgroundImage: CachedNetworkImageProvider(
+                                          backgroundImage:
+                                              CachedNetworkImageProvider(
                                             data.author!.profile!.photo!,
                                           ),
                                         ),
@@ -390,81 +394,88 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                         // BlogDetailIconButton(
                                         //   iconData: Icons.fast_rewind,
                                         // ),
-                                        narration.isNotEmpty ?
-                                        BlogDetailIconButton(
-                                          iconData: Icons.fast_rewind,
-                                          onTap: () async {
-                                            final val = await _player
-                                                .getCurrentPosition();
-                                            print(val);
-                                            _player.seek(
-                                              Duration(
-                                                  milliseconds: val - 10000),
-                                            );
-                                          },
-                                        ) : SizedBox(),
+                                        narration.isNotEmpty
+                                            ? BlogDetailIconButton(
+                                                iconData: Icons.fast_rewind,
+                                                onTap: () async {
+                                                  final val = await _player
+                                                      .getCurrentPosition();
+                                                  print(val);
+                                                  _player.seek(
+                                                    Duration(
+                                                        milliseconds:
+                                                            val - 10000),
+                                                  );
+                                                },
+                                              )
+                                            : SizedBox(),
                                         SizedBox(
                                           width: 8,
                                         ),
-                                        narration.isNotEmpty ?
-                                        BlogDetailIconButton(
-                                          iconData: _isPlaying
-                                              ? Icons.pause
-                                              : Icons.play_arrow,
-                                          onTap: () {
-                                            if (!_isPlaying) {
-                                              _player.resume();
-                                              setState(() {
-                                                _isPlaying = true;
-                                              });
-                                            } else {
-                                              _player.pause();
-                                              setState(() {
-                                                _isPlaying = false;
-                                              });
-                                            }
-                                          },
-                                        ) : SizedBox(),
+                                        narration.isNotEmpty
+                                            ? BlogDetailIconButton(
+                                                iconData: _isPlaying
+                                                    ? Icons.pause
+                                                    : Icons.play_arrow,
+                                                onTap: () {
+                                                  if (!_isPlaying) {
+                                                    _player.resume();
+                                                    setState(() {
+                                                      _isPlaying = true;
+                                                    });
+                                                  } else {
+                                                    _player.pause();
+                                                    setState(() {
+                                                      _isPlaying = false;
+                                                    });
+                                                  }
+                                                },
+                                              )
+                                            : SizedBox(),
                                         SizedBox(
                                           width: 8,
                                         ),
-                                        narration.isNotEmpty ?
-                                        BlogDetailIconButton(
-                                          iconData: Icons.fast_forward,
-                                          onTap: () async {
-                                            final val = await _player
-                                                .getCurrentPosition();
-                                            print(val);
-                                            _player.seek(
-                                              Duration(
-                                                  milliseconds: val + 10000),
-                                            );
-                                          },
-                                        ) : SizedBox(),
+                                        narration.isNotEmpty
+                                            ? BlogDetailIconButton(
+                                                iconData: Icons.fast_forward,
+                                                onTap: () async {
+                                                  final val = await _player
+                                                      .getCurrentPosition();
+                                                  print(val);
+                                                  _player.seek(
+                                                    Duration(
+                                                        milliseconds:
+                                                            val + 10000),
+                                                  );
+                                                },
+                                              )
+                                            : SizedBox(),
                                         SizedBox(width: smallPadding),
-                                        narration.isNotEmpty ?
-                                        Container(
-                                          height: 30,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8, vertical: 4),
-                                          decoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .custom
-                                                  .textColor
-                                                  .withOpacity(0.8),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),),
-                                          child: Center(
-                                            child: Text(
-                                              '${currentPosition.toString().split('.')[0]} - ${totalLength.toString().split('.')[0]}',
-                                              style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .custom
-                                                    .bgThemeColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ) : SizedBox(),
+                                        narration.isNotEmpty
+                                            ? Container(
+                                                height: 30,
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 8, vertical: 4),
+                                                decoration: BoxDecoration(
+                                                  color: Theme.of(context)
+                                                      .custom
+                                                      .textColor
+                                                      .withOpacity(0.8),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    '${currentPosition.toString().split('.')[0]} - ${totalLength.toString().split('.')[0]}',
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .custom
+                                                          .bgThemeColor,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : SizedBox(),
                                         Expanded(
                                           child: SizedBox(
                                             width: 8,
@@ -576,38 +587,12 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                   ],
                 );
               },
-              error: (error, stack) {
-                return Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Are you connected to the Internet?',
-                        style: Theme.of(context).custom.textStyle,
-                      ),
-                      SizedBox(
-                        height: smallPadding,
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          ref.refresh(postProvider(args.id));
-                        },
-                        child: Text('Reload'),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              loading: () => Center(
-                child: Scaffold(
-                  body: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
+              error: (error, stack) => LoadingError(
+                onTap: () {
+                  ref.refresh(postProvider(args.id));
+                },
               ),
+              loading: () => LoadingIndicator(),
             );
           },
         ),
@@ -666,5 +651,5 @@ class BlogArguments {
   final int id;
   final bool? isFav;
 
-  BlogArguments({this.isFav,required this.id});
+  BlogArguments({this.isFav, required this.id});
 }

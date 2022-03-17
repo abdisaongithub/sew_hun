@@ -67,7 +67,7 @@ final _customDarkTheme = CustomThemeData(
   bgThemeColor: Colors.black,
   btnColor: Color(0xFF9BECF6),
   pillColor: Color(0xFFE5F5F7),
-  searchAppBarColor: Color(0xFF9497F3),
+  searchAppBarColor: Color(0xFFA8AAEF),
   chatContainerColor: Color(0xFF30C270),
 );
 
