@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:sew_hun/dio_api.dart';
 import 'package:sew_hun/providers/blog/random_posts_provider.dart';
 import 'package:sew_hun/providers/blog/search_post_provider.dart';
 import 'package:sew_hun/providers/landing/landingProvider.dart';
@@ -18,8 +18,6 @@ import 'package:sew_hun/screens/profile/profile_screen.dart';
 import 'package:sew_hun/screens/youtube/youtube_videos_screen.dart';
 import 'package:sew_hun/static.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
-
 
 class LandingScreen extends ConsumerStatefulWidget {
   static String id = 'LandingScreen';
@@ -50,6 +48,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
     });
 
     final landing = ref.watch(landingProvider);
+    var currentIndex = 0;
     return WillPopScope(
       onWillPop: () async {
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Press back again to exit')));
@@ -87,21 +86,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
               ),
             ),
             SizedBox(
-              width: smallPadding,
-            ),
-            // GestureDetector(
-            //   onTap: () {
-            //     Navigator.pushNamed(context, ProfileScreen.id);
-            //   },
-            //   child: CircleAvatar(
-            //     foregroundImage: AssetImage('assets/img/baby.png'),
-            //     backgroundImage: AssetImage('assets/img/et.jpg'),
-            //     // TODO: change this to a default image
-            //     radius: 17,
-            //   ),
-            // ),
-            SizedBox(
-              width: smallPadding,
+              width: defaultPadding,
             ),
           ],
         ),
@@ -109,190 +94,458 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
           elevation: 6.0,
           child: LandingScreenDrawer(),
         ),
-        body: SafeArea(
-          child: landing.when(
-            data: (data) {
-              return Container(
-                padding: EdgeInsets.only(
-                  left: 8,
-                  right: 8,
-                ),
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).custom.bgColor,
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: defaultPadding,
-                      ),
-                      // Text(
-                      //   'Hello',
-                      //   style: Theme.of(context).custom.textStyle.copyWith(
-                      //         fontWeight: FontWeight.w700,
-                      //         fontSize: 18,
-                      //       ),
-                      // ),
-                      Text(
-                        'Let\'s Explore Today',
-                        style: Theme.of(context).custom.textStyle.copyWith(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 24,
-                            ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        'Categories',
-                        style: Theme.of(context).custom.textStyle.copyWith(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
-                            ),
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        physics: BouncingScrollPhysics(),
-                        padding: EdgeInsets.all(
-                          smallPadding,
+        bottomNavigationBar: BottomNavigationBar(
+          // type: BottomNavigationBarType.shifting,
+          currentIndex: currentIndex,
+          elevation: 6.0,
+          onTap: (newIndex){
+            setState(() {
+              currentIndex = newIndex;
+              print(newIndex);
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home, color: Colors.black54,),
+              activeIcon: Icon(Icons.home, color: Colors.black,),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.email),
+              label: 'Messages',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.ondemand_video),
+              label: 'Videos',
+            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.person),
+            //   label: 'Profile',
+            // ),
+          ],
+        ),
+
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: SvgPicture.asset(
+                'assets/img/landing.svg',
+                fit: BoxFit.cover,
+              ),
+            ),
+            SafeArea(
+              child: landing.when(
+                data: (data) {
+                  return Container(
+                    padding: EdgeInsets.only(
+                      left: 8,
+                      right: 8,
+                    ),
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        // color: Theme.of(context).custom.bgColor,
                         ),
-                        child: Row(
-                          children: [
-                            for (var category in data.categories!)
-                              CategoryCard(
-                                category: category.category!,
-                                img: category.image!,
-                                id: category.id!,
-                              )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      ref.watch(randomPostProvider).when(
-                        data: (res) {
-                          return Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: defaultPadding,
+                          ),
+                          // Text(
+                          //   'Hello',
+                          //   style: Theme.of(context).custom.textStyle.copyWith(
+                          //         fontWeight: FontWeight.w700,
+                          //         fontSize: 18,
+                          //       ),
+                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Hello User',
+                                style:
+                                    Theme.of(context).custom.textStyle.copyWith(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 24,
+                                        ),
+                              ),
+                              Expanded(
+                                child: SizedBox(),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                      context, SearchResultScreen.id);
+                                },
+                                child: Icon(
+                                  Icons.search,
+                                  size: 34,
+                                  color: Theme.of(context).custom.textColor,
+                                ),
+                              ),
+                              SizedBox(
+                                width: smallPadding,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  'Top Picks',
-                                  style: Theme.of(context)
-                                      .custom
-                                      .textStyle
-                                      .copyWith(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 18,
+                                Container(
+                                  height: 32,
+                                  width: 60,
+                                  margin: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).custom.pillColor,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Tag',
+                                      style: TextStyle(
+                                        color: Colors.black,
                                       ),
+                                    ),
+                                  ),
                                 ),
-                                SizedBox(
-                                  height: smallPadding,
+                                Container(
+                                  height: 32,
+                                  width: 60,
+                                  margin: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).custom.pillColor,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Tag',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                for (var post in res.data!)
-                                  FavoriteCard(
-                                    title: post.title!,
-                                    content: post.text!,
-                                    img: post.image!,
-                                    index: post.id!,
+                                Container(
+                                  height: 32,
+                                  width: 60,
+                                  margin: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).custom.pillColor,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Tag',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 32,
+                                  width: 60,
+                                  margin: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).custom.pillColor,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Tag',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 32,
+                                  width: 60,
+                                  margin: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).custom.pillColor,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Tag',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 32,
+                                  width: 60,
+                                  margin: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).custom.pillColor,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Tag',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 32,
+                                  width: 60,
+                                  margin: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).custom.pillColor,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Tag',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 32,
+                                  width: 60,
+                                  margin: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).custom.pillColor,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Tag',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: 32,
+                                  width: 60,
+                                  margin: EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).custom.pillColor,
+                                    borderRadius: BorderRadius.circular(50),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Tag',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            'Categories',
+                            style: Theme.of(context).custom.textStyle.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18,
+                                ),
+                          ),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            physics: BouncingScrollPhysics(),
+                            padding: EdgeInsets.all(
+                              smallPadding,
+                            ),
+                            child: Row(
+                              children: [
+                                for (var category in data.categories!)
+                                  CategoryCard(
+                                    category: category.category!,
+                                    img: category.image!,
+                                    id: category.id!,
                                   )
                               ],
                             ),
-                          );
-                        },
-                        error: (error, st) {
-                          return SizedBox();
-                        },
-                        loading: () {
-                          return SizedBox();
-                        },
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ref.watch(randomPostProvider).when(
+                            data: (res) {
+                              return Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      'Top Picks',
+                                      style: Theme.of(context)
+                                          .custom
+                                          .textStyle
+                                          .copyWith(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18,
+                                          ),
+                                    ),
+                                    SizedBox(
+                                      height: smallPadding,
+                                    ),
+                                    for (var post in res.data!)
+                                      BlogListTile(
+                                        title: post.title!,
+                                        content: post.text!,
+                                        img: post.image!,
+                                        index: post.id!,
+                                      )
+                                  ],
+                                ),
+                              );
+                            },
+                            error: (error, st) {
+                              return SizedBox();
+                            },
+                            loading: () {
+                              return SizedBox();
+                            },
+                          ),
+                          SizedBox(
+                            height: defaultPadding,
+                          ),
+                          ref.watch(randomPostProvider).when(
+                            data: (res) {
+                              return Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      'Previously Read',
+                                      style: Theme.of(context)
+                                          .custom
+                                          .textStyle
+                                          .copyWith(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18,
+                                          ),
+                                    ),
+                                    SizedBox(
+                                      height: smallPadding,
+                                    ),
+                                    for (var post in res.data!)
+                                      BlogListTile(
+                                        title: post.title!,
+                                        content: post.text!,
+                                        img: post.image!,
+                                        index: post.id!,
+                                      )
+                                  ],
+                                ),
+                              );
+                            },
+                            error: (error, st) {
+                              return SizedBox();
+                            },
+                            loading: () {
+                              return SizedBox();
+                            },
+                          ),
+                          // data.favorites!.isNotEmpty
+                          //     ? Text(
+                          //         'My Favorites',
+                          //         style:
+                          //             Theme.of(context).custom.textStyle.copyWith(
+                          //                   fontWeight: FontWeight.w500,
+                          //                   fontSize: 18,
+                          //                 ),
+                          //       )
+                          //     : Center(
+                          //         child: Text(
+                          //           'No Favorites Yet ...',
+                          //           style:
+                          //               Theme.of(context).custom.textStyle.copyWith(
+                          //                     fontWeight: FontWeight.w500,
+                          //                     fontSize: 18,
+                          //                   ),
+                          //         ),
+                          //       ),
+                          // SizedBox(
+                          //   height: Theme.of(context).custom.smallPadding,
+                          // ),
+                          // for (var fav in data.favorites!)
+                          //   FavoriteCard(
+                          //     title: fav.post!.title.toString(),
+                          //     content: fav.post!.text.toString(),
+                          //     index: fav.post!.id!.toInt(),
+                          //     img: fav.post!.image.toString(),
+                          //   ),
+                        ],
                       ),
-                      // data.favorites!.isNotEmpty
-                      //     ? Text(
-                      //         'My Favorites',
-                      //         style:
-                      //             Theme.of(context).custom.textStyle.copyWith(
-                      //                   fontWeight: FontWeight.w500,
-                      //                   fontSize: 18,
-                      //                 ),
-                      //       )
-                      //     : Center(
-                      //         child: Text(
-                      //           'No Favorites Yet ...',
-                      //           style:
-                      //               Theme.of(context).custom.textStyle.copyWith(
-                      //                     fontWeight: FontWeight.w500,
-                      //                     fontSize: 18,
-                      //                   ),
-                      //         ),
-                      //       ),
-                      // SizedBox(
-                      //   height: Theme.of(context).custom.smallPadding,
-                      // ),
-                      // for (var fav in data.favorites!)
-                      //   FavoriteCard(
-                      //     title: fav.post!.title.toString(),
-                      //     content: fav.post!.text.toString(),
-                      //     index: fav.post!.id!.toInt(),
-                      //     img: fav.post!.image.toString(),
-                      //   ),
-                    ],
-                  ),
-                ),
-              );
-            },
-            error: (error, st) {
-              // if (ref.read(networkErrorProvider.notifier).state!.type ==
-              //     DioErrorType.response) {
-              //   Navigator.popAndPushNamed(context, LoginScreen.id);
-              // }
+                    ),
+                  );
+                },
+                error: (error, st) {
+                  // if (ref.read(networkErrorProvider.notifier).state!.type ==
+                  //     DioErrorType.response) {
+                  //   Navigator.popAndPushNamed(context, LoginScreen.id);
+                  // }
 
-              return Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Are you connected to the Internet?',
-                      style: Theme.of(context).custom.textStyle,
+                  return Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Are you connected to the Internet?',
+                          style: Theme.of(context).custom.textStyle,
+                        ),
+                        SizedBox(
+                          height: smallPadding,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            ref.refresh(landingProvider);
+                          },
+                          child: Text('Reload'),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: smallPadding,
+                  );
+                },
+                loading: () {
+                  return Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: defaultPadding,
+                        ),
+                        Text('Loading...'),
+                      ],
                     ),
-                    TextButton(
-                      onPressed: () {
-                        ref.refresh(landingProvider);
-                      },
-                      child: Text('Reload'),
-                    ),
-                  ],
-                ),
-              );
-            },
-            loading: () {
-              return Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                    SizedBox(
-                      height: defaultPadding,
-                    ),
-                    Text('Loading...'),
-                  ],
-                ),
-              );
-            },
-          ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -609,14 +862,13 @@ class CategoryCard extends StatelessWidget {
   }
 }
 
-class FavoriteCard extends StatelessWidget {
+class BlogListTile extends StatelessWidget {
   final String title;
   final String content;
   final String img;
   final int index;
 
-  //TODO: Implement favorites ...
-  const FavoriteCard({
+  const BlogListTile({
     Key? key,
     required this.title,
     required this.content,

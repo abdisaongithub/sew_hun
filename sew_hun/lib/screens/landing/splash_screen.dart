@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/landing/landing_screen.dart';
 import 'package:sew_hun/screens/auth/login_screen.dart';
+import 'package:sew_hun/screens/onboarding/onboarding.dart';
 import 'package:sew_hun/static.dart';
 import 'package:validators/validators.dart' as V;
 
@@ -51,7 +52,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         // return LandingScreen.id;
       } else {
         print('Login ...');
-        Navigator.popAndPushNamed(context, LoginScreen.id);
+        Navigator.popAndPushNamed(context, OnboardingScreen.id);
         // return LoginScreen.id;
       }
     });

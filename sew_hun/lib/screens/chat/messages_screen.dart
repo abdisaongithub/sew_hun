@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record_mp3/record_mp3.dart';
@@ -102,7 +103,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).custom.appBarColor,
+        backgroundColor: Theme.of(context).custom.searchAppBarColor,
         leading: BackButton(
           color: Theme.of(context).custom.textColor,
         ),
@@ -116,6 +117,12 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
       ),
       body: Stack(
         children: <Widget>[
+          Positioned.fill(
+            child: SvgPicture.asset(
+              'assets/img/bg.svg',
+              fit: BoxFit.cover,
+            ),
+          ),
           messages.when(
             data: (messages) {
               if (messages.data!.length != 0) {
@@ -137,7 +144,9 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                         Container(
                           width: size.width * 0.6,
                           margin: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10,),
+                            vertical: 10,
+                            horizontal: 10,
+                          ),
                           padding: EdgeInsets.symmetric(
                             vertical: 10,
                             horizontal: 10,
@@ -149,13 +158,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                               bottomRight: Radius.circular(10),
                               topRight: Radius.circular(10),
                             ),
-                            border: Border.all(
-                              color: Theme.of(context)
-                                  .custom
-                                  .textColor
-                                  .withOpacity(0.2),
-                              width: 1.5,
-                            ),
+                            color: Theme.of(context).custom.chatContainerColor.withOpacity(0.8),
                           ),
                           child: Column(
                             // crossAxisAlignment:
@@ -279,7 +282,6 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               );
             },
           ),
-
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
@@ -291,7 +293,7 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               height: 60,
               width: size.width,
               decoration: BoxDecoration(
-                color: Theme.of(context).custom.appBarColor,
+                // color: Theme.of(context).custom.appBarColor,
                 border: Border(
                   top: BorderSide(
                     color: Theme.of(context).custom.textColor,
@@ -300,24 +302,24 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               ),
               child: Row(
                 children: <Widget>[
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     print('record sound');
-                  //   },
-                  //   child: Container(
-                  //     height: 30,
-                  //     width: 30,
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.lightBlue,
-                  //       borderRadius: BorderRadius.circular(30),
-                  //     ),
-                  //     child: Icon(
-                  //       Icons.mic,
-                  //       color: Colors.white,
-                  //       size: 20,
-                  //     ),
-                  //   ),
-                  // ),
+                  GestureDetector(
+                    onTap: () {
+                      print('record sound');
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).custom.btnColor,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Icon(
+                        Icons.mic,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     width: 15,
                   ),
@@ -352,10 +354,10 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                     },
                     child: Icon(
                       Icons.send,
-                      color: Colors.white,
+                      color: Colors.black,
                       size: 18,
                     ),
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Theme.of(context).custom.btnColor,
                     elevation: 0,
                   ),
                 ],

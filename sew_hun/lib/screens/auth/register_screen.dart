@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sew_hun/models/auth/register.dart';
 import 'package:sew_hun/providers/auth/register_data_provider.dart';
 import 'package:sew_hun/providers/auth/sign_in_provider.dart';
+import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/landing/landing_screen.dart';
 import 'package:sew_hun/static.dart';
 import 'package:validators/validators.dart';
@@ -71,65 +73,39 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Positioned.fill(
-          //   child: Image.asset(
-          //     'assets/img/et.jpg',
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
+          Positioned.fill(
+            child: SvgPicture.asset(
+              'assets/img/bg.svg',
+              fit: BoxFit.cover,
+            ),
+          ),
           Align(
             alignment: Alignment.center,
             child: SingleChildScrollView(
               child: Container(
                 margin: const EdgeInsets.all(defaultPadding),
                 padding: const EdgeInsets.all(defaultPadding),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 3,
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
-                ),
                 child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Center(
-                        child: CircleAvatar(
-                          radius: 50,
-                          child: Image.asset(
-                            'assets/img/logo.png',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Center(
-                        child: Text(
-                          'Register',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        child: SvgPicture.asset(
+                          'assets/img/register.svg',
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width * 0.4,
                         ),
                       ),
                       SizedBox(
                         height: 20,
                       ),
                       Text(
-                        'Email',
+                        'Register',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       Padding(
@@ -154,17 +130,6 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
                             }
                             return null;
                           },
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        'Password',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       Padding(
@@ -199,23 +164,12 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
                           },
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        'Confirm Password',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           decoration: InputDecoration(
                             border: UnderlineInputBorder(),
-                            hintText: 'Enter Password Again',
+                            hintText: 'Confirm Password',
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                           ),
                           obscureText: true,
@@ -254,24 +208,33 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
-                        onPressed: () async {
+                      GestureDetector(
+                        onTap: () async {
                           if (_formKey.currentState!.validate()) {
                             ref.read(registerDataProvider.notifier).register(
-                                  register: Register(
-                                    email: registerData.state.email,
-                                    password1: registerData.state.password1,
-                                    password2: registerData.state.password2,
-                                  ),
-                                );
+                              register: Register(
+                                email: registerData.state.email,
+                                password1: registerData.state.password1,
+                                password2: registerData.state.password2,
+                              ),
+                            );
                           } else {
                             print('Validation Error');
                           }
                         },
-                        child: Center(
-                          child: Text('Register'),
+                        child: Container(
+                          height: 45,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).custom.btnColor,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Text('Register'),
+                          ),
                         ),
                       ),
+
                       SizedBox(
                         height: 20,
                       ),

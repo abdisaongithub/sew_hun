@@ -24,6 +24,10 @@ class CustomThemeData {
   final Color appBarColor;
   final Color linkColor;
   final Color bgThemeColor;
+  final Color btnColor;
+  final Color pillColor;
+  final Color searchAppBarColor;
+  final Color chatContainerColor;
 
   final TextStyle textStyle;
 
@@ -34,6 +38,10 @@ class CustomThemeData {
     required this.appBarColor,
     required this.linkColor,
     required this.bgThemeColor,
+    required this.btnColor,
+    required this.pillColor,
+    required this.searchAppBarColor,
+    required this.chatContainerColor,
   });
 }
 
@@ -43,7 +51,11 @@ final _customLightTheme = CustomThemeData(
   textStyle: TextStyle(color: Colors.black),
   appBarColor: Colors.white,
   linkColor: Colors.blue,
-  bgThemeColor: Colors.white
+  bgThemeColor: Colors.white,
+  btnColor: Color(0xFF9BECF6),
+  pillColor: Color(0xFFE5F5F7),
+  searchAppBarColor: Color(0xFF9497F3),
+  chatContainerColor: Color(0xFF30C270),
 );
 
 final _customDarkTheme = CustomThemeData(
@@ -52,11 +64,16 @@ final _customDarkTheme = CustomThemeData(
   textStyle: TextStyle(color: Colors.white),
   appBarColor: Colors.black12,
   linkColor: Colors.blue,
-  bgThemeColor: Colors.black
+  bgThemeColor: Colors.black,
+  btnColor: Color(0xFF9BECF6),
+  pillColor: Color(0xFFE5F5F7),
+  searchAppBarColor: Color(0xFF9497F3),
+  chatContainerColor: Color(0xFF30C270),
 );
 
 extension CustomTheme on ThemeData {
-  CustomThemeData get custom => brightness == Brightness.dark ? _customDarkTheme : _customLightTheme;
+  CustomThemeData get custom =>
+      brightness == Brightness.dark ? _customDarkTheme : _customLightTheme;
 }
 
 // THEME PROVIDERS
@@ -65,9 +82,9 @@ final darkThemeProvider = Provider((ref) => _darkTheme);
 
 final themeModeProvider = StateProvider((ref) {
   final theme = ref.watch(savedThemeProvider);
-  if (theme.value == kLight){
+  if (theme.value == kLight) {
     return ThemeMode.light;
-  } else if(theme.value == kDark){
+  } else if (theme.value == kDark) {
     return ThemeMode.dark;
   }
 });
@@ -77,7 +94,7 @@ final savedThemeProvider = FutureProvider<String>((ref) async {
   try {
     final res = await storage.read(key: kTheme);
     return res!;
-  } catch (e){
+  } catch (e) {
     await storage.write(key: kTheme, value: kLight);
     return kLight;
   }

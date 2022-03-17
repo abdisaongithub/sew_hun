@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sew_hun/providers/chat/admin_chooser_screen.dart';
 import 'package:sew_hun/providers/chat/chat_id_provider.dart';
 import 'package:sew_hun/providers/chat/chats_provider.dart';
@@ -22,146 +23,201 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
   Widget build(BuildContext context) {
     final chats = ref.watch(chatsProvider);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).custom.appBarColor,
-        title: Text(
-          'Chats',
-          style: Theme.of(context).custom.textStyle,
-        ),
-        leading: BackButton(
-          color: Theme.of(context).custom.textColor,
-        ),
-      ),
-      body: chats.when(
-        data: (data) {
-          if (data.chats!.isNotEmpty) {
-            return Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: ListView.builder(
-                itemCount: data.chats!.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Container(
-                      height: 50,
-                      width: 65,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        image: DecorationImage(
-                          image: CachedNetworkImageProvider(
-                            data.isAdmin!
-                                ? data.chats![index].client!.profile!.photo!
-                                : data.chats![index].admin!.profile!.photo!,
+      // appBar: AppBar(
+      //   backgroundColor: Theme.of(context).custom.searchAppBarColor,
+      //   title: Text(
+      //     'Chats',
+      //     style: Theme.of(context).custom.textStyle,
+      //   ),
+      //   leading: BackButton(
+      //     color: Theme.of(context).custom.textColor,
+      //   ),
+      // ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: SvgPicture.asset(
+              'assets/img/bg.svg',
+              fit: BoxFit.cover,
+            ),
+          ),
+          chats.when(
+            data: (data) {
+              if (data.chats!.isNotEmpty) {
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10,
+                  ),
+                  child: ListView.builder(
+                    itemCount: data.chats!.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          ref.read(chatIdProvider.state).state =
+                              data.chats![index].id!;
+                          Navigator.pushNamed(
+                            context,
+                            MessagesScreen.id,
+                          );
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 10,
                           ),
-                          fit: BoxFit.cover,
+                          child: Container(
+                            padding: EdgeInsets.all(10,),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 80,
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.green,
+                                    image: DecorationImage(
+                                      image: CachedNetworkImageProvider(
+                                        data.isAdmin!
+                                            ? data.chats![index].client!.profile!
+                                                .photo
+                                                .toString()
+                                            : data.chats![index].admin!.profile!
+                                                .photo!,
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: smallPadding,
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: 250,
+                                      child: Text(
+                                        data.isAdmin!
+                                            ? data.chats![index].client!.username
+                                                .toString()
+                                            : data.chats![index].admin!.username
+                                                .toString(),
+                                        maxLines: 2,
+                                        style: Theme.of(context)
+                                            .custom
+                                            .textStyle
+                                            .copyWith(
+                                              fontSize: 16,
+                                            ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: smallPadding,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 6,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.cyan,
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      child: Text(
+                                        data.isAdmin! ? 'Admin' : 'Client',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                      // child: Image(
-                      //   image: NetworkImage(
-                      //     data.isAdmin!
-                      //         ? data.chats![index].admin!.profile!.photo
-                      //             .toString()
-                      //         : data.chats![index].client!.profile!.photo
-                      //             .toString(),
-                      //   ),
-                      //   fit: BoxFit.cover,
-                      //   errorBuilder: (c, o, s) {
-                      //     return Image(
-                      //       image: AssetImage('assets/img/et.jpg'),
-                      //     );
-                      //   },
-                      // ),
-                    ),
-                    title: Text(
-                      data.isAdmin!
-                          ? data.chats![index].client!.username.toString()
-                          : data.chats![index].admin!.username.toString(),
-                      style: Theme.of(context).custom.textStyle.copyWith(
-                            fontSize: 22,
-                          ),
-                    ),
-                    subtitle: Text(
-                      data.isAdmin! ? 'Admin' : 'Client',
-                    ),
-                    onTap: () {
-                      ref.read(chatIdProvider.state).state =
-                          data.chats![index].id!;
-                      Navigator.pushNamed(
-                        context,
-                        MessagesScreen.id,
                       );
                     },
-                  );
-                },
-              ),
-            );
-          } else {
-            return Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Create a chat with one of the admins?',
-                    style: Theme.of(context).custom.textStyle,
                   ),
-                  SizedBox(
-                    height: defaultPadding,
+                );
+              } else {
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Create a chat with one of the admins?',
+                        style: Theme.of(context).custom.textStyle,
+                      ),
+                      SizedBox(
+                        height: defaultPadding,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, AdminChooserScreen.id);
+                        },
+                        child: Text('Create'),
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, AdminChooserScreen.id);
-                    },
-                    child: Text('Create'),
-                  ),
-                ],
-              ),
-            );
-          }
-        },
-        error: (error, st) {
-          return Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Are you connected to the internet?',
-                  style: Theme.of(context).custom.textStyle,
+                );
+              }
+            },
+            error: (error, st) {
+              return Container(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Are you connected to the internet?',
+                      style: Theme.of(context).custom.textStyle,
+                    ),
+                    SizedBox(
+                      height: defaultPadding,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ref.refresh(chatsProvider);
+                      },
+                      child: Text('Retry'),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: defaultPadding,
+              );
+            },
+            loading: () {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).custom.textColor,
                 ),
-                TextButton(
-                  onPressed: () {
-                    ref.refresh(chatsProvider);
-                  },
-                  child: Text('Retry'),
-                ),
-              ],
-            ),
-          );
-        },
-        loading: () {
-          return Center(
-            child: CircularProgressIndicator(
-              color: Theme.of(context).custom.textColor,
-            ),
-          );
-        },
+              );
+            },
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          ref.refresh(chatsProvider);
-          print('Refreshing...');
-        },
-        child: Icon(Icons.refresh),
-        // TODO: when empty use this to create/initiate a chat with an admin
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     ref.refresh(chatsProvider);
+      //   },
+      //   child: Icon(Icons.refresh),
+      // ),
     );
   }
 }

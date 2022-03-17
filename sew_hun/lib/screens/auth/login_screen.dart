@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sew_hun/models/auth/auth_token.dart';
 import 'package:sew_hun/providers/auth/login_credentials_provider.dart';
 import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/providers/auth/token_provider.dart';
+import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/auth/register_screen.dart';
 import 'package:sew_hun/screens/landing/landing_screen.dart';
 import 'package:sew_hun/static.dart';
@@ -57,30 +59,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Positioned.fill(
-          //   child: Image.asset(
-          //     'assets/img/et.jpg',
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
+          Positioned.fill(
+            child: SvgPicture.asset(
+              'assets/img/bg.svg',
+              fit: BoxFit.cover,
+            ),
+          ),
           Align(
             alignment: Alignment.center,
             child: SingleChildScrollView(
-              // crossAxisAlignment: CrossAxisAlignment.start,
               child: Container(
                 margin: EdgeInsets.all(defaultPadding),
                 padding: EdgeInsets.all(defaultPadding),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 3,
-                    ),
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(defaultPadding),
-                ),
                 child: Form(
                   key: _formKey,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -88,36 +78,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Center(
-                        child: CircleAvatar(
-                          radius: 50,
-                          child: Image.asset(
-                            'assets/img/logo.png',
-                            fit: BoxFit.cover,
-                          ),
+                        child: Image.asset(
+                          'assets/img/login.png',
+                          fit: BoxFit.contain,
+                          width: MediaQuery.of(context).size.width * 0.4,
                         ),
                       ),
                       SizedBox(
-                        height: 20,
-                      ),
-                      Center(
-                        child: Text(
-                          'Login',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
+                        height: largePadding + smallPadding,
                       ),
                       Text(
-                        'Email',
+                        'Login',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       Padding(
@@ -141,17 +116,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             }
                             return null;
                           },
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        'Password',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       Padding(
@@ -186,8 +150,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
-                        onPressed: () async {
+                      GestureDetector(
+                        onTap: () async {
                           if (_formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -199,8 +163,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             print('Validation Error');
                           }
                         },
-                        child: Center(
-                          child: Text('Login'),
+                        child: Container(
+                          height: 45,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).custom.btnColor,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Text('Login'),
+                          ),
                         ),
                       ),
                       SizedBox(
