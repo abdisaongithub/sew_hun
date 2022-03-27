@@ -208,3 +208,5 @@ AUTHENTICATION_BACKENDS = (
 )
 
 TOKEN_TTL = datetime.timedelta(days=15)
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
