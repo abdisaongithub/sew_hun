@@ -20,83 +20,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="781bd1ff-cb70-4116-b1cb-6ed0ff9f70df" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/abdi.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/ResizeSensor.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/SOURCE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/django_summernote.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/font/summernote.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/font/summernote.hash" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/font/summernote.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/font/summernote.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/font/summernote.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/jquery.fileupload.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/jquery.iframe-transport.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/jquery.ui.widget.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-ar-AR.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-az-AZ.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-bg-BG.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-bn-BD.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-ca-ES.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-cs-CZ.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-da-DK.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-de-CH.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-de-DE.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-el-GR.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-en-US.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-es-ES.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-es-EU.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-fa-IR.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-fi-FI.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-fr-FR.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-gl-ES.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-he-IL.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-hr-HR.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-hu-HU.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-id-ID.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-it-IT.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-ja-JP.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-ko-KR.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-lt-LT.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-lt-LV.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-mn-MN.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-nb-NO.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-nl-NL.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-pl-PL.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-pt-BR.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-pt-PT.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-ro-RO.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-ru-RU.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-sk-SK.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-sl-SI.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-sr-RS-Latin.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-sr-RS.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-sv-SE.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-ta-IN.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-th-TH.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-tr-TR.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-uk-UA.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-uz-UZ.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-vi-VN.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-zh-CN.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/lang/summernote-zh-TW.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/summernote-bs4.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/summernote-bs4.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/summernote-bs5.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/summernote-bs5.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/summernote-lite.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/summernote-lite.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/summernote.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/summernote.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/summernote/summernote.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/admin/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/dio_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/dio_api.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/language/language_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/language/language_provider.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/theme/theme_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/theme/theme_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_detail_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_list_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_list_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/landing_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/landing_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/splash_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/youtube/youtube_videos_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/youtube/youtube_videos_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/static.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/static.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blog/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sew_hun_back/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/sew_hun_back/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sew_hun_back/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/sew_hun_back/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -216,7 +154,7 @@
       <workItem from="1647246850897" duration="2671000" />
       <workItem from="1647260930087" duration="843000" />
       <workItem from="1648378576318" duration="911000" />
-      <workItem from="1648379579875" duration="6548000" />
+      <workItem from="1648379579875" duration="8532000" />
     </task>
     <servers />
   </component>
