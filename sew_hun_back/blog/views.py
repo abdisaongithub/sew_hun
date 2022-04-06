@@ -22,7 +22,7 @@ class CategoryPostListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        posts = Post.objects.filter(category=kwargs['pk'])
+        posts = Post.objects.filter(category=kwargs['pk']).filter(is_published=True)
         serialized = serializers.PostsCategorySerializer(posts, many=True)
         return Response({"posts": serialized.data}, status=status.HTTP_200_OK, )
 
@@ -176,7 +176,7 @@ class LandingView(generics.ListAPIView):
             'favorites': fav_ser.data
         }
 
-        return Response(data=res, )
+        return Response(data=res, status=status.HTTP_200_OK)
 
 
 class SettingsListView(generics.ListAPIView):

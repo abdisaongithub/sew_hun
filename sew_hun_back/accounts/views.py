@@ -1,12 +1,10 @@
 from dj_rest_auth.registration.views import RegisterView
-from django.contrib import auth
-from django.contrib.auth import get_user_model
-from django.forms import model_to_dict
-from django.http import JsonResponse
+from django.shortcuts import render
+from django.utils.datastructures import MultiValueDictKeyError
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from . import serializers
 from .models import MyUser, Profile
@@ -36,13 +34,11 @@ class CustomAuthToken(ObtainAuthToken):
 #             user = MyUser.objects.create(serialized.data)
 #
 #             return Response(data=user, status=status.HTTP_200_OK)
-#         return Response(data=None, status=status.HTTP_400_BAD_REQUEST)
+#         return Response(data=serialized.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class Me(generics.RetrieveAPIView):
-    permission_classes = (IsAuthenticated,)
-
-    # serializer_class = serializers.MeSerializer
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         current_user = request.user
@@ -58,32 +54,35 @@ class Me(generics.RetrieveAPIView):
             )
 
 
-class Profile(generics.RetrieveUpdateAPIView):
-    def get(self, request, user_id, *args, **kwargs):
-        user = MyUser.objects.get(id=user_id)
-
-        if user is None:
-            return Response(data={'error': 'No user found'}, status=status.HTTP_404_NOT_FOUND)
-        else:
-            serializer = serializers.UserProfileSerializer(user)
-            return Response(data={'data': serializer.data})
-
-    def put(self, request, *args, **kwargs):
-        # TODO: Finish this crap
-        return super().put(request, *args, **kwargs)
-
-
 class CreateProfile(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
-        profile = serializers.CreateProfileSerializer(data=request.data)
-        if profile.is_valid():
-            print('data: ' + str(profile.data))
-            return Response(data=profile.data)
+        form_data = serializers.CreateProfileSerializer(data=request.data, many=False, )
+        if form_data.is_valid():
+            print(form_data.data)
+            user = MyUser.objects.get(id=request.user.id)
+
+            if form_data.data['email']:
+                user.email = form_data.data['email']
+
+            user.first_name = form_data.data['firstName']
+            user.last_name = form_data.data['lastName']
+
+            if form_data.data['subCity']:
+                user.profile.sub_city = form_data.data['subCity']
+            user.profile.phone = form_data.data['phone']
+            user.profile.city = form_data.data['city']
+            try:
+                if request.FILES['photo'] is not None:
+                    if user.profile.photo is not None:
+                        user.profile.photo.delete()
+                    user.profile.photo = request.FILES.get('photo')
+            except MultiValueDictKeyError:
+                pass
+
+            user.profile.save()
+            user.save()
+            return Response(data={'data': form_data.data}, status=status.HTTP_201_CREATED)
         else:
-            print(profile.errors)
-            return Response(data=profile.errors)
-
-
-class Register(RegisterView):
-    permission_classes = [AllowAny]
-
+            return Response(data=form_data.errors, status=status.HTTP_400_BAD_REQUEST)

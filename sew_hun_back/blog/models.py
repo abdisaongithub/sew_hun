@@ -41,6 +41,7 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag, related_name='posts')
     title = models.CharField(max_length=256, )
     text = models.TextField(null=False, blank=False, )
+    # TODO: create a sample text field
     image = models.ImageField(upload_to='photos/posts/', )
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)

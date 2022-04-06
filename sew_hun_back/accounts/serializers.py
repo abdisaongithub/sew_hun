@@ -56,10 +56,13 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CreateProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ['city', 'sub_city', 'special_name', 'bio']
+class CreateProfileSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    firstName = serializers.CharField(max_length=256)
+    lastName = serializers.CharField(max_length=256)
+    phone = serializers.CharField(max_length=15)
+    city = serializers.CharField(max_length=50)
+    subCity = serializers.CharField(max_length=50, required=False, )
 
 
 class ProfileMiniSerializer(serializers.ModelSerializer):

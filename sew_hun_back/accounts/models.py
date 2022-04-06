@@ -52,11 +52,9 @@ class Profile(models.Model):
     Different information on the user for analytics purposes
     """
     user = models.OneToOneField(MyUser, on_delete=models.CASCADE, related_name='profile')
-    phone = models.CharField(max_length=15, blank=False, default='0900000000')
+    phone = models.CharField(max_length=15, blank=False, default='09xxxxxxxx')
     city = models.CharField(max_length=50, blank=True, default='Addis Ababa')
     sub_city = models.CharField(max_length=50, blank=True, default='bole')
-    special_name = models.CharField(max_length=50, blank=True, default='bole-bulbula')
-    bio = models.TextField(blank=True, default='')
     photo = models.ImageField(upload_to='photos/profiles/', blank=True)
 
     role = models.ManyToManyField(Role, related_name='profiles', )

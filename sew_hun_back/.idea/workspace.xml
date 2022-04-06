@@ -20,21 +20,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="781bd1ff-cb70-4116-b1cb-6ed0ff9f70df" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/templates/admin/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/accounts/migrations/0005_auto_20220404_2105.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/accounts/migrations/0006_remove_profile_special_name.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/photos/profiles/Screenshot_from_2022-02-28_02-05-09.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/photos/profiles/Screenshot_from_2022-03-06_21-40-47.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/photos/profiles/Screenshot_from_2022-03-06_21-41-26.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/photos/profiles/Screenshot_from_2022-03-27_03-58-20.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/photos/profiles/Screenshot_from_2022-03-27_03-58-20_Y2bOprc.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/dio_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/dio_api.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/language/language_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/language/language_provider.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/theme/theme_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/theme/theme_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/auth/login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/auth/login_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/auth/register_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/auth/register_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_detail_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_list_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/blog_list_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/chat/chats_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/chat/chats_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/landing_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/landing_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/splash_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/edit_profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/edit_profile_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/profile_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/youtube/youtube_videos_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/youtube/youtube_videos_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/static.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/static.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/todos.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/todos.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blog/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sew_hun_back/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/sew_hun_back/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blog/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,7 +174,10 @@
       <workItem from="1647246850897" duration="2671000" />
       <workItem from="1647260930087" duration="843000" />
       <workItem from="1648378576318" duration="911000" />
-      <workItem from="1648379579875" duration="8532000" />
+      <workItem from="1648379579875" duration="10659000" />
+      <workItem from="1648459107714" duration="92000" />
+      <workItem from="1649101600477" duration="5598000" />
+      <workItem from="1649230688672" duration="4394000" />
     </task>
     <servers />
   </component>
@@ -177,10 +200,15 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="491" y="117" width="374" height="564" key="#com.intellij.ide.util.MemberChooser" timestamp="1647090644501">
+    <state x="312" y="81" width="732" height="639" key="#Inspections" timestamp="1649231838209">
+      <screen x="0" y="32" width="1366" height="736" />
+    </state>
+    <state x="312" y="81" width="732" height="639" key="#Inspections/0.32.1366.736@0.32.1366.736" timestamp="1649231838209" />
+    <state x="491" y="117" width="374" height="564" key="#com.intellij.ide.util.MemberChooser" timestamp="1649104761001">
       <screen x="0" y="29" width="1366" height="739" />
     </state>
     <state x="491" y="117" width="374" height="564" key="#com.intellij.ide.util.MemberChooser/0.29.1366.739/1366.0.1366.768@0.29.1366.739" timestamp="1647090644501" />
+    <state x="491" y="117" width="374" height="564" key="#com.intellij.ide.util.MemberChooser/0.29.1366.739@0.29.1366.739" timestamp="1649104761001" />
     <state x="348" y="29" width="660" height="739" key="#urls" timestamp="1646308368596">
       <screen x="0" y="29" width="1366" height="739" />
     </state>
