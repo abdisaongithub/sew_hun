@@ -12,12 +12,17 @@ from .views import (
     LandingView,
     SettingsListView,
     SearchView,
-    RandomPostListView
+    RandomPostListView,
+    TagsView,
+    TagPostListView,
 )
 
 urlpatterns = [
     path('categories/', CategoriesView.as_view(), name='categories'),
     path('categories/posts/<int:pk>/', CategoryPostListView.as_view(), name='categories.posts'),
+
+    path('tags/', TagsView.as_view(), name='tags'),
+    path('tags/<int:pk>/', TagPostListView.as_view(), name='categories.posts'),
 
     # TODO: remove posts from the url
 

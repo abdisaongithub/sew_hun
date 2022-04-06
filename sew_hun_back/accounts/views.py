@@ -5,9 +5,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework import generics, status, permissions
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from . import serializers
-from .models import MyUser, Profile
+from .models import MyUser
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -60,7 +60,6 @@ class CreateProfile(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         form_data = serializers.CreateProfileSerializer(data=request.data, many=False, )
         if form_data.is_valid():
-            print(form_data.data)
             user = MyUser.objects.get(id=request.user.id)
 
             if form_data.data['email']:

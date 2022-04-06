@@ -59,6 +59,8 @@ class Profile(models.Model):
 
     role = models.ManyToManyField(Role, related_name='profiles', )
 
+    read = models.ManyToManyField('blog.Post', related_name='read', )
+
     def __str__(self):
         if len(self.user.first_name + self.user.last_name) == 0:
             return self.user.username

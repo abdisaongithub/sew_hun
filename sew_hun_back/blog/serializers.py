@@ -33,12 +33,13 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ['id', 'username', 'profile']
+        depth = 1
 
 
 class UserMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ['id', 'username', 'email']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -68,21 +69,28 @@ class CommentDetailSerializer(serializers.ModelSerializer):
 class PostsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['id', 'title', 'text', 'image', 'reads', 'shares', 'category', ]
+        fields = ['id', 'title', 'text', 'sample', 'image', 'reads', 'shares', 'category', ]
         depth = 1
 
 
 class PostsMiniSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['id', 'title', 'image', 'category', ]
+        fields = ['id', 'title', 'sample', 'image', 'category', ]
         depth = 1
 
 
 class PostsCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['id', 'title', 'text', 'image', 'reads', ]
+        fields = ['id', 'title', 'sample', 'image', 'reads', ]
+        depth = 1
+
+
+class PostsTagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'text', 'sample', 'image', 'reads', ]
         depth = 1
 
 

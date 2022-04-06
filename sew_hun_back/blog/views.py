@@ -6,9 +6,24 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Post, Comment, Category, YoutubePlaylist
+from .models import Post, Comment, Category, YoutubePlaylist, Tag
 from . import serializers
-from accounts.models import Favorite, Settings
+from accounts.models import Favorite, Settings, Profile
+
+
+class TagsView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = serializers.TagsSerializer
+    queryset = Tag.objects.all()
+
+
+class TagPostListView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        posts = Post.objects.filter(tags=kwargs['pk'])
+        serialized = serializers.PostsTagSerializer(posts, many=True)
+        return Response({"posts": serialized.data, }, status=status.HTTP_200_OK, )
 
 
 class CategoriesView(generics.ListAPIView):
@@ -53,6 +68,9 @@ class PostDetailView(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         pk = kwargs['pk']
         post = Post.objects.get(pk=pk)
+
+        profile = request.user.profile
+        read = profile.read.add(post)
 
         # post.reads = F('reads') + 1
         # post.save()
@@ -165,15 +183,27 @@ class LandingView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
+        user = request.user
+        user_ser = serializers.UserMiniSerializer(user, many=False)
+
         categories = Category.objects.all()
         cat_ser = serializers.CategoriesSerializer(categories, many=True)
 
         fav = Favorite.objects.filter(user=request.user.id).order_by('-created_at')
         fav_ser = serializers.FavoritesSerializer(fav, many=True)
 
+        tag = Tag.objects.filter(posts__is_published=True)[:11]
+        tag_ser = serializers.TagsSerializer(tag, many=True)
+
+        read = Post.objects.filter(read__user_id=user).filter(is_published=True)[:15]
+        read_ser = serializers.PostsMiniSerializer(read, many=True)
+
         res = {
             'categories': cat_ser.data,
-            'favorites': fav_ser.data
+            'tags': tag_ser.data,
+            'favorites': fav_ser.data,
+            'read': read_ser.data,
+            'user': user_ser.data
         }
 
         return Response(data=res, status=status.HTTP_200_OK)
