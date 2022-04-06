@@ -6,9 +6,10 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from payment.permissions import PaidMonthlySubscription
 from .models import Post, Comment, Category, YoutubePlaylist, Tag
 from . import serializers
-from accounts.models import Favorite, Settings, Profile
+from accounts.models import Favorite, Settings
 
 
 class TagsView(generics.ListAPIView):
@@ -180,7 +181,7 @@ class YoutubePlaylistListView(generics.ListAPIView):
 
 
 class LandingView(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, PaidMonthlySubscription]
 
     def get(self, request, *args, **kwargs):
         user = request.user

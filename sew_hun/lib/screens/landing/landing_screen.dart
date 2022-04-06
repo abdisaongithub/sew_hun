@@ -24,7 +24,7 @@ class LandingScreen extends ConsumerStatefulWidget {
 }
 
 class _LandingScreenState extends ConsumerState<LandingScreen> {
-  final GlobalKey<ScaffoldState> _globalKey = GlobalKey();
+  // final GlobalKey<ScaffoldState> _globalKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Hello ' + data.user!.firstName.toString() ?? '',
+                                'Hello ' + data.user!.firstName.toString(),
                                 style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   color: Colors.black,

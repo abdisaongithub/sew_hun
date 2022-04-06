@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
-import 'package:sew_hun/screens/landing/landing_screen.dart';
-import 'package:sew_hun/screens/auth/login_screen.dart';
 import 'package:sew_hun/screens/landing/menu_screen.dart';
 import 'package:sew_hun/screens/onboarding/onboarding.dart';
 import 'package:sew_hun/static.dart';

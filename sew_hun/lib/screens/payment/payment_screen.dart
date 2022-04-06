@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
-import 'package:sew_hun/static.dart';
 
 class PaymentsScreen extends StatefulWidget {
   static String id = 'PaymentsScreen';
