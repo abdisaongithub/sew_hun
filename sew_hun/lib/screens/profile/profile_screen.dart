@@ -136,6 +136,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                                   phone: data.user?.profile?.phone,
                                   subCity: data.user?.profile?.subCity,
                                   email: data.user?.email,
+                                  profile: data.user?.profile?.photo,
                                 ),
                               );
                             },

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -145,24 +147,47 @@ class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
+                          setState(() {
+                            _pic = false;
+                          });
+
                           photo = await _picker.pickImage(
                             source: ImageSource.gallery,
                           );
+
                           setState(() {
                             _pic = true;
                           });
+
+                          if (photo?.path == null) {
+                            setState(() {
+                              _pic = false;
+                            });
+                          }
                         },
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundImage: CachedNetworkImageProvider(
-                            'https://www.sewhun.com/media/photos/posts/8bEfxy8skS6fUVZnfaLWxj.jpg',
-                          ),
-                          child: Icon(
-                            Icons.camera_alt_outlined,
-                            size: 60,
-                          ),
-                          // foregroundImage: , // TODO: Change with image Icon
-                        ),
+                        child: _pic
+                            ? CircleAvatar(
+                                radius: 50,
+                                backgroundImage: FileImage(
+                                  File(
+                                    photo!.path,
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.camera_alt_outlined,
+                                  size: 60,
+                                ),
+                              )
+                            : CircleAvatar(
+                                radius: 50,
+                                backgroundImage: CachedNetworkImageProvider(
+                                  args.profile ?? '',
+                                ),
+                                child: Icon(
+                                  Icons.camera_alt_outlined,
+                                  size: 60,
+                                ),
+                              ),
                       ),
                       SizedBox(
                         width: smallPadding,
@@ -174,7 +199,7 @@ class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
                           SizedBox(
                             width: 180,
                             child: Text(
-                              'username', // TODO: Use name here
+                              args.firstName.toString(), // TODO: Use name here
                               style:
                                   Theme.of(context).custom.textStyle.copyWith(
                                         fontSize: 18,
@@ -188,16 +213,16 @@ class _ProfileScreenState extends ConsumerState<EditProfileScreen> {
                             ),
                           ),
                           SizedBox(
-                            height: defaultPadding,
+                            height: largePadding,
                           ),
-                          Text(
-                            'email',
-                            style: Theme.of(context).custom.textStyle.copyWith(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  overflow: TextOverflow.clip,
-                                ),
-                          ),
+                          // Text(
+                          //   'email',
+                          //   style: Theme.of(context).custom.textStyle.copyWith(
+                          //         fontSize: 14,
+                          //         fontWeight: FontWeight.bold,
+                          //         overflow: TextOverflow.clip,
+                          //       ),
+                          // ),
                         ],
                       ),
                       SizedBox(
@@ -371,6 +396,7 @@ class EditProfileArguments {
   final String? email;
   final String? city;
   final String? subCity;
+  final String? profile;
 
   EditProfileArguments({
     this.lastName,
@@ -379,6 +405,7 @@ class EditProfileArguments {
     this.subCity,
     this.firstName,
     this.email,
+    this.profile,
   });
 }
 
