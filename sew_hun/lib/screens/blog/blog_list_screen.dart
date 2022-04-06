@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sew_hun/dio_api.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:sew_hun/providers/blog/blog_list_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/blog/blog_detail_screen.dart';
@@ -45,33 +45,53 @@ class _BlogListScreenState extends ConsumerState<BlogListScreen> {
             final blogList = ref.watch(categoryPostsProvider(args.id));
             return blogList.when(
               data: (data) {
-                return SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Padding(
-                      padding: EdgeInsets.only(
-                        left: Theme.of(context).custom.smallPadding,
-                        right: Theme.of(context).custom.smallPadding,
+                if (data.posts != null) {
+                  if (data.posts!.length > 0) {
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: Theme.of(context).custom.smallPadding,
+                          right: Theme.of(context).custom.smallPadding,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (var post in data.posts!)
+                              BlogListContainer(
+                                img: post.image!,
+                                title: post.title!,
+                                content: post.sample!,
+                                id: post.id!,
+                              )
+                            // Divider(),
+                          ],
+                        ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (var post in data.posts!)
-                            BlogListContainer(
-                              img: post.image!,
-                              title: post.title!,
-                              content: post.text!,
-                              id: post.id!,
-                            )
-
-                          // Divider(),
-                        ],
-                      )),
+                    );
+                  }
+                }
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: Center(
+                    child: Text(
+                      'No Posts In this Category Yet',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
                 );
               },
-              error: (error, stack) => LoadingError(onTap: (){
-                ref.refresh(categoryPostsProvider(args.id));
-              }),
+              error: (error, stack) => LoadingError(
+                onTap: () {
+                  ref.refresh(categoryPostsProvider(args.id));
+                },
+              ),
               loading: () => LoadingIndicator(),
             );
           },
@@ -149,23 +169,30 @@ class BlogListContainer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title.length < 15 ? title : title.substring(0,14),
+                    title.length < 15 ? title : title.substring(0, 14),
                     style: Theme.of(context).custom.textStyle.copyWith(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18,
-                    ),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                        ),
                   ),
                   SizedBox(height: 10),
-                  Text(
-                    content.length < 20 ? content : content.substring(0,20) + ' ...',
-                    style: Theme.of(context).custom.textStyle.copyWith(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                    ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: true,
+                  HtmlWidget(
+                    content.length < 20
+                        ? content
+                        : content.substring(0, 20) + ' ...',
                   ),
+                  // Text(
+                  //   content.length < 20
+                  //       ? content
+                  //       : content.substring(0, 20) + ' ...',
+                  //   style: Theme.of(context).custom.textStyle.copyWith(
+                  //         fontWeight: FontWeight.w400,
+                  //         fontSize: 14,
+                  //       ),
+                  //   maxLines: 3,
+                  //   overflow: TextOverflow.ellipsis,
+                  //   softWrap: true,
+                  // ),
                   Expanded(
                     child: SizedBox(
                       height: 30,

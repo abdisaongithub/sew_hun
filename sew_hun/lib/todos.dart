@@ -11,7 +11,9 @@
 // TODO: register and reset password
 // TODO: use cached network images
 // TODO: replace all load errors with refresh button
-
+// TODO: BACKEND: create a sample text on post model from the content
+// TODO: BACKEND: change url to tags endpoint
+// TODO: BACKEND: only allow a single logged in app at a time
 
 
 

@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sew_hun/dio_api.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/providers/youtube/channel_provider.dart';
 import 'package:sew_hun/providers/youtube/current_video_id_provider.dart';
@@ -47,12 +49,9 @@ class _YoutubeVideosScreenState extends ConsumerState<YoutubeVideosScreen> {
               ref.refresh(videosProvider);
             },
           ),
-          loading: () => LoadingIndicator(),
+          loading: () => Text('...'),
         ),
         backgroundColor: Theme.of(context).custom.appBarColor,
-        leading: BackButton(
-          color: Theme.of(context).custom.textColor,
-        ),
         actions: [
           Padding(
             padding: EdgeInsets.only(
@@ -94,16 +93,16 @@ class _YoutubeVideosScreenState extends ConsumerState<YoutubeVideosScreen> {
                     height: 60,
                     width: 70,
                     child: Image(
-                      image: NetworkImage(
+                      image: CachedNetworkImageProvider(
                         video[index].thumbnails.highResUrl,
                       ),
                       errorBuilder: (context, obj, st) {
                         return Image(
                           image: AssetImage(
-                            'assets/img/et.jpg',
+                            'assets/img/logo.png',
                           ),
                           //TODO: prepare default image
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                         );
                       },
                       fit: BoxFit.cover,

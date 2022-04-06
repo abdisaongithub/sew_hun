@@ -1,85 +1,50 @@
-import 'dart:convert';
-/// posts : [{"id":1,"title":"Healthy Title","text":"ad'oinlk df;","image":"/media/photos/posts/Screenshot_1629763897.png","reads":0}]
-
-CategoryPosts categoryPostsFromJson(String str) => CategoryPosts.fromJson(json.decode(str));
-String categoryPostsToJson(CategoryPosts data) => json.encode(data.toJson());
 class CategoryPosts {
-  CategoryPosts({
-      List<Posts>? posts,}){
-    _posts = posts;
-}
+  List<Posts>? posts;
 
-  CategoryPosts.fromJson(dynamic json) {
+  CategoryPosts({this.posts});
+
+  CategoryPosts.fromJson(Map<String, dynamic> json) {
     if (json['posts'] != null) {
-      _posts = [];
+      posts = <Posts>[];
       json['posts'].forEach((v) {
-        _posts?.add(Posts.fromJson(v));
+        posts!.add(new Posts.fromJson(v));
       });
     }
   }
-  List<Posts>? _posts;
-
-  List<Posts>? get posts => _posts;
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    if (_posts != null) {
-      map['posts'] = _posts?.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.posts != null) {
+      data['posts'] = this.posts!.map((v) => v.toJson()).toList();
     }
-    return map;
+    return data;
   }
-
 }
 
-/// id : 1
-/// title : "Healthy Title"
-/// text : "ad'oinlk df;"
-/// image : "/media/photos/posts/Screenshot_1629763897.png"
-/// reads : 0
-
-Posts postsFromJson(String str) => Posts.fromJson(json.decode(str));
-String postsToJson(Posts data) => json.encode(data.toJson());
 class Posts {
-  Posts({
-      int? id, 
-      String? title, 
-      String? text, 
-      String? image, 
-      int? reads,}){
-    _id = id;
-    _title = title;
-    _text = text;
-    _image = image;
-    _reads = reads;
-}
+  int? id;
+  String? title;
+  String? sample;
+  String? image;
+  int? reads;
 
-  Posts.fromJson(dynamic json) {
-    _id = json['id'];
-    _title = json['title'];
-    _text = json['text'];
-    _image = json['image'];
-    _reads = json['reads'];
+  Posts({this.id, this.title, this.sample, this.image, this.reads});
+
+  Posts.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    sample = json['sample'];
+    image = json['image'];
+    reads = json['reads'];
   }
-  int? _id;
-  String? _title;
-  String? _text;
-  String? _image;
-  int? _reads;
-
-  int? get id => _id;
-  String? get title => _title;
-  String? get text => _text;
-  String? get image => _image;
-  int? get reads => _reads;
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['title'] = _title;
-    map['text'] = _text;
-    map['image'] = _image;
-    map['reads'] = _reads;
-    return map;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['sample'] = this.sample;
+    data['image'] = this.image;
+    data['reads'] = this.reads;
+    return data;
   }
-
 }

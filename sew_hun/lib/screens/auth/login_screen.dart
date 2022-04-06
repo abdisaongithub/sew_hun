@@ -9,6 +9,7 @@ import 'package:sew_hun/providers/auth/token_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/auth/register_screen.dart';
 import 'package:sew_hun/screens/landing/landing_screen.dart';
+import 'package:sew_hun/screens/landing/menu_screen.dart';
 import 'package:sew_hun/static.dart';
 import 'package:validators/validators.dart';
 
@@ -36,7 +37,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         print('About to bind');
         WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
           if (signedIn.state == true) {
-            Navigator.pushNamed(context, LandingScreen.id);
+            Navigator.pushNamed(context, MenuScreen.id);
             // print('To LandingScreen...');
           } else if (signInError.state == true) {
             final error = ref.read(networkErrorProvider.state);

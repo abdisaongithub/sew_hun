@@ -72,8 +72,7 @@ final _customDarkTheme = CustomThemeData(
 );
 
 extension CustomTheme on ThemeData {
-  CustomThemeData get custom =>
-      brightness == Brightness.dark ? _customDarkTheme : _customLightTheme;
+  CustomThemeData get custom => brightness == Brightness.dark ? _customDarkTheme : _customLightTheme;
 }
 
 // THEME PROVIDERS

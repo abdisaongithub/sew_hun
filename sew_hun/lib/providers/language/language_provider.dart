@@ -1,2 +1,4 @@
+class Language{
 
-// TODO: make language provider here
+}
+

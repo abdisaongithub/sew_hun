@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,6 +9,7 @@ import 'package:sew_hun/providers/user/user_provider.dart';
 import 'package:sew_hun/screens/auth/login_screen.dart';
 import 'package:sew_hun/screens/components/LoadingError.dart';
 import 'package:sew_hun/screens/components/LoadingIndicator.dart';
+import 'package:sew_hun/screens/profile/edit_profile_screen.dart';
 import 'package:sew_hun/static.dart';
 import 'package:validators/validators.dart';
 
@@ -24,50 +25,11 @@ class ProfileScreen extends ConsumerStatefulWidget {
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return ref.watch(userProvider).when(
-      data: (data) {
-        return Scaffold(
-          // appBar: AppBar(
-          //   title: Text(
-          //     data.user!.username!,
-          //     style: Theme.of(context).custom.textStyle.copyWith(
-          //           color: Theme.of(context).custom.textColor,
-          //         ),
-          //   ),
-          //   backgroundColor: Theme.of(context).custom.appBarColor,
-          //   leading: BackButton(
-          //     color: Theme.of(context).custom.textColor,
-          //   ),
-          //   actions: [
-          //     Tooltip(
-          //       message: 'Edit Profile',
-          //       child: GestureDetector(
-          //         onTap: () async {
-          //           // final storage = FlutterSecureStorage();
-          //           // await storage.delete(key: kToken);
-          //           // ref.read(isSignedInProvider.notifier).state = false;
-          //           // ref.read(signInErrorProvider.notifier).state = false;
-          //           // ref.read(networkErrorProvider.notifier).state = null;
-          //           //
-          //           // Navigator.pushNamed(
-          //           //   context,
-          //           //   EditProfileScreen.id,
-          //           // );
-          //
-          //           // Restart.restartApp();
-          //         },
-          //         child: Icon(
-          //           Icons.edit,
-          //           color: Theme.of(context).custom.textColor,
-          //         ),
-          //       ),
-          //     ),
-          //     SizedBox(
-          //       width: defaultPadding,
-          //     ),
-          //   ],
-          // ),
-          body: Stack(
+    final user = ref.watch(userProvider);
+    return Scaffold(
+      body: user.when(
+        data: (data) {
+          return Stack(
             children: [
               Positioned.fill(
                 child: SvgPicture.asset(
@@ -164,10 +126,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              // Navigator.pushNamed(
-                              //   context,
-                              //   EditProfileScreen.id,
-                              // );
+                              Navigator.pushNamed(
+                                context,
+                                EditProfileScreen.id,
+                                arguments: EditProfileArguments(
+                                  firstName: data.user?.firstName,
+                                  lastName: data.user?.lastName,
+                                  city: data.user?.profile?.city,
+                                  phone: data.user?.profile?.phone,
+                                  subCity: data.user?.profile?.subCity,
+                                  email: data.user?.email,
+                                ),
+                              );
                             },
                             child: CircleAvatar(
                               radius: 20,
@@ -241,14 +211,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             },
                             label: 'Sub City',
                           ),
-                          WhiteDivider(),
-                          ProfileTile(
-                            value: data.user!.profile!.bio!,
-                            onTap: () {
-                              print('Bio');
-                            },
-                            label: 'Bio',
-                          ),
                         ],
                       ),
                     ),
@@ -311,23 +273,22 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               ),
             ],
-          ),
-        );
-      },
-      error: (error, st) {
-        return LoadingError(
+          );
+        },
+        error: (error, st) {
+          return LoadingError(
             onTap: () {
               ref.refresh(userProvider);
             },
-        );
-      },
-      loading: () {
-        return LoadingIndicator();
-      },
+          );
+        },
+        loading: () {
+          return LoadingIndicator();
+        },
+      ),
     );
   }
 }
-
 
 class WhiteDivider extends StatelessWidget {
   const WhiteDivider({

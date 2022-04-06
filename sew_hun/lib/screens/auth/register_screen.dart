@@ -5,7 +5,7 @@ import 'package:sew_hun/models/auth/register.dart';
 import 'package:sew_hun/providers/auth/register_data_provider.dart';
 import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
-import 'package:sew_hun/screens/landing/landing_screen.dart';
+import 'package:sew_hun/screens/landing/menu_screen.dart';
 import 'package:sew_hun/static.dart';
 import 'package:validators/validators.dart';
 
@@ -33,8 +33,7 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
       (a, b) {
         WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
           if (signedIn.state == true) {
-            Navigator.popAndPushNamed(context, LandingScreen.id);
-            print('To LandingScreen...');
+            Navigator.popAndPushNamed(context, MenuScreen.id);
           } else if (signInError.state == true) {
             final error = ref.read(networkErrorProvider.state);
             // print(error.state.toString());
@@ -52,23 +51,6 @@ class _LoginScreenState extends ConsumerState<RegisterScreen> {
         });
       },
     );
-    // ref.listen(
-    //   registerDataProvider,
-    //   (a, b) {
-    //     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-    //       print('Inside Listen');
-    //       if (signedIn.state == true) {
-    //         Navigator.popAndPushNamed(context, LandingScreen.id);
-    //         print('To LandingScreen...');
-    //       } else if (signInError.state == true) {
-    //         print('SignIn Error Happened');
-    //       }
-    //     });
-    //   },
-    //   onError: (error, st) {
-    //     print(error.toString());
-    //   },
-    // );
 
     return Scaffold(
       body: Stack(

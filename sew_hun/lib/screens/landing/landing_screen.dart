@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,17 +5,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sew_hun/providers/blog/random_posts_provider.dart';
 import 'package:sew_hun/providers/landing/landingProvider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
-import 'package:sew_hun/screens/about/about_screen.dart';
 import 'package:sew_hun/screens/blog/blog_detail_screen.dart';
 import 'package:sew_hun/screens/blog/blog_list_screen.dart';
+import 'package:sew_hun/screens/blog/blog_tag_list_screen.dart';
 import 'package:sew_hun/screens/blog/search_result_screen.dart';
-import 'package:sew_hun/screens/chat/chats_screen.dart';
-import 'package:sew_hun/screens/payment/payment_screen.dart';
-import 'package:sew_hun/screens/profile/profile_screen.dart';
-import 'package:sew_hun/screens/youtube/youtube_videos_screen.dart';
+import 'package:sew_hun/screens/components/LoadingError.dart';
+import 'package:sew_hun/screens/components/LoadingIndicator.dart';
 import 'package:sew_hun/static.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 
 class LandingScreen extends ConsumerStatefulWidget {
   static String id = 'LandingScreen';
@@ -44,7 +40,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
           children: [
             Positioned.fill(
               child: SvgPicture.asset(
-                'assets/img/landing.svg',
+                'assets/img/bg.svg',
                 fit: BoxFit.cover,
               ),
             ),
@@ -69,23 +65,16 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                           SizedBox(
                             height: defaultPadding,
                           ),
-                          // Text(
-                          //   'Hello',
-                          //   style: Theme.of(context).custom.textStyle.copyWith(
-                          //         fontWeight: FontWeight.w700,
-                          //         fontSize: 18,
-                          //       ),
-                          // ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Hello User',
-                                style:
-                                    Theme.of(context).custom.textStyle.copyWith(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 24,
-                                        ),
+                                'Hello ' + data.user!.firstName.toString() ?? '',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.black,
+                                  fontSize: 24,
+                                ),
                               ),
                               Expanded(
                                 child: SizedBox(),
@@ -98,7 +87,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                                 child: Icon(
                                   Icons.search,
                                   size: 34,
-                                  color: Theme.of(context).custom.textColor,
+                                  color: Colors.black,
                                 ),
                               ),
                               SizedBox(
@@ -114,159 +103,20 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                Container(
-                                  height: 32,
-                                  width: 60,
-                                  margin: EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).custom.pillColor,
-                                    borderRadius: BorderRadius.circular(50),
+                                for (var tag in data.tags!)
+                                  TagContainer(
+                                    label: tag.tag!,
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        BlogTagListScreen.id,
+                                        arguments: BlogTagListArgument(
+                                          id: tag.id!,
+                                          tag: tag.tag!,
+                                        ),
+                                      );
+                                    },
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                      'Tag',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 32,
-                                  width: 60,
-                                  margin: EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).custom.pillColor,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Tag',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 32,
-                                  width: 60,
-                                  margin: EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).custom.pillColor,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Tag',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 32,
-                                  width: 60,
-                                  margin: EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).custom.pillColor,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Tag',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 32,
-                                  width: 60,
-                                  margin: EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).custom.pillColor,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Tag',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 32,
-                                  width: 60,
-                                  margin: EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).custom.pillColor,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Tag',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 32,
-                                  width: 60,
-                                  margin: EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).custom.pillColor,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Tag',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 32,
-                                  width: 60,
-                                  margin: EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).custom.pillColor,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Tag',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 32,
-                                  width: 60,
-                                  margin: EdgeInsets.only(right: 8),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).custom.pillColor,
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Tag',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -275,10 +125,11 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                           ),
                           Text(
                             'Categories',
-                            style: Theme.of(context).custom.textStyle.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18,
-                                ),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                              fontSize: 18,
+                            ),
                           ),
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
@@ -314,6 +165,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                                           .copyWith(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 18,
+                                            color: Colors.black,
                                           ),
                                     ),
                                     SizedBox(
@@ -340,43 +192,34 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                           SizedBox(
                             height: defaultPadding,
                           ),
-                          ref.watch(randomPostProvider).when(
-                            data: (res) {
-                              return Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      'Previously Read',
-                                      style: Theme.of(context)
-                                          .custom
-                                          .textStyle
-                                          .copyWith(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18,
-                                          ),
-                                    ),
-                                    SizedBox(
-                                      height: smallPadding,
-                                    ),
-                                    for (var post in res.data!)
-                                      BlogListTile(
-                                        title: post.title!,
-                                        content: post.text!,
-                                        img: post.image!,
-                                        index: post.id!,
-                                      )
-                                  ],
+                          Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Previously Read',
+                                  style: Theme.of(context)
+                                      .custom
+                                      .textStyle
+                                      .copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                  ),
                                 ),
-                              );
-                            },
-                            error: (error, st) {
-                              return SizedBox();
-                            },
-                            loading: () {
-                              return SizedBox();
-                            },
-                          ),
+                                SizedBox(
+                                  height: smallPadding,
+                                ),
+                                for (var read in data.read!)
+                                  BlogListTile(
+                                    title: read.title!,
+                                    content: read.sample!,
+                                    img: read.image!,
+                                    index: read.id!,
+                                  )
+                              ],
+                            ),
+                          )
                           // data.favorites!.isNotEmpty
                           //     ? Text(
                           //         'My Favorites',
@@ -417,50 +260,52 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                   //   Navigator.popAndPushNamed(context, LoginScreen.id);
                   // }
 
-                  return Container(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Are you connected to the Internet?',
-                          style: Theme.of(context).custom.textStyle,
-                        ),
-                        SizedBox(
-                          height: smallPadding,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            ref.refresh(landingProvider);
-                          },
-                          child: Text('Reload'),
-                        ),
-                      ],
-                    ),
+                  return LoadingError(
+                    onTap: () {
+                      ref.refresh(landingProvider);
+                    },
                   );
                 },
                 loading: () {
-                  return Container(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(
-                          height: defaultPadding,
-                        ),
-                        Text('Loading...'),
-                      ],
-                    ),
-                  );
+                  return LoadingIndicator();
                 },
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class TagContainer extends StatelessWidget {
+  const TagContainer({
+    Key? key,
+    required this.label,
+    required this.onTap,
+  }) : super(key: key);
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 32,
+        margin: EdgeInsets.only(right: 8),
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          color: Theme.of(context).custom.pillColor,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
         ),
       ),
     );
@@ -584,7 +429,7 @@ class BlogListTile extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.only(bottom: smallPadding),
         decoration: BoxDecoration(
-          // color: Colors.blue,
+          color: Theme.of(context).custom.pillColor,
           borderRadius: BorderRadius.all(
             Radius.circular(20),
           ),
@@ -627,6 +472,7 @@ class BlogListTile extends StatelessWidget {
                       : title,
                   style: Theme.of(context).custom.textStyle.copyWith(
                         fontWeight: FontWeight.w700,
+                        color: Colors.black,
                         fontSize: 18,
                       ),
                 ),
@@ -638,6 +484,7 @@ class BlogListTile extends StatelessWidget {
                       : content.substring(0, 50),
                   style: Theme.of(context).custom.textStyle.copyWith(
                         fontWeight: FontWeight.w400,
+                        color: Colors.black,
                         fontSize: 14,
                       ),
                   maxLines: 3,
@@ -648,6 +495,7 @@ class BlogListTile extends StatelessWidget {
                   'read more ...',
                   style: Theme.of(context).custom.textStyle.copyWith(
                         fontWeight: FontWeight.w400,
+                        color: Colors.black,
                         fontSize: 14,
                       ),
                   maxLines: 3,
