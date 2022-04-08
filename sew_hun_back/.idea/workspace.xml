@@ -20,17 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="781bd1ff-cb70-4116-b1cb-6ed0ff9f70df" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/dio_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/dio_api.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/auth/token_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/auth/token_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/landing/landingProvider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/landing/landingProvider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/auth/sign_in_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/auth/sign_in_provider.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/comments_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/comments_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/chat/messages_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/chat/messages_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/landing_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/landing_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/edit_profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/edit_profile_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/profile_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/permissions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blog/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,7 +153,8 @@
       <workItem from="1649326158330" duration="14000" />
       <workItem from="1649361481555" duration="158000" />
       <workItem from="1649362022682" duration="377000" />
-      <workItem from="1649445868324" duration="2309000" />
+      <workItem from="1649445868324" duration="2906000" />
+      <workItem from="1649451386678" duration="79000" />
     </task>
     <servers />
   </component>

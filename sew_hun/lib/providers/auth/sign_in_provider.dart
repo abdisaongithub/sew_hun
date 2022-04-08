@@ -6,3 +6,5 @@ final isSignedInProvider = StateProvider<bool>((ref) => false);
 final signInErrorProvider = StateProvider<bool>((ref) => false);
 
 final networkErrorProvider = StateProvider<DioError?>((ref) => null);
+
+final successProvider = StateProvider<bool?>((ref) => null);

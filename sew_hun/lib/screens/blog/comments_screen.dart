@@ -1,7 +1,11 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/models/blog/post.dart';
+import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/providers/blog/comments_provider.dart';
+import 'package:sew_hun/providers/blog/post_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/chat/record_screen.dart';
 import 'package:sew_hun/static.dart';
@@ -17,6 +21,7 @@ class CommentsScreen extends ConsumerStatefulWidget {
 
 class _CommentsScreenState extends ConsumerState<CommentsScreen> {
   late TextEditingController _textEditingController;
+  bool sending = false;
 
   @override
   void initState() {
@@ -29,6 +34,9 @@ class _CommentsScreenState extends ConsumerState<CommentsScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final args = ModalRoute.of(context)!.settings.arguments as CommentArgument;
+    final success = ref.watch(successProvider.notifier);
+    final error = ref.watch(networkErrorProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).custom.appBarColor,
@@ -45,30 +53,42 @@ class _CommentsScreenState extends ConsumerState<CommentsScreen> {
       ),
       body: Stack(
         children: <Widget>[
-          ListView.builder(
-            padding: EdgeInsets.only(
-              top: smallPadding,
-              left: smallPadding,
-              right: smallPadding,
-            ),
-            itemCount: args.comments.length,
-            itemBuilder: (context, index) {
-              if (args.comments.length == 0) {
-                return ListTile(
-                  title: Text('No Comments Yet'),
-                );
-              }
-              return ListTile(
-                title: Text(args.comments[index].comment!),
-                subtitle: Text(args.comments[index].user!.username!),
-                leading: CircleAvatar(
-                  radius: 25,
-                  foregroundImage: NetworkImage(
-                    args.comments[index].user!.profile!.photo!,
-                  ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              padding: EdgeInsets.only(
+                bottom: 60,
+              ),
+              child: ListView.builder(
+                physics: ClampingScrollPhysics(),
+                // itemExtent: args.comments.length.toDouble(),
+                scrollDirection: Axis.vertical,
+                reverse: true,
+                padding: EdgeInsets.only(
+                  top: smallPadding,
+                  left: smallPadding,
+                  right: smallPadding,
                 ),
-              );
-            },
+                itemCount: args.comments.length,
+                itemBuilder: (context, index) {
+                  if (args.comments.length == 0) {
+                    return ListTile(
+                      title: Text('No Comments Yet'),
+                    );
+                  }
+                  return ListTile(
+                    title: Text(args.comments[index].comment!),
+                    subtitle: Text(args.comments[index].user!.username!),
+                    leading: CircleAvatar(
+                      radius: 25,
+                      foregroundImage: NetworkImage(
+                        args.comments[index].user!.profile!.photo!,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
           Align(
             alignment: Alignment.bottomLeft,
@@ -106,20 +126,50 @@ class _CommentsScreenState extends ConsumerState<CommentsScreen> {
                   SizedBox(
                     width: 15,
                   ),
-                  FloatingActionButton(
-                    onPressed: () {
-                      ref.read(commentProvider.notifier).sendComment(
-                            comment: _textEditingController.text,
-                            post_id: args.id,
-                          );
-                    },
-                    child: Icon(
-                      Icons.send,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                    backgroundColor: Colors.blue,
-                    elevation: 0,
+                  sending
+                      ? SizedBox(
+                          child: CircularProgressIndicator(),
+                          height: 25,
+                          width: 25,
+                        )
+                      : FloatingActionButton(
+                          onPressed: () async {
+                            setState(() {
+                              sending = true;
+                            });
+                            final res = await ref
+                                .read(commentProvider.notifier)
+                                .sendComment(
+                                  comment: _textEditingController.text,
+                                  post_id: args.id,
+                                );
+                            if (res == true) {
+                              ref.refresh(postProvider(args.id));
+                              Navigator.pop(context);
+                            } else if (res == false) {
+                              Navigator.pop(context);
+                              setState(() {
+                                sending = false;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Something Went Wrong',
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          child: Icon(
+                            Icons.send,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                          backgroundColor: Colors.blue,
+                          elevation: 0,
+                        ),
+                  SizedBox(
+                    width: 15,
                   ),
                 ],
               ),
