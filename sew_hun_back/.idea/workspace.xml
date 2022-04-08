@@ -20,13 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="781bd1ff-cb70-4116-b1cb-6ed0ff9f70df" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/payment/permissions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/auth/register_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/auth/register_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/dio_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/dio_api.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/auth/token_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/auth/token_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/providers/landing/landingProvider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/providers/landing/landingProvider.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/comments_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/blog/comments_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/chat/messages_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/chat/messages_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/landing_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/landing_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/splash_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/landing/splash_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/payment/payment_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/payment/payment_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/youtube/youtube_videos_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/youtube/youtube_videos_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/edit_profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/edit_profile_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/profile_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../sew_hun/lib/screens/profile/profile_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blog/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/permissions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blog/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/blog/views.py" afterDir="false" />
@@ -153,7 +154,11 @@
       <workItem from="1648459107714" duration="92000" />
       <workItem from="1649101600477" duration="5598000" />
       <workItem from="1649230688672" duration="11649000" />
-      <workItem from="1649258602428" duration="1761000" />
+      <workItem from="1649258602428" duration="2907000" />
+      <workItem from="1649326158330" duration="14000" />
+      <workItem from="1649361481555" duration="158000" />
+      <workItem from="1649362022682" duration="377000" />
+      <workItem from="1649445868324" duration="2309000" />
     </task>
     <servers />
   </component>

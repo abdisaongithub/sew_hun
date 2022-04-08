@@ -459,6 +459,7 @@ class _BlogDetailScreenState extends ConsumerState<BlogDetailScreen>
                                             CommentsScreen.id,
                                             arguments: CommentArgument(
                                               comments: data.comments!,
+                                              id: data.id!,
                                             ),
                                           );
                                         },

@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sew_hun/models/user/edit_profile.dart';
 import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/providers/user/edit_profile_provider.dart';
 import 'package:sew_hun/screens/profile/profile_screen.dart';
 import 'package:sew_hun/static.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:validators/validators.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -110,15 +110,15 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                               SizedBox(
                                 height: defaultPadding,
                               ),
-                              Text(
-                                data.user!.email!,
-                                style:
-                                    Theme.of(context).custom.textStyle.copyWith(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          overflow: TextOverflow.clip,
-                                        ),
-                              ),
+                              // Text(
+                              //   data.user!.email!,
+                              //   style:
+                              //       Theme.of(context).custom.textStyle.copyWith(
+                              //             fontSize: 14,
+                              //             fontWeight: FontWeight.bold,
+                              //             overflow: TextOverflow.clip,
+                              //           ),
+                              // ),
                             ],
                           ),
                           SizedBox(
@@ -281,6 +281,46 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             onTap: () {
               ref.refresh(userProvider);
             },
+            element: GestureDetector(
+              onTap: () async {
+                final storage = FlutterSecureStorage();
+                await storage.delete(key: kToken);
+                ref.read(isSignedInProvider.notifier).state = false;
+                ref.read(signInErrorProvider.notifier).state = false;
+                ref.read(networkErrorProvider.notifier).state = null;
+
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  LoginScreen.id,
+                  (route) => route.currentResult == LoginScreen.id,
+                );
+              },
+              child: Container(
+                height: 20,
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      'Logout?',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.red,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Icon(
+                      Icons.logout,
+                      color: Colors.red,
+                      size: 18,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           );
         },
         loading: () {

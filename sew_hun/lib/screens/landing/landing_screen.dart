@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +13,6 @@ import 'package:sew_hun/screens/blog/search_result_screen.dart';
 import 'package:sew_hun/screens/components/LoadingError.dart';
 import 'package:sew_hun/screens/components/LoadingIndicator.dart';
 import 'package:sew_hun/static.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class LandingScreen extends ConsumerStatefulWidget {
   static String id = 'LandingScreen';
@@ -174,7 +174,8 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                                     for (var post in res.data!)
                                       BlogListTile(
                                         title: post.title!,
-                                        content: post.text!,
+                                        // content: post.text!,
+                                        content: '',
                                         img: post.image!,
                                         index: post.id!,
                                       )
@@ -196,17 +197,21 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  'Previously Read',
-                                  style: Theme.of(context)
-                                      .custom
-                                      .textStyle
-                                      .copyWith(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 18,
-                                    color: Colors.black,
-                                  ),
-                                ),
+                                data.read!.isNotEmpty
+                                    ? Text(
+                                        'Previously Read',
+                                        style: Theme.of(context)
+                                            .custom
+                                            .textStyle
+                                            .copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                            ),
+                                      )
+                                    : SizedBox(
+                                        height: smallPadding,
+                                      ),
                                 SizedBox(
                                   height: smallPadding,
                                 ),

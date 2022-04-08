@@ -55,7 +55,7 @@ class RandomPostListView(generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         rand = list(Post.objects.filter(is_published=True))
-        posts = random.sample(rand, 2)
+        posts = random.sample(rand, 3)
         ser = serializers.PostsSerializer(posts, many=True)
         return Response(data={'data': ser.data})
 
@@ -85,24 +85,28 @@ class CommentCreateView(generics.CreateAPIView):
     serializer_class = serializers.CommentDetailSerializer
     queryset = Comment
 
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, PaidMonthlySubscription]
 
     def post(self, request, *args, **kwargs):
         # todo: make validation here
-        serialized = serializers.CommentDetailSerializer(
-            data=request.data, context={
-                'user': request.user.id,
-                'post': request.data['post']
-            }
-        )
-        serialized.is_valid()
-        print(serialized.data)
-        comment = Comment.objects.create(
-            user_id=request.user.id,
-            post_id=serialized.data['post'],
-            comment=serialized.data['comment'],
-        )
-        return Response(data=serialized.data, status=status.HTTP_200_OK)
+        post_id = kwargs['pk']
+        post = Post.objects.get(pk=post_id)
+        if post is not None:
+            serialized = serializers.CommentDetailSerializer(
+                data=request.data, context={
+                    'user': request.user.id,
+                    'post': post.id
+                }
+            )
+            serialized.is_valid()
+            comment = Comment.objects.create(
+                user_id=request.user.id,
+                post=post,
+                comment=serialized.data['comment'],
+            )
+            return Response(data=serialized.data, status=status.HTTP_200_OK)
+        else:
+            return Response(data=None, status=status.HTTP_404_NOT_FOUND)
 
 
 class CommentRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):

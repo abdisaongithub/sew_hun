@@ -5,6 +5,7 @@ import 'package:sew_hun/dio_api.dart';
 import 'package:sew_hun/models/auth/auth_token.dart';
 import 'package:sew_hun/providers/auth/sign_in_provider.dart';
 import 'package:sew_hun/static.dart';
+
 import 'login_credentials_provider.dart';
 
 // final authTokenProvider = FutureProvider<AuthToken>(
@@ -21,7 +22,8 @@ import 'login_credentials_provider.dart';
 //   },
 // );
 
-final authTokenProvider = StateNotifierProvider.autoDispose<AuthNotifier, AuthToken>(
+final authTokenProvider =
+    StateNotifierProvider.autoDispose<AuthNotifier, AuthToken>(
   (ref) => AuthNotifier(ref),
 );
 
@@ -46,7 +48,7 @@ class AuthNotifier extends StateNotifier<AuthToken> {
           },
         ),
       );
-      // print(_response.statusCode);
+      print(_response.statusCode);
       if (_response.statusCode == 200) {
         isSignedIn.state = true;
       }

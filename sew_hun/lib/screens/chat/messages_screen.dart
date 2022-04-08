@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -160,7 +161,10 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                               bottomRight: Radius.circular(10),
                               topRight: Radius.circular(10),
                             ),
-                            color: Theme.of(context).custom.chatContainerColor.withOpacity(0.8),
+                            color: Theme.of(context)
+                                .custom
+                                .chatContainerColor
+                                .withOpacity(0.8),
                           ),
                           child: Column(
                             // crossAxisAlignment:
@@ -248,7 +252,11 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
                 );
               }
             },
-            error: (error, st) => LoadingError(onTap: (){ref.refresh(messagesProvider);},),
+            error: (error, st) => LoadingError(
+              onTap: () {
+                ref.refresh(messagesProvider);
+              },
+            ),
             loading: () => LoadingIndicator(),
           ),
           Align(
@@ -271,24 +279,24 @@ class _MessagesScreenState extends ConsumerState<MessagesScreen> {
               ),
               child: Row(
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      print('record sound');
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).custom.btnColor,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Icon(
-                        Icons.mic,
-                        color: Colors.black,
-                        size: 20,
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     print('record sound');
+                  //   },
+                  //   child: Container(
+                  //     height: 30,
+                  //     width: 30,
+                  //     decoration: BoxDecoration(
+                  //       color: Theme.of(context).custom.btnColor,
+                  //       borderRadius: BorderRadius.circular(30),
+                  //     ),
+                  //     child: Icon(
+                  //       Icons.mic,
+                  //       color: Colors.black,
+                  //       size: 20,
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(
                     width: 15,
                   ),

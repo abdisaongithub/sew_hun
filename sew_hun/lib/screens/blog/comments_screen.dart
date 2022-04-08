@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sew_hun/models/blog/post.dart';
+import 'package:sew_hun/providers/blog/comments_provider.dart';
 import 'package:sew_hun/providers/theme/theme_provider.dart';
 import 'package:sew_hun/screens/chat/record_screen.dart';
 import 'package:sew_hun/static.dart';
@@ -69,71 +70,73 @@ class _CommentsScreenState extends ConsumerState<CommentsScreen> {
               );
             },
           ),
-          // Align(
-          //   alignment: Alignment.bottomLeft,
-          //   child: Container(
-          //     padding: EdgeInsets.only(
-          //       left: 10,
-          //       bottom: 10,
-          //       top: 10,
-          //     ),
-          //     height: 60,
-          //     width: size.width,
-          //     decoration: BoxDecoration(
-          //       color: Theme.of(context).custom.appBarColor,
-          //       border: Border(
-          //         top: BorderSide(
-          //           color: Theme.of(context).custom.textColor,
-          //         ),
-          //       ),
-          //     ),
-          //     child: Row(
-          //       children: <Widget>[
-          //         SizedBox(
-          //           width: 15,
-          //         ),
-          //         Expanded(
-          //           child: TextField(
-          //             controller: _textEditingController,
-          //             decoration: InputDecoration(
-          //               hintText: "Write your comment...",
-          //               hintStyle: Theme.of(context).custom.textStyle,
-          //               border: InputBorder.none,
-          //             ),
-          //             onChanged: (value) {
-          //               print(value);
-          //             },
-          //           ),
-          //         ),
-          //         SizedBox(
-          //           width: 15,
-          //         ),
-          //         FloatingActionButton(
-          //           onPressed: () {
-          //             print('Reload');
-          //           },
-          //           child: Icon(
-          //             Icons.send,
-          //             color: Colors.white,
-          //             size: 18,
-          //           ),
-          //           backgroundColor: Colors.blue,
-          //           elevation: 0,
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Container(
+              padding: EdgeInsets.only(
+                left: 10,
+                bottom: 10,
+                top: 10,
+              ),
+              height: 60,
+              width: size.width,
+              decoration: BoxDecoration(
+                color: Theme.of(context).custom.appBarColor,
+                border: Border(
+                  top: BorderSide(
+                    color: Theme.of(context).custom.textColor,
+                  ),
+                ),
+              ),
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _textEditingController,
+                      decoration: InputDecoration(
+                        hintText: "Write your comment...",
+                        hintStyle: Theme.of(context).custom.textStyle,
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  FloatingActionButton(
+                    onPressed: () {
+                      ref.read(commentProvider.notifier).sendComment(
+                            comment: _textEditingController.text,
+                            post_id: args.id,
+                          );
+                    },
+                    child: Icon(
+                      Icons.send,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                    backgroundColor: Colors.blue,
+                    elevation: 0,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-// TODO: implement comment feature
-
 class CommentArgument {
   final List<Comments> comments;
+  final int id;
 
-  CommentArgument({required this.comments});
+  CommentArgument({
+    required this.comments,
+    required this.id,
+  });
 }
