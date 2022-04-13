@@ -13,6 +13,7 @@ import 'package:sew_hun/screens/blog/search_result_screen.dart';
 import 'package:sew_hun/screens/components/LoadingError.dart';
 import 'package:sew_hun/screens/components/LoadingIndicator.dart';
 import 'package:sew_hun/static.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LandingScreen extends ConsumerStatefulWidget {
   static String id = 'LandingScreen';
@@ -25,6 +26,18 @@ class LandingScreen extends ConsumerStatefulWidget {
 
 class _LandingScreenState extends ConsumerState<LandingScreen> {
   // final GlobalKey<ScaffoldState> _globalKey = GlobalKey();
+
+  Future<void> _launchInBrowser(String url) async {
+    if (!await launch(
+      url,
+      forceSafariVC: false,
+      forceWebView: false,
+      headers: <String, String>{'host': 'my_header_value'},
+    )) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Couldn\'t launch browser')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +60,53 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
             SafeArea(
               child: landing.when(
                 data: (data) {
+                  if (data.forceUpdate! == true) {
+                    return Center(
+                      child: Card(
+                        color: Colors.white,
+                        elevation: 6,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                'assets/img/logo.png',
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'You need to update to the latest version to continue to use this application',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              MaterialButton(
+                                onPressed: () {
+                                  _launchInBrowser(data.forceUrl!);
+                                },
+                                height: 40,
+                                color:
+                                    Theme.of(context).custom.searchAppBarColor,
+                                child: Text(
+                                  'Update',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
                   return Container(
                     padding: EdgeInsets.only(
                       left: 8,

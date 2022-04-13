@@ -4,8 +4,19 @@ class Landing {
   List<Favorites>? favorites;
   List<Read>? read;
   User? user;
+  String? release;
+  bool? forceUpdate;
+  String? forceUrl;
 
-  Landing({this.categories, this.tags, this.favorites, this.read, this.user});
+  Landing(
+      {this.categories,
+      this.tags,
+      this.favorites,
+      this.read,
+      this.user,
+      this.release,
+      this.forceUpdate,
+      this.forceUrl});
 
   Landing.fromJson(Map<String, dynamic> json) {
     if (json['categories'] != null) {
@@ -33,6 +44,9 @@ class Landing {
       });
     }
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    release = json['release'];
+    forceUpdate = json['force_update'];
+    forceUrl = json['force_url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -52,6 +66,9 @@ class Landing {
     if (this.user != null) {
       data['user'] = this.user!.toJson();
     }
+    data['release'] = this.release;
+    data['force_update'] = this.forceUpdate;
+    data['force_url'] = this.forceUrl;
     return data;
   }
 }
@@ -136,13 +153,13 @@ class Post {
 
   Post(
       {this.id,
-        this.title,
-        this.text,
-        this.sample,
-        this.image,
-        this.reads,
-        this.shares,
-        this.category});
+      this.title,
+      this.text,
+      this.sample,
+      this.image,
+      this.reads,
+      this.shares,
+      this.category});
 
   Post.fromJson(Map<String, dynamic> json) {
     id = json['id'];

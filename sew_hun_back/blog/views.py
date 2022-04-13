@@ -203,12 +203,21 @@ class LandingView(generics.ListAPIView):
         read = Post.objects.filter(read__user_id=user).filter(is_published=True)[:15]
         read_ser = serializers.PostsMiniSerializer(read, many=True)
 
+        BETA = 'beta'
+        ALPHA = 'alpha'
+        PRODUCTION = 'production'
+        UPDATE_URL = 'https://app.sewhun.com'
+        FORCE_UPDATE = False
+
         res = {
             'categories': cat_ser.data,
             'tags': tag_ser.data,
             'favorites': fav_ser.data,
             'read': read_ser.data,
-            'user': user_ser.data
+            'user': user_ser.data,
+            'release': BETA,
+            'force_update': FORCE_UPDATE,
+            'force_url': UPDATE_URL,
         }
 
         return Response(data=res, status=status.HTTP_200_OK)

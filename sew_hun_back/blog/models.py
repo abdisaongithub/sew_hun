@@ -98,3 +98,18 @@ class YoutubePlaylist(models.Model):
 # class Read(models.Model):
 #     user = models.ManyToManyField()
 #     post = models.ManyToManyField()
+
+# class Release(models.Model):
+#
+#     state = [
+#         ('BETA', "BETA"),
+#         ('ALPHA', "ALPHA"),
+#         ('PRODUCTION', "PRODUCTION")
+#     ]
+#     release = models.CharField(
+#         max_length=10,
+#         default='BETA',
+#     )
+#
+#     def __str__(self):
+#         return self.release.title()

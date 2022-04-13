@@ -155,18 +155,29 @@ REST_FRAMEWORK = {
 
 SITE_ID = 1
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# ACCOUNT_EMAIL_REQUIRED = True
-# AUTHENTICATION_METHOD = 'EMAIL'
-# ACCOUNT_EMAIL_VERIFICATION = 'optional'
+EMAIL_HOST = 'mail.sewhun.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'noreply@sehun.com'
+EMAIL_HOST_PASSWORD = '-e[08+UVD}}{'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_BACKEND = 'django.core.mail.backend'
+
+UNIQUE_EMAIL = True  # just to be sure, ok
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'gen:email_success'  # a page to identify that email is confirmed when not logged in
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'gen:email_success'  # same but logged in
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True  # False by default
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = True  # True by default
+
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 
